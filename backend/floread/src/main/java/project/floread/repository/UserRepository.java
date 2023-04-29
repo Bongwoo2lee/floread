@@ -1,27 +1,11 @@
 package project.floread.repository;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import project.floread.model.User;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
-@Repository
-public class UserRepository {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    private Map<String, Object> users = new HashMap<>();
-
-
-    public User findByUsername(String username){
-        if(users.containsKey(username)){
-            return (User)users.get(username);
-        }
-        return null;
-    }
-    public void register(User user){
-        if(users.containsKey(user.getUsername())){
-            return;
-        }
-        users.put(user.getUsername(),user);
-    }
+    Optional<User> findByEmail(String email);
 }
