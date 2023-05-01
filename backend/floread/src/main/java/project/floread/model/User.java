@@ -18,6 +18,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id")
     private Long id;
 
+
     @Column(nullable = false)
     private String name;
 
@@ -25,7 +26,7 @@ public class User extends BaseTimeEntity {
     private String email;
 
     @Column
-    private String picture;
+    private String userId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -35,16 +36,16 @@ public class User extends BaseTimeEntity {
     private List<Book> bookList = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, String picture, Role role) {
+    public User(String name, String email, String userId, Role role) {
         this.name = name;
         this.email = email;
-        this.picture = picture;
+        this.userId = userId;
         this.role = role;
     }
 
-    public User update(String name, String picture) {
+    public User update(String name, String userId) {
         this.name = name;
-        this.picture = picture;
+        this.userId = userId;
 
         return this;
     }
