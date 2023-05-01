@@ -29,3 +29,5 @@ logging:
     org.hibernate.SQL: debug
 
 
+upload:
+  path: /Users/seokbeomlee/Desktop/Project/floread/book/

@@ -5,7 +5,7 @@
     <div class="col-md-12">
         <div class="row">
             <div class="col-md-6">
-                <a href="/posts/save" role="button" class="btn btn-primary">글 등록</a>
+                <a href="/books/save" role="button" class="btn btn-primary"> 업로드</a>
                 <!--{#userName} 머스테치는 다른 언어와 같은 if문을 제공하지 않습니다. true/false 여부만 판단할 뿐입니다.-->
                 <!--그래서 머스테치에서는 항상 최종값을 넘겨줘야합니다. 여기서도 역시 userName이 있다면 userName을 노출시키도록 구성했습니다.-->
                 {{#googleName}}
@@ -25,29 +25,6 @@
         </div>
         <br>
         <!--목록 출력 영역-->
-        <table class="table table-horizontal table-bordered">
-            <thead class="thead-strong">
-            <tr>
-                <th>게시글번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>최종수정일</th>
-            </tr>
-            </thead>
-            <tbody id="tbody">
-            <!--{#posts} => posts라는 List를 순회합니다-->
-            <!--JAVA의 for문과 동일하게 생각하면 됩니다.-->
-            {{#posts}}
-                <!-- IndexController의 model.addAttribute로 전달됨 -->
-                <tr>
-                    <!--{id} 등의 {변수명} => List에서 뽑아낸 객체의 필드를 사용합니다.-->
-                    <td>{{id}}</td>
-                    <td><a href="/posts/update/{{id}}">{{title}}</a></td>
-                    <td>{{author}}</td>
-                    <td>{{modifiedDate}}</td>
-                </tr>
-            {{/posts}}
-            </tbody>
-        </table>
+
     </div>
 {{>layout/footer}}

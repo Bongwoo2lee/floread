@@ -1,0 +1,16 @@
+{{>layout/header}}
+
+<h1>책 업로드</h1>
+
+<div class="col-md-12">
+    <form method="POST" action="/upload" enctype="multipart/form-data">
+        <div>
+            <span>파일</span>
+            <input type="file" name="file" accept="image/txt">
+        </div>
+        <div>
+            <span>업로드</span>
+            <input type="submit" value="전송">
+        </div>
+    </form>
+</div>
