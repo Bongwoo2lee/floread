@@ -13,7 +13,7 @@ import java.util.List;
 public class MusicController {
 
     private final EmotionService emotionService;
-    // /musics/기쁨 이면 장르가 기쁨을 가지는 음악의 콘솔에 path를 출력
+    // '/musics/기쁨' 이면 장르가 기쁨을 가지는 음악의 콘솔에 path를 출력
     @GetMapping("/musics/{input}")
     public String Print(@PathVariable String input) {
         List<String> urls = emotionService.Print(input);

@@ -25,6 +25,7 @@ import java.nio.file.Files;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 @Controller
 @RequiredArgsConstructor
@@ -89,12 +90,15 @@ public class BookController {
         return "books-save";
     }
 
+
+    //임시로 사용자의 책들을 출력
     @GetMapping("/read")
     public String Read(Authentication authentication) {
         String userId = authentication.getName();
         List<String> url = bookService.findUrl(userId);
         for (String s : url) {
             System.out.println(s);
+            File file = new File(s);
         }
         return "index";
     }

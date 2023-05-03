@@ -35,6 +35,7 @@ public class User extends BaseTimeEntity {
     @OneToMany(mappedBy = "user")
     private List<Book> bookList = new ArrayList<>();
 
+    //생성
     @Builder
     public User(String name, String email, String userId, Role role) {
         this.name = name;
@@ -43,6 +44,7 @@ public class User extends BaseTimeEntity {
         this.role = role;
     }
 
+    //업데이트
     public User update(String name, String userId) {
         this.name = name;
         this.userId = userId;
@@ -50,6 +52,7 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
+    //역할 가져오기
     public String getRoleKey() {
         return this.role.getKey();
     }

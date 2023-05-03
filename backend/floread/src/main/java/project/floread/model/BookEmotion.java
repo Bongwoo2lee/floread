@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+//책과 감정은 다대다이므로 중간에 풀어줄 테이블
 @Entity
 @Getter
 @NoArgsConstructor
