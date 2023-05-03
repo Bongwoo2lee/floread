@@ -1,15 +1,11 @@
 package project.floread.repository;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import project.floread.model.Book;
 
 import javax.persistence.EntityManager;
-import java.io.File;
-import java.nio.file.Files;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,6 +25,12 @@ public class BookRepository {
     public List<Book> findByName(String fileName) {
         return em.createQuery("select b from Book b where b.fileName = :fileName", Book.class)
                 .setParameter("fileName", fileName)
+                .getResultList();
+    }
+
+    public List<String> findByUrl(String userId) {
+        return em.createQuery("select b.url from Book b join b.user u  where u.userId = :userId", String.class)
+                .setParameter("userId", userId)
                 .getResultList();
     }
 }

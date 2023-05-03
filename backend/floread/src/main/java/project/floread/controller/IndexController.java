@@ -51,9 +51,5 @@ public class IndexController {
         return "index";
     }
 
-/*    @GetMapping("/books/save")
-    public String booksSave() {
-        return "books-save";
-    }*/
 
 }

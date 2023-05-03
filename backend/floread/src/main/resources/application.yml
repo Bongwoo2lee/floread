@@ -7,7 +7,9 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
+      #create DB삭제하고 생성, none은 x
       ddl-auto: create
+      #ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       use-new-id-generator-mappings: false
@@ -24,9 +26,6 @@ server:
     encoding:
       force-response: true
 
-logging:
-  level:
-    org.hibernate.SQL: debug
 
 
 upload:

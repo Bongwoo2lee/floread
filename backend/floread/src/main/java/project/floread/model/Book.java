@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,5 +28,6 @@ public class Book {
     @JoinColumn(name = "user_id")
     private User user;
 
-
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<BookEmotion> bookEmotions = new ArrayList<>();
 }

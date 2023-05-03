@@ -9,6 +9,7 @@ import project.floread.repository.BookRepository;
 import project.floread.repository.UserRepository;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,6 @@ public class BookService {
     @Transactional
     public Long join(Book book, String userId) {
         User user = userRepository.findByUserId(userId);
-        System.out.println(user.getUserId());
         book.setUser(user);
         validateDuplicateBook(book);
         bookRepository.save(book);
@@ -35,5 +35,10 @@ public class BookService {
         if(!findBooks.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 책입니다.");
         }
+    }
+
+    public List<String> findUrl(String userId) {
+        List<String> urls = bookRepository.findByUrl(userId);
+        return urls;
     }
 }
