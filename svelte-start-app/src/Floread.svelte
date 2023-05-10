@@ -1,11 +1,15 @@
 <script>
-	import Popup from "./Popup.svelte";
-	let isPoupVisible = false;
-	function handleOpenPopup(){
-		isPoupVisible=true;
+	let popupVisible = false;
+	let popupVisible2 = false;
+	let popupVisible3 = false;
+	function togglePopup(){
+		popupVisible = !popupVisible;
 	}
-	function handleClosePopup(){
-		isPoupVisible=false;
+	function togglePopup2(){
+		popupVisible2 = !popupVisible2;
+	}
+	function togglePopup3(){
+		popupVisible3 = !popupVisible3;
 	}
 	let src="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/1166091_ORSJPI0.jpg";
 	let src2="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5542689_2866296.jpg"
@@ -16,6 +20,40 @@
 	}
 </script>
 <style>
+	.popup-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.2s ease;
+    opacity: 0;
+    z-index: -1;
+  }
+
+  .popup {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(100%);
+    transition: transform 0.2s ease;
+  }
+
+  .popup-wrapper.visible {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  .popup.visible {
+    transform: translateY(0);
+  }
     p{
         color: rgb(255, 244,233);
         font-family: 'Georgia', serif;
@@ -89,14 +127,25 @@
 		<td><img style="margin: auto;" src={src3} alt="이미지" width='150px' height='150px'></td>		
 	</tr>
 	<tr>
-		<td><button class="btn" on:click={handleOpenPopup}>UPLOAD</button><Popup 
-			visible={isPoupVisible}
-			title="팝업 제목"
-			content="팝업 내용"
-			onClose={handleClosePopup}></Popup></td>
-		<td><button class="btn">VIEWER</button></td>
-		<td><button class="btn">MYPAGE</button></td>		
+		<td><button class="btn" on:click={togglePopup}>UPLOAD</button></td>
+		<td><button class="btn" on:click={togglePopup2}>VIEWER</button></td>
+		<td><button class="btn" on:click={togglePopup3}>MYPAGE</button></td>		
 	</tr>
 </table>
 </div>
+<div class="popup-wrapper {popupVisible ? 'visible' : ''}" on:click={togglePopup}>
+	<div class="popup {popupVisible ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
+	  <h2>업로드 화면 들어올 예정</h2>
+	</div>
+  </div>
+  <div class="popup-wrapper {popupVisible2 ? 'visible' : ''}" on:click={togglePopup2}>
+	<div class="popup {popupVisible2 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
+	  <h2>뷰어 페이지 화면 들어올 예정</h2>
+	</div>
+  </div>
+  <div class="popup-wrapper {popupVisible3 ? 'visible' : ''}" on:click={togglePopup3}>
+	<div class="popup {popupVisible3 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
+	  <h2>개인 페이지 화면 들어올 예정</h2>
+	</div>
+  </div>
 </body>
