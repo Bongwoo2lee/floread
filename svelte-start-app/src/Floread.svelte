@@ -12,8 +12,8 @@
 		popupVisible3 = !popupVisible3;
 	}
 	let src="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/1166091_ORSJPI0.jpg";
-	let src2="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5542689_2866296.jpg"
-	let src3="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5567275_2901224.jpg"
+	let src2="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5542689_2866296.jpg";
+	let src3="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5567275_2901224.jpg";
 	let user ={loggedIn:false};
 	function toggle(){
 		user.loggedIn=!user.loggedIn;
@@ -122,7 +122,7 @@
 	<p style="color:rgba(255, 244,233);font-size: 3em;font-family:Gothic A1, san-serif;"><b>당신의 독서를 돕는 음악과 함께 하세요</b></p>
 <table style="width: 100%; text-align:center; margin:auto;">
 	<tr>
-		<td><img style="margin: auto;" src={src} alt="이미지" width='150px' height='150px'></td>
+		<td><img style="margin: auto;" src={src} alt="이미지" width="150px" height="150px"></td>
 		<td><img style="margin: auto;" src={src2} alt="이미지" width='150px' height='150px'></td>
 		<td><img style="margin: auto;" src={src3} alt="이미지" width='150px' height='150px'></td>		
 	</tr>
