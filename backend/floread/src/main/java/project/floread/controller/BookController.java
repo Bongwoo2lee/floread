@@ -2,25 +2,30 @@ package project.floread.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.floread.model.Book;
+import project.floread.repository.UserRepository;
 import project.floread.service.BookService;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-
+@CrossOrigin
 @Controller
 @RequiredArgsConstructor
+//@RestController
 public class BookController {
 
     private final BookService bookService;
+    private final UserRepository userRepository;
 
     @GetMapping("/books/save")
     public String upload() {
@@ -85,16 +90,45 @@ public class BookController {
     }
 
 
-    //임시로 사용자의 책들을 출력
+    //임시로 책내용 출력
     @GetMapping("/read")
     public String Read(Authentication authentication) {
         String userId = authentication.getName();
         List<String> url = bookService.findUrl(userId);
+
+
         for (String s : url) {
             System.out.println(s);
+
             //파일 출력시 할 내용
             //File file = new File(s);
         }
-        return "index";
+        return "book";
+    }
+
+
+    public String  getBook(Authentication authentication, Model model) {
+        // url 파라미터를 사용하여 파일 경로를 가져오는 로직
+        List<Book> books = bookService.findBooks(authentication.getName());
+        Book book = books.get(0);
+        String filePath = book.getUrl();
+
+        model.addAttribute("filePath", filePath);
+        // HTTP 응답 설정
+        /*HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        return new ResponseEntity<>(filePath, headers, HttpStatus.OK);*/
+        return "book";
+    }
+
+    @GetMapping("/book")
+    public ResponseEntity<FileSystemResource> getFile(Authentication authentication) throws IOException {
+        List<Book> books = bookService.findBooks(authentication.getName());
+        Book book = books.get(0);
+        String filePath = book.getUrl();
+        FileSystemResource resource = new FileSystemResource(filePath);
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(resource);
     }
 }

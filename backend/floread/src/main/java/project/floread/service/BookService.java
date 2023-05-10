@@ -41,4 +41,12 @@ public class BookService {
         List<String> urls = bookRepository.findByUrl(userId);
         return urls;
     }
+
+    public List<Book> findBooks(String userId) {
+        List<Book> books = bookRepository.findByBook(userId);
+        for (Book book : books) {
+            System.out.println(book.getFileName());
+        }
+        return books;
+    }
 }

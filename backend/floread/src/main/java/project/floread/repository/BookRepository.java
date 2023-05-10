@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+
 public class BookRepository {
 
     private final EntityManager em;
@@ -30,6 +31,12 @@ public class BookRepository {
 
     public List<String> findByUrl(String userId) {
         return em.createQuery("select b.url from Book b join b.user u  where u.userId = :userId", String.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
+
+    public List<Book> findByBook(String userId) {
+        return em.createQuery("select b from Book b join b.user u  where u.userId = :userId", Book.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }
