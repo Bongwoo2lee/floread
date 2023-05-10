@@ -1,7 +1,19 @@
 <script>
+	import Popup from "./Popup.svelte";
+	let isPoupVisible = false;
+	function handleOpenPopup(){
+		isPoupVisible=true;
+	}
+	function handleClosePopup(){
+		isPoupVisible=false;
+	}
 	let src="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/1166091_ORSJPI0.jpg";
 	let src2="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5542689_2866296.jpg"
 	let src3="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5567275_2901224.jpg"
+	let user ={loggedIn:false};
+	function toggle(){
+		user.loggedIn=!user.loggedIn;
+	}
 </script>
 <style>
     p{
@@ -32,6 +44,18 @@
 		background-repeat: no-repeat;
 		background-size: 100%;
 	}
+	.btn{
+	background: rgba(0,0,0,0);
+	padding: 10px 25px;
+	display: inline-block;
+	border-radius: 25px;
+	margin: 20px 0;
+	color: #fff;
+	position: relative;
+	font-size: 1em;
+	font-weight: bold;
+	border-color: #fff;
+}
 	#wrap{
 		margin: 0 auto;
 		overflow: hidden;
@@ -45,6 +69,13 @@
 	img{display: block;}
 </style>
 <body bgcolor="black">
+	<div style="float:right">
+		{#if user.loggedIn}
+		<button  style="background:none" on:click={toggle}><p style="line-height: 0px;">log out</p></button>
+		{:else}
+		<button style="background:none" on:click={toggle}><p style="line-height: 0px;">log in</p></button>
+		{/if}
+	</div>
 	<div>
     <p style="line-height: 0px; font-size:6.5em;">Floread</p>
     <p style="line-height: 0px;">Music stuck on the bookshelf </p>
@@ -58,9 +89,13 @@
 		<td><img style="margin: auto;" src={src3} alt="이미지" width='150px' height='150px'></td>		
 	</tr>
 	<tr>
-		<td><p>UPLOAD</p></td>
-		<td><p>VIEWER</p></td>
-		<td><p>MYPAGE</p></td>		
+		<td><button class="btn" on:click={handleOpenPopup}>UPLOAD</button><Popup 
+			visible={isPoupVisible}
+			title="팝업 제목"
+			content="팝업 내용"
+			onClose={handleClosePopup}></Popup></td>
+		<td><button class="btn">VIEWER</button></td>
+		<td><button class="btn">MYPAGE</button></td>		
 	</tr>
 </table>
 </div>
