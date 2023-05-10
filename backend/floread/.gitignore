@@ -27,7 +27,7 @@ out/
 !**/src/test/**/out/
 application-oauth.yml
 application-datasource.yml
-
+application-real-db.yml
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
