@@ -1,34 +1,23 @@
 package project.floread.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import project.floread.config.auth.LoginUser;
-import project.floread.config.auth.dto.SessionUser;
 import project.floread.model.Book;
-import project.floread.model.User;
-import project.floread.repository.BookRepository;
-import project.floread.repository.UserRepository;
 import project.floread.service.BookService;
-import project.floread.service.EmotionService;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+
 
 @Controller
 @RequiredArgsConstructor
-//@RequestMapping(value = "/upload", method = RequestMethod.POST)
-//@ResponseBody
 public class BookController {
 
     private final BookService bookService;
@@ -41,7 +30,6 @@ public class BookController {
 
     @PostMapping("/books/save")
     public String create(@RequestPart("file") MultipartFile[] files,  Authentication authentication) throws IOException {
-/*음*/
 
         //현재 로그인 중인 유저 userId가져오기
         String userId = authentication.getName();
@@ -62,7 +50,8 @@ public class BookController {
                 //저장될 파일
                 File destinationBook;
                 String destinationBookName;
-                String bookUrl = "/Users/seokbeomlee/Desktop/Project/floread/book/";
+                String bookUrl = System.getProperty("user.dir")+"/../book/";
+                System.out.println(bookUrl);
                 try {
 
                     //파일명은 사용자auth2아이디_원본파일.txt로 저장됨
@@ -86,6 +75,7 @@ public class BookController {
                 }
 
             } catch (IOException e) {
+
                 System.out.println("저장 실패");
                 return "index";
             }
@@ -102,7 +92,8 @@ public class BookController {
         List<String> url = bookService.findUrl(userId);
         for (String s : url) {
             System.out.println(s);
-            File file = new File(s);
+            //파일 출력시 할 내용
+            //File file = new File(s);
         }
         return "index";
     }

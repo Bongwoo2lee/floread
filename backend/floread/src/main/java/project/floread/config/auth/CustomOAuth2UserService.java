@@ -2,7 +2,6 @@ package project.floread.config.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -14,7 +13,6 @@ import project.floread.config.auth.dto.OAuthAttributes;
 import project.floread.config.auth.dto.SessionUser;
 import project.floread.model.User;
 import project.floread.repository.UserRepository;
-
 
 import javax.servlet.http.HttpSession;
 import java.util.Collections;

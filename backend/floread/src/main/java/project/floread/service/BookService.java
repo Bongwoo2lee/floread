@@ -8,10 +8,7 @@ import project.floread.model.User;
 import project.floread.repository.BookRepository;
 import project.floread.repository.UserRepository;
 
-import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
