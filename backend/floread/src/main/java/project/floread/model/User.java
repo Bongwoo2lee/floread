@@ -28,20 +28,15 @@ public class User extends BaseTimeEntity {
     @Column
     private String userId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
-
     @OneToMany(mappedBy = "user")
     private List<Book> bookList = new ArrayList<>();
 
     //생성
     @Builder
-    public User(String name, String email, String userId, Role role) {
+    public User(String name, String email, String userId) {
         this.name = name;
         this.email = email;
         this.userId = userId;
-        this.role = role;
     }
 
     //업데이트
@@ -52,8 +47,4 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
-    //역할 가져오기
-    public String getRoleKey() {
-        return this.role.getKey();
-    }
 }

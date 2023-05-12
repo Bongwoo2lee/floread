@@ -13,18 +13,5 @@ public class FloreadApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FloreadApplication.class, args);
-		File targetFolder = new File(System.getProperty("user.dir")+"/../book");
-
-		File[] files = targetFolder.listFiles();
-
-		for (File file : files) {
-
-			if(file.isDirectory()) {
-				continue;
-			}
-			file.delete();
-		}
-		System.out.println(targetFolder);
 	}
-
 }
