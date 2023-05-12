@@ -1,4 +1,5 @@
 <script>
+	import {onMount} from 'svelte';
 	let popupVisible = false;
 	let popupVisible2 = false;
 	let popupVisible3 = false;
@@ -11,6 +12,20 @@
 	function togglePopup3(){
 		popupVisible3 = !popupVisible3;
 	}
+	function handleClick(event) {
+    if (popupVisible && !event.target.classList.contains('close-button')) {
+      event.stopPropagation();
+      return false;
+    }
+	else if (popupVisible2 && !event.target.classList.contains('close-button')) {
+      event.stopPropagation();
+      return false;
+    }
+	else if (popupVisible3 && !event.target.classList.contains('close-button')) {
+      event.stopPropagation();
+      return false;
+    }
+  }
 	let src="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/1166091_ORSJPI0.jpg";
 	let src2="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5542689_2866296.jpg";
 	let src3="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5567275_2901224.jpg";
@@ -18,6 +33,12 @@
 	function toggle(){
 		user.loggedIn=!user.loggedIn;
 	}
+	onMount(() => {
+    document.addEventListener('click', handleClick);
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  });
 </script>
 <style>
 	.popup-wrapper {
@@ -53,6 +74,12 @@
 
   .popup.visible {
     transform: translateY(0);
+  }
+  .close-button{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	cursor: pointer;
   }
     p{
         color: rgb(255, 244,233);
@@ -133,19 +160,22 @@
 	</tr>
 </table>
 </div>
-<div class="popup-wrapper {popupVisible ? 'visible' : ''}" on:click={togglePopup}>
+  <div class="popup-wrapper {popupVisible ? 'visible' : ''}">
 	<div class="popup {popupVisible ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
+	  <span class="close-button" on:click={togglePopup}>x</span>
 	  <h2>업로드 화면 들어올 예정</h2>
 	</div>
   </div>
-  <div class="popup-wrapper {popupVisible2 ? 'visible' : ''}" on:click={togglePopup2}>
+  <div class="popup-wrapper {popupVisible2 ? 'visible' : ''}">
 	<div class="popup {popupVisible2 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
-	  <h2>뷰어 페이지 화면 들어올 예정</h2>
+	  <span class="close-button" on:click={togglePopup2}>x</span>
+		<h2>뷰어 페이지 화면 들어올 예정</h2>
 	</div>
   </div>
-  <div class="popup-wrapper {popupVisible3 ? 'visible' : ''}" on:click={togglePopup3}>
+  <div class="popup-wrapper {popupVisible3 ? 'visible' : ''}">
 	<div class="popup {popupVisible3 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
-	  <h2>개인 페이지 화면 들어올 예정</h2>
+	  <span class="close-button" on:click={togglePopup3}>x</span>
+		<h2>개인 페이지 화면 들어올 예정</h2>
 	</div>
   </div>
 </body>
