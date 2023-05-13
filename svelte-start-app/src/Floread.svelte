@@ -3,6 +3,8 @@
 	let popupVisible = false;
 	let popupVisible2 = false;
 	let popupVisible3 = false;
+	let login = false;
+	let logout = false;
 	function togglePopup(){
 		popupVisible = !popupVisible;
 	}
@@ -11,6 +13,12 @@
 	}
 	function togglePopup3(){
 		popupVisible3 = !popupVisible3;
+	}
+	function logintoggle(){
+		login = !login;
+	}
+	function logouttoggle(){
+		logout = !logout;
 	}
 	function handleClick(event) {
     if (popupVisible && !event.target.classList.contains('close-button')) {
@@ -25,20 +33,66 @@
       event.stopPropagation();
       return false;
     }
+	else if (login && !event.target.classList.contains('close-button')) {
+      event.stopPropagation();
+      return false;
+    }
+	else if (logout && !event.target.classList.contains('close-button')) {
+      event.stopPropagation();
+      return false;
+    }
   }
 	let src="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/1166091_ORSJPI0.jpg";
 	let src2="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5542689_2866296.jpg";
 	let src3="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5567275_2901224.jpg";
-	let user ={loggedIn:false};
-	function toggle(){
-		user.loggedIn=!user.loggedIn;
-	}
 	onMount(() => {
     document.addEventListener('click', handleClick);
     return () => {
       document.removeEventListener('click', handleClick);
     };
   });
+  function handleCredentialResponse(response) {
+		// decodeJwtResponse() is a custom function defined by you
+		// to decode the credential response.
+		const responsePayload = parseJwt(response.credential);
+
+		const data = {
+			id: responsePayload.sub, 
+			name: responsePayload.name,
+			email: responsePayload.email, 
+			profile_image: responsePayload.picture
+		};
+
+		fetch('http://localhost:8000/login/google', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		})
+		.then(response => {
+			if (!response.ok) {
+			throw new Error('Network response was not ok');
+			}
+			return response.json();
+		})
+		.then(data => {
+			console.log(data);
+		})
+		.catch(error => {
+			console.error('There was a problem with the fetch operation:', error);
+		});
+	};
+
+	function parseJwt (token) {
+		var base64Url = token.split('.')[1];
+		var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+		var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+			return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+		}).join(''));
+
+		return JSON.parse(jsonPayload);
+	};
 </script>
 <style>
 	.popup-wrapper {
@@ -135,10 +189,10 @@
 </style>
 <body bgcolor="black">
 	<div style="float:right">
-		{#if user.loggedIn}
-		<button  style="background:none" on:click={toggle}><p style="line-height: 0px;">log out</p></button>
+		{#if login}
+		<button  style="background:none" on:click={logouttoggle}><p style="line-height: 0px;">log out</p></button>
 		{:else}
-		<button style="background:none" on:click={toggle}><p style="line-height: 0px;">log in</p></button>
+		<button style="background:none" on:click={logintoggle}><p style="line-height: 0px;">log in</p></button>
 		{/if}
 	</div>
 	<div>
@@ -176,6 +230,17 @@
 	<div class="popup {popupVisible3 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
 	  <span class="close-button" on:click={togglePopup3}>x</span>
 		<h2>개인 페이지 화면 들어올 예정</h2>
+	</div>
+  </div>
+  <div class="popup-wrapper {login ? 'visible' : ''}">
+	<div class="popup {login ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
+	  <span class="close-button" on:click={logintoggle}>x</span>
+	</div>
+  </div>
+  <div class="popup-wrapper {logout ? 'visible' : ''}">
+	<div class="popup {logout ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
+	  <span class="close-button" on:click={logouttoggle}>x</span>
+		<h2>로그아웃 화면</h2>
 	</div>
   </div>
 </body>
