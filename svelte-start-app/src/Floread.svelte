@@ -39,6 +39,44 @@
       document.removeEventListener('click', handleClick);
     };
   });
+  let files = [];
+  let message;
+
+  async function handleUpload() {
+    if (files.length === 0) return;
+
+    const formData = new FormData();
+    files.forEach((file) => {
+      // 파일 확장자 검사
+      const extension = file.name.split('.').pop();
+      if (extension !== 'txt') {
+        message = `${file.name} is not a text file`;
+        return;
+      }
+
+      formData.append('files', file);
+    });
+
+    if (message) return;
+
+    try {
+      const response = await fetch('http://localhost:3000/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        message = 'Files uploaded successfully';
+      } else {
+        message = result.message;
+      }
+    } catch (error) {
+      console.error(error);
+      message = error.message;
+    }
+  }
 </script>
 <style>
 	.popup-wrapper {
@@ -58,8 +96,8 @@
 
   .popup {
     position: relative;
-    width: 300px;
-    height: 200px;
+    width: 350px;
+    height: 300px;
     background-color: white;
     border-radius: 5px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
@@ -75,12 +113,27 @@
   .popup.visible {
     transform: translateY(0);
   }
-  .close-button{
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	cursor: pointer;
-  }
+  .close-button {
+  float: right;
+  width: 48px;
+  height: 48px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.close-icon {
+  width: 24px;
+  height: 24px;
+  fill: #757575;
+}
+
+.close-button:hover .close-icon {
+  fill: #212121;
+}
     p{
         color: rgb(255, 244,233);
         font-family: 'Georgia', serif;
@@ -132,6 +185,30 @@
 		margin-bottom: 150px;
 	}
 	img{display: block;}
+	.upload-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .upload-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    margin-right: 1rem;
+  }
+
+  .upload-input {
+    display: none;
+  }
+
+  .message {
+    margin-top: 1rem;
+  }
 </style>
 <body bgcolor="black">
 	<div style="float:right">
@@ -162,20 +239,52 @@
 </div>
   <div class="popup-wrapper {popupVisible ? 'visible' : ''}">
 	<div class="popup {popupVisible ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
-	  <span class="close-button" on:click={togglePopup}>x</span>
-	  <h2>업로드 화면 들어올 예정</h2>
+		<table style="width: 100%; text-align:center; margin:auto;">
+			<tr>
+				<td>
+					<button class="close-button" aria-label="Close modal" on:click={togglePopup}>
+						<svg class="close-icon" viewBox="0 0 24 24">
+						  <path fill="currentColor" d="M12.7,12l5.3-5.3c0.4-0.4,0.4-1,0-1.4l0,0c-0.4-0.4-1-0.4-1.4,0L11.3,10.6L6,5.3c-0.4-0.4-1-0.4-1.4,0l0,0c-0.4,0.4-0.4,1,0,1.4l5.3,5.3l-5.3,5.3c-0.4,0.4-0.4,1,0,1.4l0,0c0.4,0.4,1,0.4,1.4,0l5.3-5.3l5.3,5.3c0.4,0.4,1,0.4,1.4,0l0,0c0.4-0.4,0.4-1,0-1.4L12.7,12z"></path>
+						</svg>
+					  </button>
+				</td>
+			</tr>
+		<tr>
+			<td><input type="file" multiple on:change={(e) => { files = Array.from(e.target.files); }} />
+			<button on:click={handleUpload}>Upload</button>
+			{#if message}
+			  <h1>{message}</h1>
+			{/if}</td>
+		</tr>
+		</table>
 	</div>
   </div>
   <div class="popup-wrapper {popupVisible2 ? 'visible' : ''}">
 	<div class="popup {popupVisible2 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
-	  <span class="close-button" on:click={togglePopup2}>x</span>
-		<h2>뷰어 페이지 화면 들어올 예정</h2>
+		<table style="width: 100%; text-align:center; margin:auto;">
+			<tr><td>
+				<button class="close-button" aria-label="Close modal" on:click={togglePopup2}>
+					<svg class="close-icon" viewBox="0 0 24 24">
+					  <path fill="currentColor" d="M12.7,12l5.3-5.3c0.4-0.4,0.4-1,0-1.4l0,0c-0.4-0.4-1-0.4-1.4,0L11.3,10.6L6,5.3c-0.4-0.4-1-0.4-1.4,0l0,0c-0.4,0.4-0.4,1,0,1.4l5.3,5.3l-5.3,5.3c-0.4,0.4-0.4,1,0,1.4l0,0c0.4,0.4,1,0.4,1.4,0l5.3-5.3l5.3,5.3c0.4,0.4,1,0.4,1.4,0l0,0c0.4-0.4,0.4-1,0-1.4L12.7,12z"></path>
+					</svg>
+				  </button>
+			</td></tr>
+			<tr><td><h2>뷰어 페이지 화면 들어올 예정</h2></td></tr>
+		</table>
 	</div>
   </div>
   <div class="popup-wrapper {popupVisible3 ? 'visible' : ''}">
 	<div class="popup {popupVisible3 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
-	  <span class="close-button" on:click={togglePopup3}>x</span>
-		<h2>개인 페이지 화면 들어올 예정</h2>
+		<table style="width: 100%; text-align:center; margin:auto;">
+			<tr><td>
+				<button class="close-button" aria-label="Close modal" on:click={togglePopup3}>
+					<svg class="close-icon" viewBox="0 0 24 24">
+					  <path fill="currentColor" d="M12.7,12l5.3-5.3c0.4-0.4,0.4-1,0-1.4l0,0c-0.4-0.4-1-0.4-1.4,0L11.3,10.6L6,5.3c-0.4-0.4-1-0.4-1.4,0l0,0c-0.4,0.4-0.4,1,0,1.4l5.3,5.3l-5.3,5.3c-0.4,0.4-0.4,1,0,1.4l0,0c0.4,0.4,1,0.4,1.4,0l5.3-5.3l5.3,5.3c0.4,0.4,1,0.4,1.4,0l0,0c0.4-0.4,0.4-1,0-1.4L12.7,12z"></path>
+					</svg>
+				  </button>
+			</td></tr>
+			<tr><td><h2>개인 페이지 화면 들어올 예정</h2></td></tr>
+		</table>
 	</div>
   </div>
 </body>
