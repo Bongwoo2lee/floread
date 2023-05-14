@@ -11,28 +11,37 @@ file = open('sentiment-analysis/data/booksample1.txt', 'r',encoding='UTF8')    #
 raw_text = file.readlines()
 #print(type(raw_text),raw_text, sep = '\n\n')
 
-text = []
+textsum = '' 
 # 모든 줄바꿈제거
 for sentence in raw_text:
     #print("sentence")
     sentence = sentence.replace("\n", "")
-    if sentence=='':    # 줄바꿈만 있는 문장은 뺀다
-        continue
-    text.append(sentence)
-# new_text = [re.sub("\n", "", sentence) for sentence in text]
-print(text)
+    textsum += sentence
 
-# 임의로 줄 바꿈 되있는 문장 붙이기
-for i in len(text):
-    if not (sentence[-1]=='.' or sentence[-1]=='”'):    #문장 끝이 '온점', '닫는 쌍따옴표'가 아닌데 줄바꿈이 됬으면 두 문장을 합친다
+# new_text = [re.sub("\n", "", sentence) for sentence in text]
+
+textsum = re.sub('\([^)]*\)|[一-龥]', '', textsum)
+# print(textsum)
+
+text = []
+s, e = 0, 0
+for i in range(len(textsum)):
+    if (textsum[i]=='.' and textsum[i+1]!='”' ) or textsum[i]=='”':
+        e = i+1
+        text.append(textsum[s:e])
+        s = e
+
+# 임의로 줄 바꿈 
+
+# for s in text:
+#     print(s)
+
     
-    
-    
-# #csv파일 생성, 쓰기
-# with open('output.csv', 'w', newline='', encoding='utf-8') as file:
-#     writer = csv.writer(file)
-#     for item in sentences:
-#         writer.writerow([item])
+#csv파일 생성, 쓰기
+with open('sentiment-analysis/data/output.csv', 'w', newline='', encoding="utf-8-sig") as f:
+    writer = csv.writer(f)
+    for item in text:
+        writer.writerow([item])
 
 # from konlpy.tag import Kkma
 
