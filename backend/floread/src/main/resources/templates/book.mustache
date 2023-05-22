@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>텍스트 파일 출력 예제</title>
+    <style>
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        #fileContent {
+            font-family: 'Arial', sans-serif;
+            font-size: 30px;
+            line-height: 3;
+            color: #000efd;
+            padding: 20px;
+            border: 4px solid #000000;
+            background-color: #ff0000;
+        }
+    </style>
+    <script>
+        function loadTextFile() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    document.getElementById("fileContent").innerHTML = xhr.responseText;
+                }
+            };
+            xhr.open("GET", "{{filePath}}", true);  // 머스테치 문법을 사용하여 파일 경로를 추가함
+            xhr.send();
+        }
+    </script>
+</head>
+<body onload="loadTextFile()">
+<h1>dssdjfoisdjfiosdjfsoidjoi <h1/>
+
+<div id="fileContent">
+    <!-- 내용 -->
+
+</div>
+
+</body>
+</html>

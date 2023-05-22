@@ -1,9 +1,12 @@
 .idea
 *.DS_Store
 
+
 #파이토치(용량)
 *.pt
 
 #AI허브 제공 데이터셋
 *.csv
 *.xlsx
+book/*
+
