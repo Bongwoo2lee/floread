@@ -60,7 +60,7 @@
     if (message) return;
 
     try {
-      const response = await fetch('http://localhost:3000/upload', {
+      const response = await fetch('http://localhost:8000/books/save', {
         method: 'POST',
         body: formData,
       });
@@ -213,9 +213,9 @@
 <body bgcolor="black">
 	<div style="float:right">
 		{#if user.loggedIn}
-		<button style="background:none" on:click={toggle} onclick="window.open('login.html', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log out</p></button>
+		<button style="background:none" on:click={toggle} onclick="window.open('http://localhost:8000', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log out</p></button>
 		{:else}
-		<button style="background:none" on:click={toggle} onclick="window.open('login.html', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log in</p></button>
+		<button style="background:none" on:click={toggle} onclick="window.open('http://localhost:8000', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log in</p></button>
 		{/if}
 	</div>
 	<div>
