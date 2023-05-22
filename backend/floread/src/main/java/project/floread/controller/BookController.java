@@ -18,26 +18,34 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-@CrossOrigin
-@Controller
+@CrossOrigin(origins = "http://localhost:8080")
 @RequiredArgsConstructor
-//@RestController
+@RestController
 public class BookController {
 
     private final BookService bookService;
     private final UserRepository userRepository;
 
-    @PostMapping("/upload")
-    public String create(@RequestPart("file") MultipartFile[] files,  Authentication authentication) throws IOException {
 
+    @PostMapping("/upload")
+    public ResponseEntity<String> create(@RequestPart("file") MultipartFile[] files,  Authentication authentication) throws IOException {
         //현재 로그인 중인 유저 userId가져오기
+        try {
+            String userId = authentication.getName();
+            System.out.println(userId);
+        }
+        catch (NullPointerException e) {
+            return ResponseEntity.ok("로그인을 먼저해주세요.");
+        }
         String userId = authentication.getName();
+
         for (MultipartFile file : files) {
             if(file.isEmpty()) {
                 System.out.println("파일 없음");
-                return "index";
+                return ResponseEntity.ok("Files uploaded fail");
             }
             try {
+                System.out.println(file.getName());
                 Book book = new Book();
                 //원본 파일 이름 저장
                 String sourceFileName = file.getOriginalFilename();
@@ -76,10 +84,10 @@ public class BookController {
             } catch (IOException e) {
 
                 System.out.println("저장 실패");
-                return "index";
+                return ResponseEntity.ok("Files uploaded fail");
             }
         }
-        return "index";
+        return ResponseEntity.ok("Files uploaded successfully");
         //있을 경우 패스
     }
 

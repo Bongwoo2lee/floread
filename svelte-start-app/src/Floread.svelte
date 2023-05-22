@@ -39,44 +39,37 @@
       document.removeEventListener('click', handleClick);
     };
   });
+
   let files = [];
   let message;
 
-  async function handleUpload() {
-    if (files.length === 0) return;
+  function uploadFile() {
+        event.preventDefault(); // Prevent the default form submission
 
-    const formData = new FormData();
-    files.forEach((file) => {
-      // 파일 확장자 검사
-      const extension = file.name.split('.').pop();
-      if (extension !== 'txt') {
-        message = `${file.name} is not a text file`;
-        return;
-      }
+        const fileInput = document.getElementById('file-input');
+        const files = fileInput.files;
 
-      formData.append('files', file);
-    });
+        if (files.length === 0) return;
 
-    if (message) return;
+        const formData = new FormData();
+        Array.from(files).forEach((file) => {
+            formData.append('files', file);
+        });
 
-    try {
-      const response = await fetch('http://localhost:8000/books/save', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        message = 'Files uploaded successfully';
-      } else {
-        message = result.message;
-      }
-    } catch (error) {
-      console.error(error);
-      message = error.message;
+        fetch('http://localhost:8000/upload', {
+            method: 'POST',
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                // Handle the response data
+                console.log(data);
+            })
+            .catch((error) => {
+                // Handle the error
+                console.error(error);
+            });
     }
-  }
 </script>
 <style>
 	.popup-wrapper {
@@ -250,11 +243,17 @@
 				</td>
 			</tr>
 		<tr>
-			<td><input type="file" multiple on:change={(e) => { files = Array.from(e.target.files); }} />
-			<button on:click={handleUpload}>Upload</button>
-			{#if message}
-			  <h1>{message}</h1>
-			{/if}</td>
+			<td>
+				<form method="POST" action="http://localhost:8080" enctype="multipart/form-data">
+					<div>
+						<input type="file" id="file-input" name="file" accept="text/plain" multiple>
+					</div>
+					<div>
+						<span>업로드</span>
+						<input type="submit" value="전송" onclick="uploadFile()">
+					</div>
+				</form>
+			</td>
 		</tr>
 		</table>
 	</div>
