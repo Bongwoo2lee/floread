@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="https://accounts.google.com/gsi/client" async defer></script>
+ 	<!-- Google API 클라이언트 라이브러리를 로드합니다. -->
+</head>
+
+<script>
+    	
+	function handleCredentialResponse(response) {
+		// decodeJwtResponse() is a custom function defined by you
+		// to decode the credential response.
+		const responsePayload = parseJwt(response.credential);
+
+		const data = {
+			id: responsePayload.sub, 
+			name: responsePayload.name,
+			email: responsePayload.email, 
+			profile_image: responsePayload.picture
+		};
+
+		fetch('http://localhost:8000/login/google', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+		})
+		.then(response => {
+			if (!response.ok) {
+			throw new Error('Network response was not ok');
+			}
+			return response.json();
+		})
+		.then(data => {
+			// 로그인 성공 후 반환된 인증 정보를 LocalStorage에 저장
+			localStorage.setItem('id_token',data.id);
+
+			// 저장된 인증 정보를 가져와서 사용
+			const idToken = localStorage.getItem('id_token');
+	
+			console.log(idToken);
+		})
+		.catch(error => {
+			console.error('There was a problem with the fetch operation:', error);
+		});
+	};
+
+	function parseJwt (token) {
+		var base64Url = token.split('.')[1];
+		var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+		var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+			return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+		}).join(''));
+
+		return JSON.parse(jsonPayload);
+	};
+</script>
+
+<body>
+    <div id="g_id_onload"
+		data-client_id="621213075461-0seu7uk9j9s54l1qpvtcf86svgf534q9.apps.googleusercontent.com"
+		data-callback="handleCredentialResponse">
+	</div>
+	<div class="g_id_signin" data-type="icon" data-shape="circle" ></div>
+
+
+	<div id="naver_id_login"></div>
+	<script type="text/javascript">
+        var naver_id_login = new window.naver_id_login("ZHL50Teqx8eslDIt34Id", "http://localhost:8080/collback");
+        var state = naver_id_login.getUniqState();
+        naver_id_login.setButton("white", 2,40);
+        naver_id_login.setDomain("http://localhost:8080");
+        naver_id_login.setState(state);
+        naver_id_login.setPopup();
+        naver_id_login.init_naver_id_login();
+    </script>
+</body>
