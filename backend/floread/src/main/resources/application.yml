@@ -26,8 +26,3 @@ server:
     encoding:
       force-response: true
   port: 8000
-
-
-
-upload:
-  path: /Users/seokbeomlee/Desktop/Project/floread/book/

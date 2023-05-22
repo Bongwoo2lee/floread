@@ -27,13 +27,7 @@ public class BookController {
     private final BookService bookService;
     private final UserRepository userRepository;
 
-    @GetMapping("/books/save")
-    public String upload() {
-        return "books-save";
-    }
-
-
-    @PostMapping("/books/save")
+    @PostMapping("/upload")
     public String create(@RequestPart("file") MultipartFile[] files,  Authentication authentication) throws IOException {
 
         //현재 로그인 중인 유저 userId가져오기

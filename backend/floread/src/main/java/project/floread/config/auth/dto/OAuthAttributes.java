@@ -2,6 +2,7 @@ package project.floread.config.auth.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+import project.floread.model.Role;
 import project.floread.model.User;
 
 import java.util.Map;
@@ -61,6 +62,7 @@ public class OAuthAttributes {
                 .name(name)
                 .email(email)
                 .userId(userId)
+                .role(Role.USER)
                 .build();
     }
 }
