@@ -1,0 +1,18 @@
+{{>layout/header}}
+
+<h1>책 업로드</h1>
+
+<div class="col-md-12">
+    <form method="POST" action="/books/save" enctype="multipart/form-data">
+        <div>
+            <span>파일</span>
+            <input type="file" id="file-input" name="file" accept="text/plain" multiple>
+        </div>
+        <div>
+            <span>업로드</span>
+            <input type="submit" value="전송" onclick="uploadFile()">
+        </div>
+    </form>
+</div>
+
+<script src="books-save.js"></script>

@@ -1,0 +1,28 @@
+spring:
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+
+  jpa:
+    open-in-view: true
+    hibernate:
+      #create DB삭제하고 생성, none은 x
+      ddl-auto: create
+      #ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      dialect: org.hibernate.dialect.MySQL8InnoDBDialect
+
+  profiles:
+    include: oauth, datasource
+
+server:
+  servlet:
+    encoding:
+      force-response: true
+  port: 8000
