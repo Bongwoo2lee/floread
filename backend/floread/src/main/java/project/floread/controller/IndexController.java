@@ -1,11 +1,13 @@
 package project.floread.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import project.floread.config.auth.LoginUser;
 import project.floread.config.auth.dto.SessionUser;
+import project.floread.service.AuthenticationService;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,13 +22,18 @@ public class IndexController {
     //이 위치에 머스테치 파일을 두면 스프링 부트에서 자동으로 로딩합니다.
     private final HttpSession httpSession;
 
+    private final AuthenticationService authenticationService;
+
     @GetMapping("/")
-    public String index(Model model, @LoginUser SessionUser user) {
+    public String index(Model model, @LoginUser SessionUser user, Authentication authentication) {
         //Model = 서버 템플릿 엔진에서 사용할 수 있는 객체를 저장.
         //어느 컨트롤러든지 @LoginUser만 사용하면 세션 정보를 가져올 수 있음.
         if (user != null) {
             model.addAttribute("googleName", user.getName());
         }
+
+        authenticationService.setAuthentication(authentication);
+
         return "index";
     }
 

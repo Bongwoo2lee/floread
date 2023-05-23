@@ -17,34 +17,32 @@
 		popupVisible3 = !popupVisible3;
 	}
 	function handleClick(event) {
-    if (popupVisible && !event.target.classList.contains('close-button')) {
-      event.stopPropagation();
-      return false;
-    }
-	else if (popupVisible2 && !event.target.classList.contains('close-button')) {
-      event.stopPropagation();
-      return false;
-    }
-	else if (popupVisible3 && !event.target.classList.contains('close-button')) {
-      event.stopPropagation();
-      return false;
-    }
-  }
+		if (popupVisible && !event.target.classList.contains('close-button')) {
+		event.stopPropagation();
+		return false;
+		}
+		else if (popupVisible2 && !event.target.classList.contains('close-button')) {
+		event.stopPropagation();
+		return false;
+		}
+		else if (popupVisible3 && !event.target.classList.contains('close-button')) {
+		event.stopPropagation();
+		return false;
+		}
+  	}
 	let src="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/1166091_ORSJPI0.jpg";
 	let src2="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5542689_2866296.jpg";
 	let src3="https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/5567275_2901224.jpg";
+
 	onMount(() => {
     document.addEventListener('click', handleClick);
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
-  });
+		return () => {
+		document.removeEventListener('click', handleClick);
+		};
+ 	});
 
-  let files = [];
-  let message;
-
-  function uploadFile() {
-        event.preventDefault(); // Prevent the default form submission
+	function uploadFile() {
+        //event.preventDefault(); // Prevent the default form submission
 
         const fileInput = document.getElementById('file-input');
         const files = fileInput.files;
@@ -60,7 +58,10 @@
             method: 'POST',
             body: formData,
         })
-            .then((response) => response.json())
+            .then((response) => {
+				response.text();
+				console.log(response)
+			})
             .then((data) => {
                 // Handle the response data
                 console.log(data);
@@ -244,15 +245,17 @@
 			</tr>
 		<tr>
 			<td>
-				<form method="POST" action="http://localhost:8080" enctype="multipart/form-data">
-					<div>
-						<input type="file" id="file-input" name="file" accept="text/plain" multiple>
-					</div>
-					<div>
-						<span>업로드</span>
-						<input type="submit" value="전송" onclick="uploadFile()">
-					</div>
-				</form>
+				<div>
+					<form enctype="multipart/form-data">
+						<div>
+							<input type="file" id="file-input" name="file" accept="text/plain" multiple>
+						</div>
+						<div>
+							<span>업로드</span>
+							<input type="submit" value="전송" on:click|preventDefault={uploadFile}>
+						</div>
+					</form>
+				</div>
 			</td>
 		</tr>
 		</table>
