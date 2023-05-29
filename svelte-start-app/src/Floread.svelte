@@ -73,26 +73,32 @@
     }
 	let isBarOpen = false;
   let isMusicPlaying = false;
+  let audioElement;
 
   // 바를 펼치거나 접는 함수
   function toggleBar() {
     isBarOpen = !isBarOpen;
+    if (!isBarOpen && isMusicPlaying) {
+      audioElement.play();
+    }
   }
 
   // 음악 파일 재생 함수
   function playMusic() {
-    const audioElement = document.getElementById('music');
     audioElement.play();
     isMusicPlaying = true;
   }
 
   // 음악 정지 함수
   function stopMusic() {
-    const audioElement = document.getElementById('music');
     audioElement.pause();
     audioElement.currentTime = 0;
     isMusicPlaying = false;
   }
+
+  onMount(() => {
+    audioElement = document.getElementById('music');
+  });
 </script>
 <style>
 	.popup-wrapper {
@@ -140,11 +146,16 @@
   .button {
     position: absolute;
     top: auto;
-    right: 0px;
-    transform: translateY(-50%);
-    background-color: #fff;
-    padding: 5px;
-    border: 1px solid #ccc;
+    right: 10px;
+    background-color: #f1f1f1;
+    color: #333;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   .music-ui {
@@ -152,9 +163,14 @@
     top: 50%;
     right: 10px;
     transform: translateY(-50%);
-    background-color: #fff;
-    padding: 5px;
-    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease-in-out;
     transform: translateY(-100%);
   }
@@ -335,14 +351,12 @@
 			<tr><td>
 				<div class="bar {isBarOpen ? 'open' : ''}" on:click={toggleBar}></div>
 				<button class="button" on:click={toggleBar}>펼치기/접기</button>
+				<audio id="music" src="y2mate.com - 좆됐다 좆됐어.mp3"></audio>
 				{#if isBarOpen}
 				  <div class="music-ui {isMusicPlaying ? 'open' : ''}">
-					<audio id="music" src="https://github.com/Bongwoo2lee/floread/blob/frontend/svelte-start-app/public/y2mate.com%20-%20%EC%A2%86%EB%90%90%EB%8B%A4%20%EC%A2%86%EB%90%90%EC%96%B4.mp3"></audio>
-					{#if isMusicPlaying}
-					  <button on:click={stopMusic}>정지</button>
-					{:else}
-					  <button on:click={playMusic}>재생</button>
-					{/if}
+					<button on:click={isMusicPlaying ? stopMusic : playMusic}>
+					  {isMusicPlaying ? '음악 일시정지' : '음악 재생'}
+					</button>
 				  </div>
 				{/if}
 				</td></tr>
