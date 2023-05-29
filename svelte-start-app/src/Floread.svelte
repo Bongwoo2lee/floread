@@ -1,4 +1,18 @@
 <script>
+	function mypage() {
+
+		fetch('http://localhost:8000/mypage')
+			.then(response => response.json())
+			.then(data => {
+				sendList = data;
+				console.log(sendList); // 데이터 출력 또는 활용
+			})
+			.catch(error => {
+				console.error(error);
+		});
+	}
+
+
 	import {onMount} from 'svelte';
 	let popupVisible = false;
 	let popupVisible2 = false;
@@ -285,7 +299,9 @@
 					</svg>
 				  </button>
 			</td></tr>
-			<tr><td><h2>개인 페이지 화면 들어올 예정</h2></td></tr>
+			<tr><td>
+				<button on:click={() => mypage()}>Greet John</button>
+			</td></tr>
 		</table>
 	</div>
   </div>
