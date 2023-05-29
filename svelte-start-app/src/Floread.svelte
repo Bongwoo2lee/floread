@@ -71,12 +71,28 @@
                 console.error(error);
             });
     }
-	let fileContent = '';
+	let isBarOpen = false;
+  let isMusicPlaying = false;
 
-async function readFile() {
-  const response = await fetch('https://github.com/Bongwoo2lee/floread/blob/frontend/svelte-start-app/src/test.txt');
-  fileContent = await response.text();
-}
+  // 바를 펼치거나 접는 함수
+  function toggleBar() {
+    isBarOpen = !isBarOpen;
+  }
+
+  // 음악 파일 재생 함수
+  function playMusic() {
+    const audioElement = document.getElementById('music');
+    audioElement.play();
+    isMusicPlaying = true;
+  }
+
+  // 음악 정지 함수
+  function stopMusic() {
+    const audioElement = document.getElementById('music');
+    audioElement.pause();
+    audioElement.currentTime = 0;
+    isMusicPlaying = false;
+  }
 </script>
 <style>
 	.popup-wrapper {
@@ -101,10 +117,51 @@ async function readFile() {
     background-color: white;
     border-radius: 5px;
     box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
-    transform: translateY(100%);
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
   }
 
+  .bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 0px;
+    height: 100%;
+    background-color: #ccc;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+  }
+
+  .bar.open {
+    width: 100px;
+    transform: translateX(0%);
+  }
+
+  .button {
+    position: absolute;
+    top: auto;
+    right: 0px;
+    transform: translateY(-50%);
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .music-ui {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background-color: #fff;
+    padding: 5px;
+    border: 1px solid #ccc;
+    transition: transform 0.3s ease-in-out;
+    transform: translateY(-100%);
+  }
+
+  .music-ui.open {
+    transform: translateY(0%);
+  }
   .popup-wrapper.visible {
     opacity: 1;
     z-index: 1;
@@ -275,10 +332,19 @@ async function readFile() {
 					</svg>
 				  </button>
 			</td></tr>
-			{#if fileContent}
-    <pre>{fileContent}</pre>
-{/if}
 			<tr><td>
+				<div class="bar {isBarOpen ? 'open' : ''}" on:click={toggleBar}></div>
+				<button class="button" on:click={toggleBar}>펼치기/접기</button>
+				{#if isBarOpen}
+				  <div class="music-ui {isMusicPlaying ? 'open' : ''}">
+					<audio id="music" src="your-music-file.mp3"></audio>
+					{#if isMusicPlaying}
+					  <button on:click={stopMusic}>정지</button>
+					{:else}
+					  <button on:click={playMusic}>재생</button>
+					{/if}
+				  </div>
+				{/if}
 				</td></tr>
 		</table>
 	</div>
