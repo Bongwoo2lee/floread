@@ -337,7 +337,7 @@
 				<button class="button" on:click={toggleBar}>펼치기/접기</button>
 				{#if isBarOpen}
 				  <div class="music-ui {isMusicPlaying ? 'open' : ''}">
-					<audio id="music" src="your-music-file.mp3"></audio>
+					<audio id="music" src="https://github.com/Bongwoo2lee/floread/blob/frontend/svelte-start-app/public/y2mate.com%20-%20%EC%A2%86%EB%90%90%EB%8B%A4%20%EC%A2%86%EB%90%90%EC%96%B4.mp3"></audio>
 					{#if isMusicPlaying}
 					  <button on:click={stopMusic}>정지</button>
 					{:else}
