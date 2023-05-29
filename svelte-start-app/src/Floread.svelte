@@ -1,4 +1,5 @@
 <script>
+	
 	import {onMount} from 'svelte';
 	let popupVisible = false;
 	let popupVisible2 = false;
@@ -70,6 +71,12 @@
                 console.error(error);
             });
     }
+	let fileContent = '';
+
+async function readFile() {
+  const response = await fetch('https://github.com/Bongwoo2lee/floread/blob/frontend/svelte-start-app/src/test.txt');
+  fileContent = await response.text();
+}
 </script>
 <style>
 	.popup-wrapper {
@@ -268,7 +275,11 @@
 					</svg>
 				  </button>
 			</td></tr>
-			<tr><td><h2>뷰어 페이지 화면 들어올 예정</h2></td></tr>
+			{#if fileContent}
+    <pre>{fileContent}</pre>
+{/if}
+			<tr><td>
+				</td></tr>
 		</table>
 	</div>
   </div>
