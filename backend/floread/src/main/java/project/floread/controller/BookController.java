@@ -1,6 +1,7 @@
 package project.floread.controller;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.FileSystemResource;
@@ -15,13 +16,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import project.floread.model.Book;
+import project.floread.model.*;
 import project.floread.repository.UserRepository;
 import project.floread.service.AuthenticationService;
 import project.floread.service.BookService;
+import project.floread.service.EmotionService;
+import project.floread.service.MusicService;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,6 +33,8 @@ import java.util.List;
 @RestController
 public class BookController {
 
+    private final EmotionService emotionService;
+    private final MusicService musicService;
     private final BookService bookService;
     private final AuthenticationService authenticationService;
 
@@ -60,7 +66,7 @@ public class BookController {
                 System.out.println(bookUrl);
                 try {
 
-                    //파일명은 사용자auth2아이디_원본파일.txt로 저장됨
+                    //파일명은 원본파일_아이디.txt로 저장됨
                     destinationBookName = title + '_' + userId + '.' + sourceFileNameExtension;
 
                     //파일 경로
@@ -73,6 +79,7 @@ public class BookController {
 
                     //데이터베이스에 저장
                     book.setFileName(destinationBookName);
+                    book.setOriginName(title);
                     book.setUrl(bookUrl + destinationBookName);
                     bookService.join(book, userId);
 
@@ -92,12 +99,65 @@ public class BookController {
         //있을 경우 패스
     }
 
-    @GetMapping("/upload")
-    public String getUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
+
+    @GetMapping("/mypage")
+    public String getMyPage() {
+        System.out.println("dd = ");
+        //아이디 찾기
+        String userId = authenticationService.getAuthentication().getName();
         System.out.println(userId);
-        return userId;
+
+        //아이디로 책 찾기
+        List<Book> books = bookService.findBooks(userId);
+
+        //잠시 책이랑 감성이랑 연결
+        for (Book book : books) {
+            System.out.println("book = " + book.getOriginName());
+
+            BookEmotion bookEmotion = new BookEmotion();
+            Emotion emotion = emotionService.FindId("기쁨");
+            System.out.println("emotion = " + emotion.getEmotion());
+
+            bookEmotion.setBook(book);
+            bookEmotion.setEmotion(emotion);
+            System.out.println("bookEmotion = " + bookEmotion.getId());
+            bookService.joinEmotion(bookEmotion);
+        }
+
+
+        //보낼 형식
+        List<SendBook> sendBookList = new ArrayList<>();
+        List<SendMusicEmotion> sendMusicEmotionList = new ArrayList<>();
+
+        //책 별로 제목, url, 음악김성리스트(음악, 감성)
+        for (Book book : books) {
+            //음악 감성 리스트
+
+            //감성 찾기
+            List<Emotion> emotions = bookService.findEmotions(book);
+
+
+            for (Emotion emotion : emotions) {
+                //감성에 대한 음악 찾기
+                List<String> musicList = musicService.findByMusic(emotion);
+
+                System.out.println("musicList = " + musicList);
+
+                //감성에 따른 음악 리스트 연결
+                SendMusicEmotion sendMusicEmotion = new SendMusicEmotion(emotion.getEmotion(), musicList);
+                sendMusicEmotionList.add(sendMusicEmotion);
+            }
+            SendBook sendBook = new SendBook(book.getOriginName(), book.getUrl(), sendMusicEmotionList);
+            System.out.println("sendBook = " + sendBook);
+            sendBookList.add(sendBook);
+        }
+        String aa = sendBookList.toString();
+        System.out.println("aa = " + aa);
+
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(sendBookList).getClass().getName());
+
+        return gson.toJson(sendBookList);
     }
 
 

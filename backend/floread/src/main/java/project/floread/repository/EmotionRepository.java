@@ -14,4 +14,7 @@ public interface EmotionRepository extends JpaRepository<Emotion, Long> {
     //감정을 입력하면 그거에 맞는 음악의 경로를 선택
     @Query("SELECT m.url from Music m JOIN  m.musicEmotions me JOIN  me.emotion e WHERE e.emotion = :emotion")
     List<String> findUrlByEmotion(@Param("emotion") String emotion);
+
+    @Query("SELECT e from Emotion e WHERE e.emotion = :emotion")
+    Emotion findById(@Param("emotion") String emotion);
 }

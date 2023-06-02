@@ -22,6 +22,9 @@ public class Book {
     private String fileName;
 
     @Column(nullable = false)
+    private String originName;
+
+    @Column(nullable = false)
     private String url;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

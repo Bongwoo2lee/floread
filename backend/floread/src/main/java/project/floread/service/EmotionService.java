@@ -3,6 +3,7 @@ package project.floread.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import project.floread.model.Emotion;
 import project.floread.repository.EmotionRepository;
 
 import java.util.List;
@@ -19,5 +20,10 @@ public class EmotionService {
         List<String> urls = emotionRepository.findUrlByEmotion(emotion);
 
         return urls;
+    }
+
+    @Transactional
+    public Emotion FindId(String emotion) {
+        return emotionRepository.findById(emotion);
     }
 }

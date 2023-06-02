@@ -4,7 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.floread.model.Book;
+import project.floread.model.BookEmotion;
+import project.floread.model.Emotion;
 import project.floread.model.User;
+import project.floread.repository.BookEmotionRepository;
 import project.floread.repository.BookRepository;
 import project.floread.repository.UserRepository;
 
@@ -17,6 +20,7 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final BookEmotionRepository bookEmotionRepository;
 
     //책 DB에 저장
     @Transactional
@@ -26,6 +30,17 @@ public class BookService {
         validateDuplicateBook(book);
         bookRepository.save(book);
         return book.getId();
+    }
+
+    @Transactional
+    public Long joinEmotion(BookEmotion bookEmotion) {
+        bookEmotionRepository.save(bookEmotion);
+        return bookEmotion.getId();
+    }
+
+    @Transactional
+    public List<Emotion> findEmotions(Book book) {
+        return bookEmotionRepository.findByEmotion(book);
     }
 
     //존재하는 책인지 확인하는 함수
