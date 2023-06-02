@@ -1,14 +1,12 @@
 <script>
 	function mypage() {
-
 		fetch('http://localhost:8000/mypage')
-			.then(response => response.json())
-			.then(data => {
-				sendList = data;
-				console.log(sendList); // 데이터 출력 또는 활용
-			})
-			.catch(error => {
-				console.error(error);
+		.then((response) => response.json())//읽어온 데이터를 json으로 변환
+    	.then(data => {
+			console.log(data)
+		})
+		.catch(error => {
+			console.error(error);
 		});
 	}
 
