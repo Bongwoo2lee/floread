@@ -1,3 +1,4 @@
+
 INSERT INTO Emotion (emotion) values ('기쁨');
 INSERT INTO Emotion (emotion) values ('슬픔');
 INSERT INTO Emotion (emotion) values ('어두움');

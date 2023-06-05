@@ -1,0 +1,24 @@
+version: '3'
+services:
+  mysql:
+    image: mysql
+    restart: no
+    environment:
+      MYSQL_ROOT_PASSWORD: floread123
+      MYSQL_DATABASE: floread_db
+      MYSQL_USER: floread
+      MYSQL_PASSWORD: floread123
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: no
+    ports:
+      - 8000:8000
+    depends_on:
+      - mysql
