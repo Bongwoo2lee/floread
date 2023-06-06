@@ -12,4 +12,4 @@ RUN npm run build
  
  
 # 앱 실행을 위한 명령어를 지정합니다.
-CMD ["npm", "run", "start", "--", "--host"]
+CMD ["npm", "run", "start", "--", "--host", "floread.store"]

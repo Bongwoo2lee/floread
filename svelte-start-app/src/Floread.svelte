@@ -9,7 +9,6 @@
 			console.error(error);
 		});
 	}
-	
 
 
 	import {onMount} from 'svelte';
@@ -28,6 +27,9 @@
 	}
 	function togglePopup3(){
 		popupVisible3 = !popupVisible3;
+		if (popupVisible3) {
+			mypage();
+		}
 	}
 	function handleClick(event) {
 		if (popupVisible && !event.target.classList.contains('close-button')) {
@@ -72,16 +74,25 @@
             body: formData,
         })
             .then((response) => {
+				if (response.ok === false) {
+					throw new Error(response.status);
+				}
 				response.text();
-				console.log(response)
+				console.log(response);
+				
 			})
             .then((data) => {
+				alert('정상적으로 업로드되었습니다.');
+				popupVisible = !popupVisible;
                 // Handle the response data
-                console.log(data);
             })
             .catch((error) => {
-                // Handle the error
-                console.error(error);
+				//에러가 406이면 팝업으로 이미존재하는 파일입니다. 출력
+				if(error.message == 500) {
+					alert('파일을 업로드할 수 없습니다.');
+					return;
+				}
+				alert('이미 존재하는 파일입니다.');
             });
     }
 </script>
@@ -219,11 +230,7 @@
 </style>
 <body bgcolor="black">
 	<div style="float:right">
-		{#if user.loggedIn}
-		<button style="background:none" on:click={toggle} onclick="window.open('http://floread.store:8000', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log out</p></button>
-		{:else}
 		<button style="background:none" on:click={toggle} onclick="window.open('http://floread.store:8000', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log in</p></button>
-		{/if}
 	</div>
 	<div>
     <p style="line-height: 0px; font-size:6.5em;">Floread</p>
@@ -299,7 +306,7 @@
 				  </button>
 			</td></tr>
 			<tr><td>
-				<button on:click={() => mypage()}>Greet John</button>
+				<h2>마이페이지 화면 들어올 예정</h2>
 			</td></tr>
 		</table>
 	</div>

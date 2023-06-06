@@ -1,6 +1,5 @@
 package project.floread.controller;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
@@ -9,15 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.floread.model.*;
-import project.floread.repository.UserRepository;
 import project.floread.service.*;
 
 import java.io.File;
@@ -30,7 +24,6 @@ import java.util.List;
 @RestController
 public class BookController {
 
-    private final EmotionService emotionService;
     private final MusicService musicService;
     private final BookService bookService;
     private final AuthenticationService authenticationService;
@@ -42,6 +35,9 @@ public class BookController {
 
         System.out.println(userId);
         for (MultipartFile file : files) {
+            //저장후 보낼 파일url을 담을 변수
+            String fileUrl = null;
+
             if(file.isEmpty()) {
                 System.out.println("파일 없음");
                 return ResponseEntity.status(HttpStatus.OK)
@@ -83,48 +79,52 @@ public class BookController {
                     book.setOriginName(title);
                     book.setUrl(bookUrl + destinationBookName);
                     bookService.join(book, userId);
-                    kafkaSampleProducerService.sendMessage(book.getUrl());
+                    fileUrl = book.getUrl();
+                    
 
                 } catch (IllegalStateException e) {
                     System.out.println("파일 존재");
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("파일 존재");
                 }
 
             } catch (IOException e) {
 
                 System.out.println("저장 실패");
-                return ResponseEntity.status(HttpStatus.OK)
+                return ResponseEntity.status(HttpStatus.NOT_EXTENDED)
                         .body("저장 실패");
             }
+            kafkaSampleProducerService.sendMessage(fileUrl);
         }
         return ResponseEntity.status(HttpStatus.OK)
                 .body("OK");
-        //있을 경우 패스
     }
 
 
     @GetMapping("/mypage")
     public String getMyPage() {
-        System.out.println("dd = ");
         //아이디 찾기
         String userId = authenticationService.getAuthentication().getName();
-        System.out.println(userId);
+        System.out.println("userId: "+ userId);
 
         //아이디로 책 찾기
         List<Book> books = bookService.findBooks(userId);
-
-        //잠시 책이랑 감성이랑 연결
         for (Book book : books) {
             System.out.println("book = " + book.getOriginName());
-
-            BookEmotion bookEmotion = new BookEmotion();
-            Emotion emotion = emotionService.FindId("기쁨");
-            System.out.println("emotion = " + emotion.getEmotion());
-
-            bookEmotion.setBook(book);
-            bookEmotion.setEmotion(emotion);
-            System.out.println("bookEmotion = " + bookEmotion.getId());
-            bookService.joinEmotion(bookEmotion);
         }
+        // //잠시 책이랑 감성이랑 연결
+        // for (Book book : books) {
+        //     System.out.println("book = " + book.getOriginName());
+
+        //     BookEmotion bookEmotion = new BookEmotion();
+        //     Emotion emotion = emotionService.FindId("기쁨");
+        //     System.out.println("emotion = " + emotion.getEmotion());
+
+        //     bookEmotion.setBook(book);
+        //     bookEmotion.setEmotion(emotion);
+        //     System.out.println("bookEmotion = " + bookEmotion.getId());
+        //     bookService.joinEmotion(bookEmotion);
+        // }
 
 
         //보낼 형식
@@ -147,6 +147,12 @@ public class BookController {
 
                 //감성에 따른 음악 리스트 연결
                 SendMusicEmotion sendMusicEmotion = new SendMusicEmotion(emotion.getEmotion(), musicList);
+                
+                //만약 리스트에 감정이 있으면 넘김
+                if (sendMusicEmotionList.contains(sendMusicEmotion)) {
+                    continue;
+                }
+
                 sendMusicEmotionList.add(sendMusicEmotion);
             }
             SendBook sendBook = new SendBook(book.getOriginName(), book.getUrl(), sendMusicEmotionList);
@@ -154,7 +160,7 @@ public class BookController {
             sendBookList.add(sendBook);
         }
         String aa = sendBookList.toString();
-        System.out.println("aa = " + aa);
+        System.out.println("책리스트 = " + aa);
 
         Gson gson = new Gson();
         System.out.println(gson.toJson(sendBookList).getClass().getName());

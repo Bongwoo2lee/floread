@@ -5,7 +5,7 @@ INSERT INTO Emotion (emotion) values ('어두움');
 INSERT INTO Emotion (emotion) values ('잔잔');
 INSERT INTO Emotion (emotion) values ('어두움');
 
-INSERT INTO Music (title, url) values  ('test1.mp4', '/home/floread/floread/music/test3.mp4test1.mp4');
+INSERT INTO Music (title, url) values  ('test1.mp4', '/home/floread/floread/music/test1.mp4');
 INSERT INTO Music (title, url) values  ('test2.mp4', '/home/floread/floread/music/test2.mp4');
 INSERT INTO Music (title, url) values  ('test3.mp4', '/home/floread/floread/music/test3.mp4');
 

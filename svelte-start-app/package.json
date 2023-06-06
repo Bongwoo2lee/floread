@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "proxy": "http://localhost:8000",
+  "proxy": "http://floread.store:8000",
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "start": "sirv public --no-clear"
+    "dev": "HOST=0.0.0.0 rollup -c -w",
+    "start": "sirv public"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
