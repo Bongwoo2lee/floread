@@ -12,6 +12,8 @@ services:
       - ./mysql_data:/var/lib/mysql
     ports:
       - 3306:3306
+    networks:
+      - spring-network
 
   spring-app:
     build:
@@ -22,3 +24,8 @@ services:
       - 8000:8000
     depends_on:
       - mysql
+    networks:
+      - spring-network
+
+networks:
+  spring-network:

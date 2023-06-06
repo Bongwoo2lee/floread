@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.floread.model.*;
 import project.floread.repository.UserRepository;
-import project.floread.service.AuthenticationService;
-import project.floread.service.BookService;
-import project.floread.service.EmotionService;
-import project.floread.service.MusicService;
+import project.floread.service.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +34,7 @@ public class BookController {
     private final MusicService musicService;
     private final BookService bookService;
     private final AuthenticationService authenticationService;
+    private final KafkaSampleProducerService kafkaSampleProducerService;
 
     @PostMapping("/upload")
     public ResponseEntity<String> create(@RequestPart("files") MultipartFile[] files) throws IOException {
@@ -82,6 +80,7 @@ public class BookController {
                     book.setOriginName(title);
                     book.setUrl(bookUrl + destinationBookName);
                     bookService.join(book, userId);
+                    kafkaSampleProducerService.sendMessage(book.getUrl());
 
                 } catch (IllegalStateException e) {
                     System.out.println("파일 존재");

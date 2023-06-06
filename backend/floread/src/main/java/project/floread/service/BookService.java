@@ -21,7 +21,6 @@ public class BookService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final BookEmotionRepository bookEmotionRepository;
-
     //책 DB에 저장
     @Transactional
     public Long join(Book book, String userId) {
@@ -29,6 +28,7 @@ public class BookService {
         book.setUser(user);
         validateDuplicateBook(book);
         bookRepository.save(book);
+
         return book.getId();
     }
 
