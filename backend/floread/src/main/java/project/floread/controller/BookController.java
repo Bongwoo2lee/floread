@@ -60,7 +60,10 @@ public class BookController {
                 //저장될 파일
                 File destinationBook;
                 String destinationBookName;
-                String bookUrl = System.getProperty("user.dir")+"/../book/";
+                String currentUrl = System.getProperty("user.dir");
+                File currentFolder = new File(currentUrl);
+                File parentFolder = currentFolder.getParentFile();
+                String bookUrl = parentFolder.getAbsolutePath()+"/book/";
                 System.out.println(bookUrl);
                 try {
 

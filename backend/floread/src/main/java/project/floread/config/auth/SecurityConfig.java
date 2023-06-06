@@ -36,7 +36,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080")); // 허용할 오리진 설정
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://floread.store:8000", "http://floread.store:8080")); // 허용할 오리진 설정
+        //configuration.setAllowedOrigins(Arrays.asList("http://floread.store:8000")); // 허용할 오리진 설정
+        //configuration.setAllowedOrigins(Arrays.asList("http://floread.store:8080")); // 허용할 오리진 설정
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // 허용할 메서드 설정
         configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization")); // 허용할 헤더 설정
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
