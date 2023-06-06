@@ -1,6 +1,6 @@
 <script>
 	function mypage() {
-		fetch('http://localhost:8000/mypage')
+		fetch('http://floread.store:8000/mypage')
 		.then((response) => response.json())//읽어온 데이터를 json으로 변환
     	.then(data => {
 			console.log(data)
@@ -67,7 +67,7 @@
             formData.append('files', file);
         });
 
-        fetch('http://localhost:8000/upload', {
+        fetch('http://floread.store:8000/upload', {
             method: 'POST',
             body: formData,
         })
@@ -220,9 +220,9 @@
 <body bgcolor="black">
 	<div style="float:right">
 		{#if user.loggedIn}
-		<button style="background:none" on:click={toggle} onclick="window.open('http://localhost:8000', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log out</p></button>
+		<button style="background:none" on:click={toggle} onclick="window.open('http://floread.store:8000', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log out</p></button>
 		{:else}
-		<button style="background:none" on:click={toggle} onclick="window.open('http://localhost:8000', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log in</p></button>
+		<button style="background:none" on:click={toggle} onclick="window.open('http://floread.store:8000', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log in</p></button>
 		{/if}
 	</div>
 	<div>
