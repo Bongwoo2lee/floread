@@ -4,6 +4,7 @@
 		.then((response) => response.json())//읽어온 데이터를 json으로 변환
     	.then(data => {
 			console.log(data)
+			return data;
 		})
 		.catch(error => {
 			console.error(error);
@@ -21,6 +22,14 @@
 	}
 	function togglePopup(){
 		popupVisible = !popupVisible;
+
+		data = mypage();
+		for (let i = 0; i < data.length; i++) {
+			url = data[i].url;
+			id = data[i].id;
+			console.log(url);
+			confirm.log(id);
+		}
 	}
 	function togglePopup2(){
 		popupVisible2 = !popupVisible2;
@@ -69,17 +78,19 @@
             formData.append('files', file);
         });
 
-        fetch('http://floread.store:8000/upload', {
+        fetch('http://localhost:8000/upload', {
             method: 'POST',
             body: formData,
         })
             .then((response) => {
+				// response에서 ok가 아닌 다른거 받을때 error처리하고 싶어
+
 				if (response.ok === false) {
-					throw new Error(response.status);
+					throw new Error('false');
 				}
 				response.text();
-				console.log(response);
-				
+				console.log(response)
+				popupVisible = !popupVisible;
 			})
             .then((data) => {
 				alert('정상적으로 업로드되었습니다.');
