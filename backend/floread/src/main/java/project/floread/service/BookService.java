@@ -46,6 +46,16 @@ public class BookService {
         return book.getId();
     }
 
+    //책 DB에서 삭제
+    @Transactional
+    public void delete(String originName, String userId) {
+        User user = userRepository.findByUserId(userId);
+        Book book = bookRepository.findByOriginName(originName);
+        if (Objects.equals(book.getUser().getId(), user.getId())) {
+            bookRepository.delete(book);
+        }
+    }
+
     @Transactional
     public Long joinEmotion(BookEmotion bookEmotion) {
         bookEmotionRepository.save(bookEmotion);

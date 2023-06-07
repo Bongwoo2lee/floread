@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 @RequiredArgsConstructor
 @RestController
 public class BookController {
@@ -60,7 +61,6 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body("OK");
     }
-    
 
     @PostMapping("/upload")
     public ResponseEntity<String> create(@RequestPart("files") MultipartFile[] files) throws IOException {
@@ -81,7 +81,7 @@ public class BookController {
                 Book book = new Book();
                 //원본 파일 이름 저장
                 String sourceFileName = file.getOriginalFilename();
-                //원본파일확장자면
+                //원본파일확장자명
                 String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName);
                 //확장자빼고
                 String title = FilenameUtils.removeExtension(sourceFileName);
@@ -203,9 +203,8 @@ public class BookController {
     }
 
 
-    //임시로 책내용 출력
     @GetMapping("/read")
-    public ResponseEntity<Resource> Read() throws IOException {
+    public ResponseEntity<Resource> Read() throws FileNotFoundException {
         String userId = authenticationService.getAuthentication().getName();
         System.out.println(userId);
         List<Book> books = bookService.findBooks(userId);
@@ -230,6 +229,7 @@ public class BookController {
             return ResponseEntity.notFound().build();
         }
     }
+
 
 
     public String getBook(Authentication authentication, Model model) {
