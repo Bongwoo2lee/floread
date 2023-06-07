@@ -19,10 +19,20 @@ public class BookEmotionRepository {
         em.persist(bookEmotion);
     }
 
+    public void delete(BookEmotion bookEmotion) {
+        em.remove(bookEmotion);
+    }
+
     public List<Emotion> findByEmotion(Book book) {
         return em.createQuery("select be.emotion from BookEmotion be where be.book = :book", Emotion.class)
                 .setParameter("book", book)
                 .getResultList();
+    }
+
+    public BookEmotion findByBookEmotion(Book book) {
+        return em.createQuery("select be from BookEmotion be where be.book = :book", BookEmotion.class)
+                .setParameter("book", book)
+                .getSingleResult();
     }
 
 }

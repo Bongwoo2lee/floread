@@ -12,6 +12,7 @@ import project.floread.repository.BookRepository;
 import project.floread.repository.UserRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,7 +22,20 @@ public class BookService {
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
     private final BookEmotionRepository bookEmotionRepository;
-    //책 DB에 저장
+
+    //책 DB에서 삭제
+    @Transactional
+    public void delete(String originName, String userId) {
+        User user = userRepository.findByUserId(userId);
+        Book book = bookRepository.findByOriginName(originName);
+        BookEmotion bookEmotion = bookEmotionRepository.findByBookEmotion(book);
+        if (Objects.equals(book.getUser().getId(), user.getId())) {
+            bookEmotionRepository.delete(bookEmotion);
+            bookRepository.delete(book);
+        }
+    }
+
+    //책 DB에 저장  
     @Transactional
     public Long join(Book book, String userId) {
         User user = userRepository.findByUserId(userId);

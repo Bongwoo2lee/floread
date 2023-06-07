@@ -23,10 +23,20 @@ public class BookRepository {
                 .getResultList();
     }
 
+    public void delete(Book book) {
+        em.remove(book);
+    }
+
     public List<Book> findByName(String fileName) {
         return em.createQuery("select b from Book b where b.fileName = :fileName", Book.class)
                 .setParameter("fileName", fileName)
                 .getResultList();
+    }
+
+    public Book findByOriginName(String originName) {
+        return em.createQuery("select b from Book b where b.originName = :originName", Book.class)
+                .setParameter("originName", originName)
+                .getSingleResult();
     }
 
     public List<String> findByUrl(String userId) {

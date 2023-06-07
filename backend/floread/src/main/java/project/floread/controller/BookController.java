@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +16,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.floread.model.*;
 import project.floread.service.*;
-
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +34,33 @@ public class BookController {
     private final BookService bookService;
     private final AuthenticationService authenticationService;
     private final KafkaSampleProducerService kafkaSampleProducerService;
+
+    private static String hashString(String input, String algorithm) {
+        try {
+            MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
+            byte[] hashBytes = messageDigest.digest(input.getBytes());
+
+            StringBuilder stringBuilder = new StringBuilder();
+            for (byte b : hashBytes) {
+                stringBuilder.append(String.format("%02x", b));
+            }
+            return stringBuilder.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @GetMapping("/delete/{originName}")
+    public ResponseEntity<String> deleteBook(@PathVariable String originName) {
+        System.out.println(originName);
+        String userId = authenticationService.getAuthentication().getName();
+        System.out.println(userId);
+        bookService.delete(originName, userId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("OK");
+    }
+    
 
     @PostMapping("/upload")
     public ResponseEntity<String> create(@RequestPart("files") MultipartFile[] files) throws IOException {
@@ -62,9 +95,10 @@ public class BookController {
                 String bookUrl = parentFolder.getAbsolutePath()+"/book/";
                 System.out.println(bookUrl);
                 try {
-
-                    //파일명은 원본파일_아이디.txt로 저장됨
-                    destinationBookName = title + '_' + userId + '.' + sourceFileNameExtension;
+                    assert title != null;
+                    String hashedPassword = hashString(title, "SHA-256");
+                    //파일명은 해싱.html로 저장됨
+                    destinationBookName = hashedPassword + ".html";
 
                     //파일 경로
                     destinationBook = new File(bookUrl + destinationBookName);
@@ -171,19 +205,30 @@ public class BookController {
 
     //임시로 책내용 출력
     @GetMapping("/read")
-    public String Read(Authentication authentication) {
-        String userId = authentication.getName();
+    public ResponseEntity<Resource> Read() throws IOException {
+        String userId = authenticationService.getAuthentication().getName();
         System.out.println(userId);
-        List<String> url = bookService.findUrl(userId);
+        List<Book> books = bookService.findBooks(userId);
+        Book book = books.get(0);
+        String filePath = book.getUrl();
+        System.out.println(filePath);
+        //파일 가져오기
+        //반환으로 파일을 보내는데 파일이 html이어서 바로보이게
+        File file = new File(filePath);
 
+        if (file.exists()) {
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
-        for (String s : url) {
-            System.out.println(s);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_HTML_VALUE);
 
-            //파일 출력시 할 내용
-            //File file = new File(s);
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(resource);
+        } else {
+            // 파일이 존재하지 않을 경우 에러 응답
+            return ResponseEntity.notFound().build();
         }
-        return "book";
     }
 
 

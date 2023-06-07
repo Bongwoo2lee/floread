@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().headers().frameOptions().disable().and()
                 .authorizeRequests()
-                .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/upload", "/mypage").permitAll()
+                .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/upload", "/mypage", "/delete", "/read").permitAll()
                 .antMatchers("api/v1/**").hasRole(Role.USER.name())
                 .anyRequest().authenticated()
                 .and().logout().logoutSuccessUrl("/")
