@@ -1,0 +1,2415 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.11)
+
+Error: Unable to access jarfile bubs/floread-0.0.1-SNAPSHOT.jar
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.11)
+
+2023-06-07 09:32:41.275  INFO 18775 --- [           main] project.floread.FloreadApplication       : Starting FloreadApplication using Java 17.0.6 on raspberrypi with PID 18775 (/home/floread/floread/backend/floread/build/libs/floread-0.0.1-SNAPSHOT.jar started by floread in /home/floread/floread/backend/floread)
+2023-06-07 09:32:41.292  INFO 18775 --- [           main] project.floread.FloreadApplication       : The following 2 profiles are active: "oauth", "datasource"
+2023-06-07 09:32:44.569  INFO 18775 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-06-07 09:32:44.808  INFO 18775 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 208 ms. Found 2 JPA repository interfaces.
+2023-06-07 09:32:47.981  INFO 18775 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2023-06-07 09:32:48.034  INFO 18775 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-06-07 09:32:48.036  INFO 18775 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2023-06-07 09:32:48.372  INFO 18775 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-06-07 09:32:48.373  INFO 18775 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 6842 ms
+2023-06-07 09:32:48.971  INFO 18775 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-06-07 09:32:49.616  INFO 18775 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.11)
+
+2023-06-07 09:32:50.287  INFO 18775 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-06-07 09:32:50.382  INFO 18809 --- [           main] project.floread.FloreadApplication       : Starting FloreadApplication using Java 17.0.6 on raspberrypi with PID 18809 (/home/floread/floread/backend/floread/build/libs/floread-0.0.1-SNAPSHOT.jar started by root in /home/floread/floread/backend/floread)
+2023-06-07 09:32:50.396  INFO 18809 --- [           main] project.floread.FloreadApplication       : The following 2 profiles are active: "oauth", "datasource"
+2023-06-07 09:32:50.700  INFO 18775 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-06-07 09:32:51.985  INFO 18775 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-06-07 09:32:52.879  INFO 18775 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2023-06-07 09:32:54.057  INFO 18809 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-06-07 09:32:54.360  INFO 18809 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 262 ms. Found 2 JPA repository interfaces.
+Hibernate: 
+    
+    alter table Book 
+       drop 
+       foreign key FKpsgrhw51v8on5lbyoo5qdjypq
+Hibernate: 
+    
+    alter table BookEmotion 
+       drop 
+       foreign key FKqtvhfeb1nsq7rofmo9vwf26os
+Hibernate: 
+    
+    alter table BookEmotion 
+       drop 
+       foreign key FKfmv5hl337gbj8g13clqdgstn
+Hibernate: 
+    
+    alter table MusicEmotion 
+       drop 
+       foreign key FKrmeriqjppc94snlsd9vh6i8at
+Hibernate: 
+    
+    alter table MusicEmotion 
+       drop 
+       foreign key FKoeyhuwwv9n2f8wjhjnvcib58d
+Hibernate: 
+    
+    drop table if exists Book
+Hibernate: 
+    
+    drop table if exists BookEmotion
+Hibernate: 
+    
+    drop table if exists Emotion
+Hibernate: 
+    
+    drop table if exists Music
+Hibernate: 
+    
+    drop table if exists MusicEmotion
+Hibernate: 
+    
+    drop table if exists User
+Hibernate: 
+    
+    create table Book (
+       book_id bigint not null auto_increment,
+        fileName varchar(255) not null,
+        originName varchar(255) not null,
+        url varchar(255) not null,
+        user_id bigint,
+        primary key (book_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table BookEmotion (
+       id bigint not null auto_increment,
+        book_id bigint,
+        emotion_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table Emotion (
+       emotion_id bigint not null auto_increment,
+        emotion varchar(255),
+        primary key (emotion_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table Music (
+       music_id bigint not null auto_increment,
+        title varchar(255),
+        url varchar(255),
+        primary key (music_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table MusicEmotion (
+       id bigint not null auto_increment,
+        emotion_id bigint,
+        music_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table User (
+       user_id bigint not null auto_increment,
+        createdTime datetime,
+        lastModifiedTime datetime,
+        email varchar(255) not null,
+        name varchar(255) not null,
+        role varchar(255) not null,
+        userId varchar(255),
+        primary key (user_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    alter table Book 
+       add constraint FKpsgrhw51v8on5lbyoo5qdjypq 
+       foreign key (user_id) 
+       references User (user_id)
+Hibernate: 
+    
+    alter table BookEmotion 
+       add constraint FKqtvhfeb1nsq7rofmo9vwf26os 
+       foreign key (book_id) 
+       references Book (book_id)
+2023-06-07 09:32:57.773  INFO 18809 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2023-06-07 09:32:57.827  INFO 18809 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-06-07 09:32:57.828  INFO 18809 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+Hibernate: 
+    
+    alter table BookEmotion 
+       add constraint FKfmv5hl337gbj8g13clqdgstn 
+       foreign key (emotion_id) 
+       references Emotion (emotion_id)
+Hibernate: 
+    
+    alter table MusicEmotion 
+       add constraint FKrmeriqjppc94snlsd9vh6i8at 
+       foreign key (emotion_id) 
+       references Emotion (emotion_id)
+Hibernate: 
+    
+    alter table MusicEmotion 
+       add constraint FKoeyhuwwv9n2f8wjhjnvcib58d 
+       foreign key (music_id) 
+       references Music (music_id)
+2023-06-07 09:32:58.081  INFO 18775 --- [           main] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'jar:file:/home/floread/floread/backend/floread/build/libs/floread-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/import.sql'
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('행복')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('불안')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('놀람')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('슬픔')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('분노')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('중립')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test1.mp4', '/home/floread/floread/music/test1.mp4')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test2.mp4', '/home/floread/floread/music/test2.mp4')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test3.mp4', '/home/floread/floread/music/test3.mp4')
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 1)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 2)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (2, 1)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (3, 3)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (4, 3)
+2023-06-07 09:32:58.159  INFO 18775 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-06-07 09:32:58.175  INFO 18809 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-06-07 09:32:58.176  INFO 18809 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 7508 ms
+2023-06-07 09:32:58.228  INFO 18775 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-06-07 09:32:58.779  INFO 18809 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-06-07 09:32:59.460  INFO 18809 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-06-07 09:33:00.077  INFO 18809 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-06-07 09:33:00.483  INFO 18809 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-06-07 09:33:01.752  INFO 18809 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-06-07 09:33:02.650  INFO 18809 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2023-06-07 09:33:02.915  INFO 18775 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1aabcb0, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@12a72c4, org.springframework.security.web.context.SecurityContextPersistenceFilter@89ef44, org.springframework.security.web.header.HeaderWriterFilter@622fe8, org.springframework.web.filter.CorsFilter@1986dd5, org.springframework.security.web.authentication.logout.LogoutFilter@236fdf, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@e12fbb, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@125e9e8, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@831a73, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@18a9516, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@bc1dde, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@ada095, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1f9ea6b, org.springframework.security.web.session.SessionManagementFilter@4d26ba, org.springframework.security.web.access.ExceptionTranslationFilter@8a5fc2, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@197b3d2]
+2023-06-07 09:33:03.853  INFO 18775 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2023-06-07 09:33:04.916  INFO 18775 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8000 (http) with context path ''
+2023-06-07 09:33:04.982  INFO 18775 --- [           main] s.a.ScheduledAnnotationBeanPostProcessor : No TaskScheduler/ScheduledExecutorService bean found for scheduled processing
+2023-06-07 09:33:05.025  INFO 18775 --- [           main] project.floread.FloreadApplication       : Started FloreadApplication in 25.994 seconds (JVM running for 27.659)
+Hibernate: 
+    
+    alter table Book 
+       drop 
+       foreign key FKpsgrhw51v8on5lbyoo5qdjypq
+Hibernate: 
+    
+    alter table BookEmotion 
+       drop 
+       foreign key FKqtvhfeb1nsq7rofmo9vwf26os
+Hibernate: 
+    
+    alter table BookEmotion 
+       drop 
+       foreign key FKfmv5hl337gbj8g13clqdgstn
+Hibernate: 
+    
+    alter table MusicEmotion 
+       drop 
+       foreign key FKrmeriqjppc94snlsd9vh6i8at
+Hibernate: 
+    
+    alter table MusicEmotion 
+       drop 
+       foreign key FKoeyhuwwv9n2f8wjhjnvcib58d
+Hibernate: 
+    
+    drop table if exists Book
+Hibernate: 
+    
+    drop table if exists BookEmotion
+Hibernate: 
+    
+    drop table if exists Emotion
+Hibernate: 
+    
+    drop table if exists Music
+Hibernate: 
+    
+    drop table if exists MusicEmotion
+Hibernate: 
+    
+    drop table if exists User
+Hibernate: 
+    
+    create table Book (
+       book_id bigint not null auto_increment,
+        fileName varchar(255) not null,
+        originName varchar(255) not null,
+        url varchar(255) not null,
+        user_id bigint,
+        primary key (book_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table BookEmotion (
+       id bigint not null auto_increment,
+        book_id bigint,
+        emotion_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table Emotion (
+       emotion_id bigint not null auto_increment,
+        emotion varchar(255),
+        primary key (emotion_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table Music (
+       music_id bigint not null auto_increment,
+        title varchar(255),
+        url varchar(255),
+        primary key (music_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table MusicEmotion (
+       id bigint not null auto_increment,
+        emotion_id bigint,
+        music_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table User (
+       user_id bigint not null auto_increment,
+        createdTime datetime,
+        lastModifiedTime datetime,
+        email varchar(255) not null,
+        name varchar(255) not null,
+        role varchar(255) not null,
+        userId varchar(255),
+        primary key (user_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    alter table Book 
+       add constraint FKpsgrhw51v8on5lbyoo5qdjypq 
+       foreign key (user_id) 
+       references User (user_id)
+Hibernate: 
+    
+    alter table BookEmotion 
+       add constraint FKqtvhfeb1nsq7rofmo9vwf26os 
+       foreign key (book_id) 
+       references Book (book_id)
+Hibernate: 
+    
+    alter table BookEmotion 
+       add constraint FKfmv5hl337gbj8g13clqdgstn 
+       foreign key (emotion_id) 
+       references Emotion (emotion_id)
+Hibernate: 
+    
+    alter table MusicEmotion 
+       add constraint FKrmeriqjppc94snlsd9vh6i8at 
+       foreign key (emotion_id) 
+       references Emotion (emotion_id)
+Hibernate: 
+    
+    alter table MusicEmotion 
+       add constraint FKoeyhuwwv9n2f8wjhjnvcib58d 
+       foreign key (music_id) 
+       references Music (music_id)
+2023-06-07 09:33:07.668  INFO 18809 --- [           main] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'jar:file:/home/floread/floread/backend/floread/build/libs/floread-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/import.sql'
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('행복')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('불안')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('놀람')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('슬픔')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('분노')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('중립')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test1.mp4', '/home/floread/floread/music/test1.mp4')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test2.mp4', '/home/floread/floread/music/test2.mp4')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test3.mp4', '/home/floread/floread/music/test3.mp4')
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 1)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 2)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (2, 1)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (3, 3)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (4, 3)
+2023-06-07 09:33:07.728  INFO 18809 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-06-07 09:33:07.785  INFO 18809 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-06-07 09:33:08.644  INFO 18775 --- [nio-8000-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-06-07 09:33:08.644  INFO 18775 --- [nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2023-06-07 09:33:08.649  INFO 18775 --- [nio-8000-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2023-06-07 09:33:12.150  INFO 18809 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@34a4f0, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1afa369, org.springframework.security.web.context.SecurityContextPersistenceFilter@19e8b96, org.springframework.security.web.header.HeaderWriterFilter@149c39b, org.springframework.web.filter.CorsFilter@19ac754, org.springframework.security.web.authentication.logout.LogoutFilter@89ef44, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@18deee8, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@16897c8, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@aec673, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@2356, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@ffa561, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@153bc95, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1820f42, org.springframework.security.web.session.SessionManagementFilter@2e0d57, org.springframework.security.web.access.ExceptionTranslationFilter@cffb2d, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@1e818da]
+2023-06-07 09:33:13.007  INFO 18809 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2023-06-07 09:33:13.875  WARN 18809 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'; nested exception is org.springframework.boot.web.server.PortInUseException: Port 8000 is already in use
+2023-06-07 09:33:13.887  INFO 18809 --- [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-06-07 09:33:13.894  INFO 18809 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-06-07 09:33:13.930  INFO 18809 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-06-07 09:33:13.936  INFO 18809 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-06-07 09:33:13.982  INFO 18809 --- [           main] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2023-06-07 09:33:14.065 ERROR 18809 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8000 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8000 or configure this application to listen on another port.
+
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.email=?
+Hibernate: 
+    insert 
+    into
+        User
+        (createdTime, lastModifiedTime, email, name, role, userId) 
+    values
+        (?, ?, ?, ?, ?, ?)
+userId: 112264131623973301211
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+책리스트 = []
+java.lang.String
+112264131623973301211
+files
+/home/floread/floread/backend/book/
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.userId=?
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    where
+        book0_.fileName=?
+Hibernate: 
+    insert 
+    into
+        Book
+        (fileName, originName, url, user_id) 
+    values
+        (?, ?, ?, ?)
+send message : /home/floread/floread/backend/book/be23cc9cccf274323a39800f5ae791f48a551d49c427e51d0636e13693206e07.html
+2023-06-07 09:34:10.873  INFO 18775 --- [nio-8000-exec-2] o.a.k.clients.producer.ProducerConfig    : ProducerConfig values: 
+	acks = -1
+	batch.size = 16384
+	bootstrap.servers = [localhost:9092]
+	buffer.memory = 33554432
+	client.dns.lookup = use_all_dns_ips
+	client.id = producer-1
+	compression.type = none
+	connections.max.idle.ms = 540000
+	delivery.timeout.ms = 120000
+	enable.idempotence = true
+	interceptor.classes = []
+	key.serializer = class org.apache.kafka.common.serialization.StringSerializer
+	linger.ms = 0
+	max.block.ms = 60000
+	max.in.flight.requests.per.connection = 5
+	max.request.size = 1048576
+	metadata.max.age.ms = 300000
+	metadata.max.idle.ms = 300000
+	metric.reporters = []
+	metrics.num.samples = 2
+	metrics.recording.level = INFO
+	metrics.sample.window.ms = 30000
+	partitioner.class = class org.apache.kafka.clients.producer.internals.DefaultPartitioner
+	receive.buffer.bytes = 32768
+	reconnect.backoff.max.ms = 1000
+	reconnect.backoff.ms = 50
+	request.timeout.ms = 30000
+	retries = 2147483647
+	retry.backoff.ms = 100
+	sasl.client.callback.handler.class = null
+	sasl.jaas.config = null
+	sasl.kerberos.kinit.cmd = /usr/bin/kinit
+	sasl.kerberos.min.time.before.relogin = 60000
+	sasl.kerberos.service.name = null
+	sasl.kerberos.ticket.renew.jitter = 0.05
+	sasl.kerberos.ticket.renew.window.factor = 0.8
+	sasl.login.callback.handler.class = null
+	sasl.login.class = null
+	sasl.login.connect.timeout.ms = null
+	sasl.login.read.timeout.ms = null
+	sasl.login.refresh.buffer.seconds = 300
+	sasl.login.refresh.min.period.seconds = 60
+	sasl.login.refresh.window.factor = 0.8
+	sasl.login.refresh.window.jitter = 0.05
+	sasl.login.retry.backoff.max.ms = 10000
+	sasl.login.retry.backoff.ms = 100
+	sasl.mechanism = GSSAPI
+	sasl.oauthbearer.clock.skew.seconds = 30
+	sasl.oauthbearer.expected.audience = null
+	sasl.oauthbearer.expected.issuer = null
+	sasl.oauthbearer.jwks.endpoint.refresh.ms = 3600000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.max.ms = 10000
+	sasl.oauthbearer.jwks.endpoint.retry.backoff.ms = 100
+	sasl.oauthbearer.jwks.endpoint.url = null
+	sasl.oauthbearer.scope.claim.name = scope
+	sasl.oauthbearer.sub.claim.name = sub
+	sasl.oauthbearer.token.endpoint.url = null
+	security.protocol = PLAINTEXT
+	security.providers = null
+	send.buffer.bytes = 131072
+	socket.connection.setup.timeout.max.ms = 30000
+	socket.connection.setup.timeout.ms = 10000
+	ssl.cipher.suites = null
+	ssl.enabled.protocols = [TLSv1.2, TLSv1.3]
+	ssl.endpoint.identification.algorithm = https
+	ssl.engine.factory.class = null
+	ssl.key.password = null
+	ssl.keymanager.algorithm = SunX509
+	ssl.keystore.certificate.chain = null
+	ssl.keystore.key = null
+	ssl.keystore.location = null
+	ssl.keystore.password = null
+	ssl.keystore.type = JKS
+	ssl.protocol = TLSv1.3
+	ssl.provider = null
+	ssl.secure.random.implementation = null
+	ssl.trustmanager.algorithm = PKIX
+	ssl.truststore.certificates = null
+	ssl.truststore.location = null
+	ssl.truststore.password = null
+	ssl.truststore.type = JKS
+	transaction.timeout.ms = 60000
+	transactional.id = null
+	value.serializer = class org.apache.kafka.common.serialization.StringSerializer
+
+2023-06-07 09:34:11.171  INFO 18775 --- [nio-8000-exec-2] o.a.k.clients.producer.KafkaProducer     : [Producer clientId=producer-1] Instantiated an idempotent producer.
+2023-06-07 09:34:11.331  INFO 18775 --- [nio-8000-exec-2] o.a.kafka.common.utils.AppInfoParser     : Kafka version: 3.1.2
+2023-06-07 09:34:11.333  INFO 18775 --- [nio-8000-exec-2] o.a.kafka.common.utils.AppInfoParser     : Kafka commitId: f8c67dc3ae0a3265
+2023-06-07 09:34:11.334  INFO 18775 --- [nio-8000-exec-2] o.a.kafka.common.utils.AppInfoParser     : Kafka startTimeMs: 1686126851327
+2023-06-07 09:34:12.653  INFO 18775 --- [ad | producer-1] org.apache.kafka.clients.Metadata        : [Producer clientId=producer-1] Resetting the last seen epoch of partition book-0 to 0 since the associated topicId changed from null to jgmLz6N2T0KSw-amKph4gw
+2023-06-07 09:34:12.663  INFO 18775 --- [ad | producer-1] org.apache.kafka.clients.Metadata        : [Producer clientId=producer-1] Cluster ID: YgMu1YQXQ7-h8mALOjQTHQ
+2023-06-07 09:34:12.678  INFO 18775 --- [ad | producer-1] o.a.k.c.p.internals.TransactionManager   : [Producer clientId=producer-1] ProducerId set to 1023 with epoch 0
+userId: 112264131623973301211
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+be23cc9cccf274323a39800f5ae791f48a551d49c427e51d0636e13693206e07.html
+book = 컴비전 공부
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+sendBook = SendBook{title='컴비전 공부', url='/home/floread/floread/backend/book/be23cc9cccf274323a39800f5ae791f48a551d49c427e51d0636e13693206e07.html', musicEmotionList=[]}
+책리스트 = [SendBook{title='컴비전 공부', url='/home/floread/floread/backend/book/be23cc9cccf274323a39800f5ae791f48a551d49c427e51d0636e13693206e07.html', musicEmotionList=[]}]
+java.lang.String
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.email=?
+Hibernate: 
+    insert 
+    into
+        User
+        (createdTime, lastModifiedTime, email, name, role, userId) 
+    values
+        (?, ?, ?, ?, ?, ?)
+userId: 107517489422822347518
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+책리스트 = []
+java.lang.String
+userId: 107517489422822347518
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+책리스트 = []
+java.lang.String
+userId: 107517489422822347518
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+책리스트 = []
+java.lang.String
+2023-06-07 09:43:12.869  INFO 18775 --- [ad | producer-1] org.apache.kafka.clients.NetworkClient   : [Producer clientId=producer-1] Node -1 disconnected.
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.email=?
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_0_,
+        user0_.createdTime as createdt2_5_0_,
+        user0_.lastModifiedTime as lastmodi3_5_0_,
+        user0_.email as email4_5_0_,
+        user0_.name as name5_5_0_,
+        user0_.role as role6_5_0_,
+        user0_.userId as userid7_5_0_ 
+    from
+        User user0_ 
+    where
+        user0_.user_id=?
+107517489422822347518
+files
+/home/floread/floread/backend/book/
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.userId=?
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    where
+        book0_.fileName=?
+Hibernate: 
+    insert 
+    into
+        Book
+        (fileName, originName, url, user_id) 
+    values
+        (?, ?, ?, ?)
+send message : /home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html
+2023-06-07 09:46:11.284  INFO 18775 --- [ad | producer-1] org.apache.kafka.clients.Metadata        : [Producer clientId=producer-1] Resetting the last seen epoch of partition book-0 to 0 since the associated topicId changed from null to jgmLz6N2T0KSw-amKph4gw
+userId: 107517489422822347518
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html
+book = a
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+sendBook = SendBook{title='a', url='/home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html', musicEmotionList=[]}
+책리스트 = [SendBook{title='a', url='/home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html', musicEmotionList=[]}]
+java.lang.String
+userId: 107517489422822347518
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html
+book = a
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+sendBook = SendBook{title='a', url='/home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html', musicEmotionList=[]}
+책리스트 = [SendBook{title='a', url='/home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html', musicEmotionList=[]}]
+java.lang.String
+userId: 107517489422822347518
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html
+book = a
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+sendBook = SendBook{title='a', url='/home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html', musicEmotionList=[]}
+책리스트 = [SendBook{title='a', url='/home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html', musicEmotionList=[]}]
+java.lang.String
+userId: 107517489422822347518
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html
+book = a
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+sendBook = SendBook{title='a', url='/home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html', musicEmotionList=[]}
+책리스트 = [SendBook{title='a', url='/home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html', musicEmotionList=[]}]
+java.lang.String
+userId: 107517489422822347518
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html
+book = a
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+sendBook = SendBook{title='a', url='/home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html', musicEmotionList=[]}
+책리스트 = [SendBook{title='a', url='/home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html', musicEmotionList=[]}]
+java.lang.String
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.email=?
+Hibernate: 
+    insert 
+    into
+        User
+        (createdTime, lastModifiedTime, email, name, role, userId) 
+    values
+        (?, ?, ?, ?, ?, ?)
+112909050310065397210
+files
+/home/floread/floread/backend/book/
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.userId=?
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    where
+        book0_.fileName=?
+Hibernate: 
+    insert 
+    into
+        Book
+        (fileName, originName, url, user_id) 
+    values
+        (?, ?, ?, ?)
+send message : /home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html
+userId: 112909050310065397210
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html
+book = a 복사본
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+sendBook = SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[]}
+책리스트 = [SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[]}]
+java.lang.String
+userId: 112909050310065397210
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html
+book = a 복사본
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+sendBook = SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[]}
+책리스트 = [SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[]}]
+java.lang.String
+userId: 112264131623973301211
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+be23cc9cccf274323a39800f5ae791f48a551d49c427e51d0636e13693206e07.html
+book = 컴비전 공부
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+sendBook = SendBook{title='컴비전 공부', url='/home/floread/floread/backend/book/be23cc9cccf274323a39800f5ae791f48a551d49c427e51d0636e13693206e07.html', musicEmotionList=[]}
+책리스트 = [SendBook{title='컴비전 공부', url='/home/floread/floread/backend/book/be23cc9cccf274323a39800f5ae791f48a551d49c427e51d0636e13693206e07.html', musicEmotionList=[]}]
+java.lang.String
+userId: 112264131623973301211
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+be23cc9cccf274323a39800f5ae791f48a551d49c427e51d0636e13693206e07.html
+book = 컴비전 공부
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+sendBook = SendBook{title='컴비전 공부', url='/home/floread/floread/backend/book/be23cc9cccf274323a39800f5ae791f48a551d49c427e51d0636e13693206e07.html', musicEmotionList=[]}
+책리스트 = [SendBook{title='컴비전 공부', url='/home/floread/floread/backend/book/be23cc9cccf274323a39800f5ae791f48a551d49c427e51d0636e13693206e07.html', musicEmotionList=[]}]
+java.lang.String
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.email=?
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_0_,
+        user0_.createdTime as createdt2_5_0_,
+        user0_.lastModifiedTime as lastmodi3_5_0_,
+        user0_.email as email4_5_0_,
+        user0_.name as name5_5_0_,
+        user0_.role as role6_5_0_,
+        user0_.userId as userid7_5_0_ 
+    from
+        User user0_ 
+    where
+        user0_.user_id=?
+112909050310065397210
+files
+/home/floread/floread/backend/book/
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.userId=?
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    where
+        book0_.fileName=?
+파일 존재
+userId: 112909050310065397210
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html
+book = a 복사본
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+sendBook = SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[]}
+책리스트 = [SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[]}]
+java.lang.String
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.11)
+
+2023-06-07 09:56:38.455  INFO 21445 --- [           main] project.floread.FloreadApplication       : Starting FloreadApplication using Java 17.0.6 on raspberrypi with PID 21445 (/home/floread/floread/backend/floread/build/libs/floread-0.0.1-SNAPSHOT.jar started by floread in /home/floread/floread/backend/floread)
+2023-06-07 09:56:38.472  INFO 21445 --- [           main] project.floread.FloreadApplication       : The following 2 profiles are active: "oauth", "datasource"
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.11)
+
+2023-06-07 09:56:41.580  INFO 21460 --- [           main] project.floread.FloreadApplication       : Starting FloreadApplication using Java 17.0.6 on raspberrypi with PID 21460 (/home/floread/floread/backend/floread/build/libs/floread-0.0.1-SNAPSHOT.jar started by floread in /home/floread/floread/backend/floread)
+2023-06-07 09:56:41.603  INFO 21460 --- [           main] project.floread.FloreadApplication       : The following 2 profiles are active: "oauth", "datasource"
+2023-06-07 09:56:42.295  INFO 21445 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-06-07 09:56:42.620  INFO 21445 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 287 ms. Found 2 JPA repository interfaces.
+2023-06-07 09:56:45.416  INFO 21460 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-06-07 09:56:45.694  INFO 21460 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 236 ms. Found 2 JPA repository interfaces.
+2023-06-07 09:56:46.054  INFO 21445 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2023-06-07 09:56:46.109  INFO 21445 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-06-07 09:56:46.110  INFO 21445 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2023-06-07 09:56:46.428  INFO 21445 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-06-07 09:56:46.429  INFO 21445 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 7692 ms
+2023-06-07 09:56:47.017  INFO 21445 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-06-07 09:56:47.697  INFO 21445 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-06-07 09:56:48.450  INFO 21445 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-06-07 09:56:48.872  INFO 21445 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-06-07 09:56:49.269  INFO 21460 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2023-06-07 09:56:49.327  INFO 21460 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-06-07 09:56:49.330  INFO 21460 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2023-06-07 09:56:49.735  INFO 21460 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-06-07 09:56:49.736  INFO 21460 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 7836 ms
+2023-06-07 09:56:50.348  INFO 21445 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-06-07 09:56:50.401  INFO 21460 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-06-07 09:56:51.134  INFO 21460 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-06-07 09:56:51.350  INFO 21445 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2023-06-07 09:56:51.804  INFO 21460 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-06-07 09:56:52.220  INFO 21460 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::               (v2.7.11)
+
+2023-06-07 09:56:52.893  INFO 21514 --- [           main] project.floread.FloreadApplication       : Starting FloreadApplication using Java 17.0.6 on raspberrypi with PID 21514 (/home/floread/floread/backend/floread/build/libs/floread-0.0.1-SNAPSHOT.jar started by root in /home/floread/floread/backend/floread)
+2023-06-07 09:56:52.913  INFO 21514 --- [           main] project.floread.FloreadApplication       : The following 2 profiles are active: "oauth", "datasource"
+2023-06-07 09:56:53.635  INFO 21460 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-06-07 09:56:54.733  INFO 21460 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+Hibernate: 
+    
+    alter table Book 
+       drop 
+       foreign key FKpsgrhw51v8on5lbyoo5qdjypq
+Hibernate: 
+    
+    alter table BookEmotion 
+       drop 
+       foreign key FKqtvhfeb1nsq7rofmo9vwf26os
+Hibernate: 
+    
+    alter table BookEmotion 
+       drop 
+       foreign key FKfmv5hl337gbj8g13clqdgstn
+Hibernate: 
+    
+    alter table MusicEmotion 
+       drop 
+       foreign key FKrmeriqjppc94snlsd9vh6i8at
+Hibernate: 
+    
+    alter table MusicEmotion 
+       drop 
+       foreign key FKoeyhuwwv9n2f8wjhjnvcib58d
+Hibernate: 
+    
+    drop table if exists Book
+Hibernate: 
+    
+    drop table if exists BookEmotion
+Hibernate: 
+    
+    drop table if exists Emotion
+Hibernate: 
+    
+    drop table if exists Music
+Hibernate: 
+    
+    drop table if exists MusicEmotion
+Hibernate: 
+    
+    drop table if exists User
+Hibernate: 
+    
+    create table Book (
+       book_id bigint not null auto_increment,
+        fileName varchar(255) not null,
+        originName varchar(255) not null,
+        url varchar(255) not null,
+        user_id bigint,
+        primary key (book_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table BookEmotion (
+       id bigint not null auto_increment,
+        book_id bigint,
+        emotion_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table Emotion (
+       emotion_id bigint not null auto_increment,
+        emotion varchar(255),
+        primary key (emotion_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table Music (
+       music_id bigint not null auto_increment,
+        title varchar(255),
+        url varchar(255),
+        primary key (music_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table MusicEmotion (
+       id bigint not null auto_increment,
+        emotion_id bigint,
+        music_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table User (
+       user_id bigint not null auto_increment,
+        createdTime datetime,
+        lastModifiedTime datetime,
+        email varchar(255) not null,
+        name varchar(255) not null,
+        role varchar(255) not null,
+        userId varchar(255),
+        primary key (user_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    alter table Book 
+       add constraint FKpsgrhw51v8on5lbyoo5qdjypq 
+       foreign key (user_id) 
+       references User (user_id)
+Hibernate: 
+    
+    alter table BookEmotion 
+       add constraint FKqtvhfeb1nsq7rofmo9vwf26os 
+       foreign key (book_id) 
+       references Book (book_id)
+Hibernate: 
+    
+    alter table BookEmotion 
+       add constraint FKfmv5hl337gbj8g13clqdgstn 
+       foreign key (emotion_id) 
+       references Emotion (emotion_id)
+2023-06-07 09:56:57.339  INFO 21514 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+Hibernate: 
+    
+    alter table MusicEmotion 
+       add constraint FKrmeriqjppc94snlsd9vh6i8at 
+       foreign key (emotion_id) 
+       references Emotion (emotion_id)
+Hibernate: 
+    
+    alter table MusicEmotion 
+       add constraint FKoeyhuwwv9n2f8wjhjnvcib58d 
+       foreign key (music_id) 
+       references Music (music_id)
+2023-06-07 09:56:57.538  INFO 21445 --- [           main] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'jar:file:/home/floread/floread/backend/floread/build/libs/floread-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/import.sql'
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('행복')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('불안')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('놀람')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('슬픔')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('분노')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('중립')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test1.mp4', '/home/floread/floread/music/test1.mp4')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test2.mp4', '/home/floread/floread/music/test2.mp4')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test3.mp4', '/home/floread/floread/music/test3.mp4')
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 1)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 2)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (2, 1)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (3, 3)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (4, 3)
+2023-06-07 09:56:57.609  INFO 21445 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-06-07 09:56:57.652  INFO 21514 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 270 ms. Found 2 JPA repository interfaces.
+2023-06-07 09:56:57.681  INFO 21445 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+Hibernate: 
+    
+    alter table Book 
+       drop 
+       foreign key FKpsgrhw51v8on5lbyoo5qdjypq
+Hibernate: 
+    
+    alter table BookEmotion 
+       drop 
+       foreign key FKqtvhfeb1nsq7rofmo9vwf26os
+Hibernate: 
+    
+    alter table BookEmotion 
+       drop 
+       foreign key FKfmv5hl337gbj8g13clqdgstn
+Hibernate: 
+    
+    alter table MusicEmotion 
+       drop 
+       foreign key FKrmeriqjppc94snlsd9vh6i8at
+Hibernate: 
+    
+    alter table MusicEmotion 
+       drop 
+       foreign key FKoeyhuwwv9n2f8wjhjnvcib58d
+Hibernate: 
+    
+    drop table if exists Book
+Hibernate: 
+    
+    drop table if exists BookEmotion
+Hibernate: 
+    
+    drop table if exists Emotion
+Hibernate: 
+    
+    drop table if exists Music
+Hibernate: 
+    
+    drop table if exists MusicEmotion
+Hibernate: 
+    
+    drop table if exists User
+Hibernate: 
+    
+    create table Book (
+       book_id bigint not null auto_increment,
+        fileName varchar(255) not null,
+        originName varchar(255) not null,
+        url varchar(255) not null,
+        user_id bigint,
+        primary key (book_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table BookEmotion (
+       id bigint not null auto_increment,
+        book_id bigint,
+        emotion_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table Emotion (
+       emotion_id bigint not null auto_increment,
+        emotion varchar(255),
+        primary key (emotion_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table Music (
+       music_id bigint not null auto_increment,
+        title varchar(255),
+        url varchar(255),
+        primary key (music_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table MusicEmotion (
+       id bigint not null auto_increment,
+        emotion_id bigint,
+        music_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table User (
+       user_id bigint not null auto_increment,
+        createdTime datetime,
+        lastModifiedTime datetime,
+        email varchar(255) not null,
+        name varchar(255) not null,
+        role varchar(255) not null,
+        userId varchar(255),
+        primary key (user_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    alter table Book 
+       add constraint FKpsgrhw51v8on5lbyoo5qdjypq 
+       foreign key (user_id) 
+       references User (user_id)
+Hibernate: 
+    
+    alter table BookEmotion 
+       add constraint FKqtvhfeb1nsq7rofmo9vwf26os 
+       foreign key (book_id) 
+       references Book (book_id)
+Hibernate: 
+    
+    alter table BookEmotion 
+       add constraint FKfmv5hl337gbj8g13clqdgstn 
+       foreign key (emotion_id) 
+       references Emotion (emotion_id)
+Hibernate: 
+    
+    alter table MusicEmotion 
+       add constraint FKrmeriqjppc94snlsd9vh6i8at 
+       foreign key (emotion_id) 
+       references Emotion (emotion_id)
+Hibernate: 
+    
+    alter table MusicEmotion 
+       add constraint FKoeyhuwwv9n2f8wjhjnvcib58d 
+       foreign key (music_id) 
+       references Music (music_id)
+2023-06-07 09:57:00.709  INFO 21460 --- [           main] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'jar:file:/home/floread/floread/backend/floread/build/libs/floread-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/import.sql'
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('행복')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('불안')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('놀람')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('슬픔')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('분노')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('중립')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test1.mp4', '/home/floread/floread/music/test1.mp4')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test2.mp4', '/home/floread/floread/music/test2.mp4')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test3.mp4', '/home/floread/floread/music/test3.mp4')
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 1)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 2)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (2, 1)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (3, 3)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (4, 3)
+2023-06-07 09:57:00.782  INFO 21460 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-06-07 09:57:00.865  INFO 21460 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-06-07 09:57:01.538  INFO 21514 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8000 (http)
+2023-06-07 09:57:01.600  INFO 21514 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2023-06-07 09:57:01.601  INFO 21514 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.74]
+2023-06-07 09:57:01.998  INFO 21514 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2023-06-07 09:57:01.999  INFO 21514 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 8700 ms
+2023-06-07 09:57:02.823  INFO 21514 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2023-06-07 09:57:03.409  INFO 21445 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@13afd6c, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1441d5, org.springframework.security.web.context.SecurityContextPersistenceFilter@424582, org.springframework.security.web.header.HeaderWriterFilter@1d0cdb6, org.springframework.web.filter.CorsFilter@12ca48c, org.springframework.security.web.authentication.logout.LogoutFilter@180aaf, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@1af03d8, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@10689af, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@1c09d57, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@1ed9976, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1e776b7, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1da0955, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1dcde7a, org.springframework.security.web.session.SessionManagementFilter@9e8212, org.springframework.security.web.access.ExceptionTranslationFilter@243175, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@b14636]
+2023-06-07 09:57:03.552  INFO 21514 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2023-06-07 09:57:04.325  INFO 21514 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2023-06-07 09:57:04.630  INFO 21445 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2023-06-07 09:57:04.735  INFO 21514 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.6.15.Final
+2023-06-07 09:57:05.979  WARN 21445 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'; nested exception is org.springframework.boot.web.server.PortInUseException: Port 8000 is already in use
+2023-06-07 09:57:05.996  INFO 21445 --- [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-06-07 09:57:06.004  INFO 21445 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-06-07 09:57:06.039  INFO 21445 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-06-07 09:57:06.047  INFO 21445 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-06-07 09:57:06.094  INFO 21514 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2023-06-07 09:57:06.118  INFO 21445 --- [           main] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2023-06-07 09:57:06.260 ERROR 21445 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8000 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8000 or configure this application to listen on another port.
+
+2023-06-07 09:57:06.822  INFO 21460 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@ff3f1d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1188a, org.springframework.security.web.context.SecurityContextPersistenceFilter@1352de0, org.springframework.security.web.header.HeaderWriterFilter@12a72c4, org.springframework.web.filter.CorsFilter@1a8c9c9, org.springframework.security.web.authentication.logout.LogoutFilter@1963d70, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@197b07f, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@110fec6, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@18c535d, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@2dc417, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@1a3468, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@9e8212, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1af03d8, org.springframework.security.web.session.SessionManagementFilter@18a9516, org.springframework.security.web.access.ExceptionTranslationFilter@33da7a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@dd44f9]
+2023-06-07 09:57:07.086  INFO 21514 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL55Dialect
+2023-06-07 09:57:07.906  INFO 21460 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2023-06-07 09:57:09.026  WARN 21460 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'; nested exception is org.springframework.boot.web.server.PortInUseException: Port 8000 is already in use
+2023-06-07 09:57:09.039  INFO 21460 --- [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-06-07 09:57:09.046  INFO 21460 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-06-07 09:57:09.077  INFO 21460 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-06-07 09:57:09.084  INFO 21460 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-06-07 09:57:09.138  INFO 21460 --- [           main] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2023-06-07 09:57:09.245 ERROR 21460 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8000 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8000 or configure this application to listen on another port.
+
+Hibernate: 
+    
+    alter table Book 
+       drop 
+       foreign key FKpsgrhw51v8on5lbyoo5qdjypq
+Hibernate: 
+    
+    alter table BookEmotion 
+       drop 
+       foreign key FKqtvhfeb1nsq7rofmo9vwf26os
+Hibernate: 
+    
+    alter table BookEmotion 
+       drop 
+       foreign key FKfmv5hl337gbj8g13clqdgstn
+Hibernate: 
+    
+    alter table MusicEmotion 
+       drop 
+       foreign key FKrmeriqjppc94snlsd9vh6i8at
+Hibernate: 
+    
+    alter table MusicEmotion 
+       drop 
+       foreign key FKoeyhuwwv9n2f8wjhjnvcib58d
+Hibernate: 
+    
+    drop table if exists Book
+Hibernate: 
+    
+    drop table if exists BookEmotion
+Hibernate: 
+    
+    drop table if exists Emotion
+Hibernate: 
+    
+    drop table if exists Music
+Hibernate: 
+    
+    drop table if exists MusicEmotion
+Hibernate: 
+    
+    drop table if exists User
+Hibernate: 
+    
+    create table Book (
+       book_id bigint not null auto_increment,
+        fileName varchar(255) not null,
+        originName varchar(255) not null,
+        url varchar(255) not null,
+        user_id bigint,
+        primary key (book_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table BookEmotion (
+       id bigint not null auto_increment,
+        book_id bigint,
+        emotion_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table Emotion (
+       emotion_id bigint not null auto_increment,
+        emotion varchar(255),
+        primary key (emotion_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table Music (
+       music_id bigint not null auto_increment,
+        title varchar(255),
+        url varchar(255),
+        primary key (music_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table MusicEmotion (
+       id bigint not null auto_increment,
+        emotion_id bigint,
+        music_id bigint,
+        primary key (id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    create table User (
+       user_id bigint not null auto_increment,
+        createdTime datetime,
+        lastModifiedTime datetime,
+        email varchar(255) not null,
+        name varchar(255) not null,
+        role varchar(255) not null,
+        userId varchar(255),
+        primary key (user_id)
+    ) engine=InnoDB
+Hibernate: 
+    
+    alter table Book 
+       add constraint FKpsgrhw51v8on5lbyoo5qdjypq 
+       foreign key (user_id) 
+       references User (user_id)
+Hibernate: 
+    
+    alter table BookEmotion 
+       add constraint FKqtvhfeb1nsq7rofmo9vwf26os 
+       foreign key (book_id) 
+       references Book (book_id)
+Hibernate: 
+    
+    alter table BookEmotion 
+       add constraint FKfmv5hl337gbj8g13clqdgstn 
+       foreign key (emotion_id) 
+       references Emotion (emotion_id)
+Hibernate: 
+    
+    alter table MusicEmotion 
+       add constraint FKrmeriqjppc94snlsd9vh6i8at 
+       foreign key (emotion_id) 
+       references Emotion (emotion_id)
+Hibernate: 
+    
+    alter table MusicEmotion 
+       add constraint FKoeyhuwwv9n2f8wjhjnvcib58d 
+       foreign key (music_id) 
+       references Music (music_id)
+2023-06-07 09:57:12.182  INFO 21514 --- [           main] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'jar:file:/home/floread/floread/backend/floread/build/libs/floread-0.0.1-SNAPSHOT.jar!/BOOT-INF/classes!/import.sql'
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('행복')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('불안')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('놀람')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('슬픔')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('분노')
+Hibernate: 
+    INSERT INTO Emotion (emotion) values ('중립')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test1.mp4', '/home/floread/floread/music/test1.mp4')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test2.mp4', '/home/floread/floread/music/test2.mp4')
+Hibernate: 
+    INSERT INTO Music (title, url) values  ('test3.mp4', '/home/floread/floread/music/test3.mp4')
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 1)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 2)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (2, 1)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (3, 3)
+Hibernate: 
+    INSERT INTO MusicEmotion (emotion_id, music_id) values (4, 3)
+2023-06-07 09:57:12.249  INFO 21514 --- [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2023-06-07 09:57:12.316  INFO 21514 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2023-06-07 09:57:16.545  INFO 21514 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@538eb2, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@18a5848, org.springframework.security.web.context.SecurityContextPersistenceFilter@10a73f2, org.springframework.security.web.header.HeaderWriterFilter@1e3f5cd, org.springframework.web.filter.CorsFilter@7cd177, org.springframework.security.web.authentication.logout.LogoutFilter@1de205, org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter@ade015, org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter@ede57d, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@d8f4ed, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@4b6a56, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3cb5ce, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@197bc14, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1d54b3, org.springframework.security.web.session.SessionManagementFilter@17eb170, org.springframework.security.web.access.ExceptionTranslationFilter@1560f51, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@17cec93]
+2023-06-07 09:57:17.438  INFO 21514 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2023-06-07 09:57:18.352  WARN 21514 --- [           main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'; nested exception is org.springframework.boot.web.server.PortInUseException: Port 8000 is already in use
+2023-06-07 09:57:18.378  INFO 21514 --- [           main] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2023-06-07 09:57:18.384  INFO 21514 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2023-06-07 09:57:18.408  INFO 21514 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2023-06-07 09:57:18.414  INFO 21514 --- [           main] o.apache.catalina.core.StandardService   : Stopping service [Tomcat]
+2023-06-07 09:57:18.464  INFO 21514 --- [           main] ConditionEvaluationReportLoggingListener : 
+
+Error starting ApplicationContext. To display the conditions report re-run your application with 'debug' enabled.
+2023-06-07 09:57:18.542 ERROR 21514 --- [           main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8000 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8000 or configure this application to listen on another port.
+
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.email=?
+Hibernate: 
+    insert 
+    into
+        User
+        (createdTime, lastModifiedTime, email, name, role, userId) 
+    values
+        (?, ?, ?, ?, ?, ?)
+107517489422822347518
+files
+/home/floread/floread/backend/book/
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.userId=?
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    where
+        book0_.fileName=?
+Hibernate: 
+    insert 
+    into
+        Book
+        (fileName, originName, url, user_id) 
+    values
+        (?, ?, ?, ?)
+send message : /home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html
+userId: 107517489422822347518
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html
+book = a 복사본
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+Hibernate: 
+    select
+        music1_.music_id as music_id1_3_,
+        music1_.title as title2_3_,
+        music1_.url as url3_3_ 
+    from
+        MusicEmotion musicemoti0_ 
+    inner join
+        Music music1_ 
+            on musicemoti0_.music_id=music1_.music_id 
+    where
+        musicemoti0_.emotion_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+musicList = [/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]
+sendBook = SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}
+책리스트 = [SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}]
+java.lang.String
+userId: 107517489422822347518
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html
+book = a 복사본
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+Hibernate: 
+    select
+        music1_.music_id as music_id1_3_,
+        music1_.title as title2_3_,
+        music1_.url as url3_3_ 
+    from
+        MusicEmotion musicemoti0_ 
+    inner join
+        Music music1_ 
+            on musicemoti0_.music_id=music1_.music_id 
+    where
+        musicemoti0_.emotion_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+musicList = [/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]
+sendBook = SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}
+책리스트 = [SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}]
+java.lang.String
+userId: 107517489422822347518
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html
+book = a 복사본
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+Hibernate: 
+    select
+        music1_.music_id as music_id1_3_,
+        music1_.title as title2_3_,
+        music1_.url as url3_3_ 
+    from
+        MusicEmotion musicemoti0_ 
+    inner join
+        Music music1_ 
+            on musicemoti0_.music_id=music1_.music_id 
+    where
+        musicemoti0_.emotion_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+musicList = [/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]
+sendBook = SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}
+책리스트 = [SendBook{title='a 복사본', url='/home/floread/floread/backend/book/1b5bd5e64a6082e7549b11d3aefd4fde5df662d14e2ebab668858a77d1ff9d61.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}]
+java.lang.String
+userId: 112264131623973301211
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+책리스트 = []
+java.lang.String
+userId: 112264131623973301211
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+책리스트 = []
+java.lang.String
+userId: 112264131623973301211
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+책리스트 = []
+java.lang.String
+112264131623973301211
+files
+/home/floread/floread/backend/book/
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.userId=?
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    where
+        book0_.fileName=?
+Hibernate: 
+    insert 
+    into
+        Book
+        (fileName, originName, url, user_id) 
+    values
+        (?, ?, ?, ?)
+send message : /home/floread/floread/backend/book/ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb.html
+userId: 112264131623973301211
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+책리스트 = []
+java.lang.String
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.email=?
+Hibernate: 
+    insert 
+    into
+        User
+        (createdTime, lastModifiedTime, email, name, role, userId) 
+    values
+        (?, ?, ?, ?, ?, ?)
+112909050310065397210
+files
+/home/floread/floread/backend/book/
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.userId=?
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    where
+        book0_.fileName=?
+파일 존재
+112909050310065397210
+files
+/home/floread/floread/backend/book/
+Hibernate: 
+    select
+        user0_.user_id as user_id1_5_,
+        user0_.createdTime as createdt2_5_,
+        user0_.lastModifiedTime as lastmodi3_5_,
+        user0_.email as email4_5_,
+        user0_.name as name5_5_,
+        user0_.role as role6_5_,
+        user0_.userId as userid7_5_ 
+    from
+        User user0_ 
+    where
+        user0_.userId=?
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    where
+        book0_.fileName=?
+Hibernate: 
+    insert 
+    into
+        Book
+        (fileName, originName, url, user_id) 
+    values
+        (?, ?, ?, ?)
+send message : /home/floread/floread/backend/book/2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html
+userId: 112909050310065397210
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html
+book = README
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+Hibernate: 
+    select
+        music1_.music_id as music_id1_3_,
+        music1_.title as title2_3_,
+        music1_.url as url3_3_ 
+    from
+        MusicEmotion musicemoti0_ 
+    inner join
+        Music music1_ 
+            on musicemoti0_.music_id=music1_.music_id 
+    where
+        musicemoti0_.emotion_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+musicList = [/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]
+sendBook = SendBook{title='README', url='/home/floread/floread/backend/book/2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}
+책리스트 = [SendBook{title='README', url='/home/floread/floread/backend/book/2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}]
+java.lang.String
+userId: 112909050310065397210
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html
+book = README
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+Hibernate: 
+    select
+        music1_.music_id as music_id1_3_,
+        music1_.title as title2_3_,
+        music1_.url as url3_3_ 
+    from
+        MusicEmotion musicemoti0_ 
+    inner join
+        Music music1_ 
+            on musicemoti0_.music_id=music1_.music_id 
+    where
+        musicemoti0_.emotion_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+musicList = [/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]
+sendBook = SendBook{title='README', url='/home/floread/floread/backend/book/2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}
+책리스트 = [SendBook{title='README', url='/home/floread/floread/backend/book/2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}]
+java.lang.String
+userId: 112909050310065397210
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html
+book = README
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+Hibernate: 
+    select
+        music1_.music_id as music_id1_3_,
+        music1_.title as title2_3_,
+        music1_.url as url3_3_ 
+    from
+        MusicEmotion musicemoti0_ 
+    inner join
+        Music music1_ 
+            on musicemoti0_.music_id=music1_.music_id 
+    where
+        musicemoti0_.emotion_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+musicList = [/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]
+sendBook = SendBook{title='README', url='/home/floread/floread/backend/book/2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}
+책리스트 = [SendBook{title='README', url='/home/floread/floread/backend/book/2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}]
+java.lang.String
+userId: 112909050310065397210
+Hibernate: 
+    select
+        book0_.book_id as book_id1_0_,
+        book0_.fileName as filename2_0_,
+        book0_.originName as originna3_0_,
+        book0_.url as url4_0_,
+        book0_.user_id as user_id5_0_ 
+    from
+        Book book0_ 
+    inner join
+        User user1_ 
+            on book0_.user_id=user1_.user_id 
+    where
+        user1_.userId=?
+2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html
+book = README
+Hibernate: 
+    select
+        emotion1_.emotion_id as emotion_1_2_,
+        emotion1_.emotion as emotion2_2_ 
+    from
+        BookEmotion bookemotio0_ 
+    inner join
+        Emotion emotion1_ 
+            on bookemotio0_.emotion_id=emotion1_.emotion_id 
+    where
+        bookemotio0_.book_id=?
+Hibernate: 
+    select
+        music1_.music_id as music_id1_3_,
+        music1_.title as title2_3_,
+        music1_.url as url3_3_ 
+    from
+        MusicEmotion musicemoti0_ 
+    inner join
+        Music music1_ 
+            on musicemoti0_.music_id=music1_.music_id 
+    where
+        musicemoti0_.emotion_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+Hibernate: 
+    select
+        music0_.url as col_0_0_ 
+    from
+        Music music0_ 
+    where
+        music0_.music_id=?
+musicList = [/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]
+sendBook = SendBook{title='README', url='/home/floread/floread/backend/book/2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}
+책리스트 = [SendBook{title='README', url='/home/floread/floread/backend/book/2b7814d3fca2e99e56c51b6ff2aa313ea6e9da6424804240aa8ad891fdfe0900.html', musicEmotionList=[SendMusicEmotion{emotion='행복', musicUrl=[/home/floread/floread/music/test1.mp4, /home/floread/floread/music/test2.mp4]}]}]
+java.lang.String
