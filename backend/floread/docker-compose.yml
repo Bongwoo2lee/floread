@@ -2,6 +2,7 @@ version: '3'
 services:
   mysql:
     image: mysql
+    platform: linux/arm64/v8
     restart: no
     environment:
       MYSQL_ROOT_PASSWORD: floread123
@@ -16,6 +17,7 @@ services:
       - spring-network
 
   spring-app:
+    platform: linux/amd64
     build:
       context: .
       dockerfile: Dockerfile
@@ -29,3 +31,4 @@ services:
 
 networks:
   spring-network:
+    driver: bridge
