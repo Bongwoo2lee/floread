@@ -1,9 +1,22 @@
 <script>
-	
+let title = '';
+let emotion = '';
+	function mypage(){
+    fetch('http://floread.store:8000/mypage')
+    .then((response)=>response.json())
+    .then(data=>{
+      console.log(data)
+      return data
+    })
+    .catch(error=>{
+      console.error(error);
+    });
+  }
 	import {onMount} from 'svelte';
 	let popupVisible = false;
 	let popupVisible2 = false;
 	let popupVisible3 = false;
+  let popup;
 	let user={loggedIn:false};
 	function toggle(){
 		user.loggedIn = !user.loggedIn;
@@ -13,10 +26,57 @@
 	}
 	function togglePopup2(){
 		popupVisible2 = !popupVisible2;
+    fetch("test.txt")
+        .then(response => response.text())
+        .then(data => {
+          const fileContentElement = document.getElementById("fileContent");
+          fileContentElement.textContent = data;});
 	}
-	function togglePopup3(){
-		popupVisible3 = !popupVisible3;
-	}
+
+  let popupData = [];
+
+  function togglePopup3() {
+    if (!popupVisible3) {
+      fetchData();
+    }
+    popupVisible3 = !popupVisible3;
+    updatePopupVisibility();
+  }
+
+  function fetchData() {
+    fetch('http://floread.store:8000/mypage')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        popupData = data;
+        updatePopupVisibility();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  function updatePopupVisibility() {
+    const popupWrapper = document.querySelector('.popup-wrapper3');
+    const popup = document.querySelector('.popup3');
+    const popupContent = document.querySelector('.popup3 .popup-content');
+
+    if (popupVisible3) {
+      popupWrapper.classList.add('visible');
+      popup.classList.add('visible');
+
+      if (popupData.length > 0) {
+        const content = popupData.map((item) => `${item.title} - ${item.musicEmotionList[0].emotion}`).join('<br>');
+        popupContent.innerHTML = content;
+      } else {
+        popupContent.textContent = '';
+      }
+    } else {
+      popupWrapper.classList.remove('visible');
+      popup.classList.remove('visible');
+      popupContent.textContent = '';
+    }
+  }
 	function handleClick(event) {
     if (popupVisible && !event.target.classList.contains('close-button')) {
       event.stopPropagation();
@@ -57,18 +117,27 @@
             formData.append('files', file);
         });
 
-        fetch('http://localhost:8000/upload', {
+        fetch('http://floread.store:8000/upload', {
             method: 'POST',
             body: formData,
         })
-            .then((response) => response.json())
+            .then((response) => {
+              if(response.ok===false){
+                throw new Error(response.status);
+              }
+              response.text();
+              console.log(response);
+            })
             .then((data) => {
-                // Handle the response data
-                console.log(data);
+                alert('정상적으로 업로드되었습니다.');
+                popupVisible=!popupVisible;
             })
             .catch((error) => {
-                // Handle the error
-                console.error(error);
+              if(error.message==500){
+                alert('파일을 업로드할 수 없습니다.');
+                return;
+              }
+              alert('이미 존재하는 파일입니다.');
             });
     }
 	let isBarOpen = false;
@@ -126,20 +195,75 @@
     transition: transform 0.3s ease-in-out;
     transform: translateX(100%);
   }
+  .popup-wrapper2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.2s ease;
+    opacity: 0;
+    z-index: -1;
+  }
 
+  .popup2 {
+    position: relative;
+    width: 700px;
+    height: 725px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+  }
+	.popup-wrapper3 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: opacity 0.2s ease;
+    opacity: 0;
+    z-index: -1;
+  }
+
+  .popup3 {
+    position: relative;
+    width: 350px;
+    height: 300px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+  }
   .bar {
     position: absolute;
     top: 0;
     right: 0;
     width: 0px;
     height: 100%;
-    background-color: #ccc;
+    background: linear-gradient(to top,	
+		rgba(0, 0, 0, 1)10%,
+		rgba(0, 0, 0,3)25%,
+		rgba(0, 0, 0,0.3)70%,
+		rgba(0, 0, 0,0.3)80%,
+		rgba(0, 0, 0,5)90%,
+		rgb(0, 0, 0)100%);
     transition: transform 0.3s ease-in-out;
     transform: translateX(100%);
   }
 
   .bar.open {
-    width: 100px;
+    width: 130px;
     transform: translateX(0%);
   }
 
@@ -147,8 +271,8 @@
     position: absolute;
     top: auto;
     right: 10px;
-    background-color: #f1f1f1;
-    color: #333;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
@@ -163,7 +287,7 @@
     top: 50%;
     right: 10px;
     transform: translateY(-50%);
-    background-color: #f1f1f1;
+    background-color: rgba(33, 1, 68, 0.6);
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
@@ -182,8 +306,21 @@
     opacity: 1;
     z-index: 1;
   }
-
   .popup.visible {
+    transform: translateY(0);
+  }
+  .popup2.visible {
+    transform: translateY(0);
+  }
+  .popup-wrapper2.visible {
+    opacity: 1;
+    z-index: 1;
+  }
+  .popup-wrapper3.visible {
+    opacity: 1;
+    z-index: 1;
+  }
+  .popup3.visible {
     transform: translateY(0);
   }
   .close-button {
@@ -282,14 +419,27 @@
   .message {
     margin-top: 1rem;
   }
+  pre {
+    position: absolute;
+    top:100px;
+  max-width: 100%;
+  max-height: 550px;
+  overflow: auto;
+  padding: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #333;
+}
 </style>
 <body bgcolor="black">
 	<div style="float:right">
-		{#if user.loggedIn}
-		<button style="background:none" on:click={toggle} onclick="window.open('http://localhost:8000', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log out</p></button>
-		{:else}
-		<button style="background:none" on:click={toggle} onclick="window.open('http://localhost:8000', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log in</p></button>
-		{/if}
+		<button style="background:none" on:click={toggle} onclick="window.open('http://floread.store:8000', '_blank', 'width=500,height=500')"><p style="line-height: 0px;">log in</p></button>
 	</div>
 	<div>
     <p style="line-height: 0px; font-size:6.5em;">Floread</p>
@@ -324,13 +474,13 @@
 			</tr>
 		<tr>
 			<td>
-				<form method="POST" action="http://localhost:8080" enctype="multipart/form-data">
+				<form enctype="multipart/form-data">
 					<div>
 						<input type="file" id="file-input" name="file" accept="text/plain" multiple>
 					</div>
 					<div>
 						<span>업로드</span>
-						<input type="submit" value="전송" onclick="uploadFile()">
+						<input type="submit" value="전송" on:click|preventDefault={uploadFile}>
 					</div>
 				</form>
 			</td>
@@ -338,9 +488,10 @@
 		</table>
 	</div>
   </div>
-  <div class="popup-wrapper {popupVisible2 ? 'visible' : ''}">
-	<div class="popup {popupVisible2 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
+  <div class="popup-wrapper2 {popupVisible2 ? 'visible' : ''}">
+	<div class="popup2 {popupVisible2 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
 		<table style="width: 100%; text-align:center; margin:auto;">
+      <tr><td><pre id="fileContent"></pre></td></tr>
 			<tr><td>
 				<button class="close-button" aria-label="Close modal" on:click={togglePopup2}>
 					<svg class="close-icon" viewBox="0 0 24 24">
@@ -349,7 +500,7 @@
 				  </button>
 			</td></tr>
 			<tr><td>
-				<div class="bar {isBarOpen ? 'open' : ''}" on:click={toggleBar}></div>
+				<div class="bar {isBarOpen ? 'open' : ''}" on:click={toggleBar} ></div>
 				<button class="button" on:click={toggleBar}>펼치기/접기</button>
 				<audio id="music" src="y2mate.com - 좆됐다 좆됐어.mp3"></audio>
 				{#if isBarOpen}
@@ -363,8 +514,8 @@
 		</table>
 	</div>
   </div>
-  <div class="popup-wrapper {popupVisible3 ? 'visible' : ''}">
-	<div class="popup {popupVisible3 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
+  <div class="popup-wrapper3 {popupVisible3 ? 'visible' : ''}">
+	<div class="popup3 {popupVisible3 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
 		<table style="width: 100%; text-align:center; margin:auto;">
 			<tr><td>
 				<button class="close-button" aria-label="Close modal" on:click={togglePopup3}>
@@ -373,7 +524,7 @@
 					</svg>
 				  </button>
 			</td></tr>
-			<tr><td><h2>개인 페이지 화면 들어올 예정</h2></td></tr>
+			<tr><td><div class="popup-content"></div></td></tr>
 		</table>
 	</div>
   </div>
