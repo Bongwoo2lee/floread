@@ -7,30 +7,83 @@ from kobert_tokenizer import KoBERTTokenizer
 import gluonnlp as nlp
 import numpy as np
 
-file_path ='booksample1.txt'
-file = open(file_path, 'r',encoding='UTF8')    #인코딩 안바꾸면 오류
-raw_text = file.readlines()
+def runKobert(raw_file):
+    with open(raw_file, 'r', encoding='utf-8') as html_file:
+        raw_text = html_file.read()
+        
+    print("파일읽기", len(raw_text), type(raw_text))
+    
+    #줄바꿈제거
+    textsum = '' 
+    for sentence in raw_text:
+        sentence = sentence.replace("\n", "")
+        textsum += sentence
+        
+    #(한자) 제거    
+    textsum = re.sub('\([^)]*\)|[一-龥]', '', textsum)
+    
+    # 줄바꿈제거
+    text = []
+    s, e = 0, 0
+    for i in range(len(textsum)):
+        if (textsum[i]=='.' and textsum[i+1]!='”' ) or textsum[i]=='”':
+            e = i+1
+            text.append(textsum[s:e])
+            s = e
+            
+    #문장 단위로 분리: . ”로 끝날때마다 묶어주기
+    text = []
+    s, e = 0, 0
+    for i in range(len(textsum)):
+        if (textsum[i]=='.' and textsum[i+1]!='”' ) or textsum[i]=='”':
+            e = i+1
+            text.append(textsum[s:e])
+            s = e
+    #데이터프레임으로
+    df = pd.DataFrame(text, columns=['sentence'])
+    
+    emos = ('행복','불안','놀람', '슬픔','분노','중립')
+    res = {'행복':0,'불안':0,'놀람':0, '슬픔':0,'분노':0,'중립':0}
+
+    for index, data in df.iterrows():
+        res[emos[predict(data['sentence'])]] += 1
+    print(res)
+
+    res_copied = res.copy()
+    del res_copied['중립']
+    del res_copied['놀람']
+    res_emo = max(res_copied, key=res_copied.get)
+
+    print(res_emo)
+    return res_emo
+    
+# file_path = '../sentiment-analysis/data/booksample1.txt'
+#file_path = 'sentiment-analysis/data/booksample1.txt' #(cmd 위치 기준)
+
+#file = open(file_path, 'r',encoding='UTF8')    #인코딩 안바꾸면 오류
+
+#raw_text = file.readlines()
 
 #줄바꿈제거
-textsum = '' 
-for sentence in raw_text:
-    sentence = sentence.replace("\n", "")
-    textsum += sentence
+# textsum = '' 
+# for sentence in raw_text:
+#     sentence = sentence.replace("\n", "")
+#     textsum += sentence
 
-#(한자) 제거    
-textsum = re.sub('\([^)]*\)|[一-龥]', '', textsum)
+# #(한자) 제거    
+# textsum = re.sub('\([^)]*\)|[一-龥]', '', textsum)
 
-#문장 단위로 분리: . ”로 끝날때마다 묶어주기
-text = []
-s, e = 0, 0
-for i in range(len(textsum)):
-    if (textsum[i]=='.' and textsum[i+1]!='”' ) or textsum[i]=='”':
-        e = i+1
-        text.append(textsum[s:e])
-        s = e
+# #문장 단위로 분리: . ”로 끝날때마다 묶어주기
+# text = []
+# s, e = 0, 0
+# for i in range(len(textsum)):
+#     if (textsum[i]=='.' and textsum[i+1]!='”' ) or textsum[i]=='”':
+#         e = i+1
+#         text.append(textsum[s:e])
+#         s = e
         
-#데이터프레임으로
-df = pd.DataFrame(text, columns=['sentence'])
+# #데이터프레임으로
+# df = pd.DataFrame(text, columns=['sentence'])
 
 #모델 불러오기
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
@@ -84,7 +137,8 @@ class BERTDataset(Dataset):
     def __len__(self):
         return (len(self.labels))
     
-model_path = '../sentiment-analysis/model/kobert-v5.pt'
+#model_path = '../sentiment-analysis/model/kobert-v6.pt'
+model_path = 'sentiment-analysis/model/kobert-v6.pt' #(cmd 위치 기준)
 model = torch.load(model_path)
 model = model.to('cpu')
 
@@ -109,10 +163,152 @@ def predict(sentence):
             answer = np.argmax(logits)
     return answer
 
+####################################################################################################################
 
-emos = ('행복','불안','놀람', '슬픔','분노','중립')
-res = {'행복':0,'불안':0,'놀람':0, '슬픔':0,'분노':0,'중립':0}
+from kafka import KafkaConsumer
+import paramiko
+from scp import SCPClient, SCPException
+import os
+import time
+import mysql.connector
+import configparser
+import sys
 
-for index, data in df.iterrows():
-    res[emos[predict(data['sentence'])]] += 1
-print(res)
+#mysql 서버 다른 파일에 놓고 import해서 사용하면 됨
+
+# MySQL 서버 정보 설정
+config = configparser.ConfigParser()
+config.read('match_music/config.ini')
+
+# MySQL 연결 설정
+conn = mysql.connector.connect(
+    host=config.get('mysql', 'host'),
+    port=config.get('mysql', 'port'),
+    database=config.get('mysql', 'database'),
+    user=config.get('mysql', 'user'),
+    password=config.get('mysql', 'password'),
+    charset='utf8'  
+)
+
+# 연결 확인
+if conn.is_connected():
+    print('MySQL에 연결되었습니다.')
+
+class SSHManager:
+    """
+    usage:
+        >>> import SSHManager
+        >>> ssh_manager = SSHManager()
+        >>> ssh_manager.create_ssh_client(hostname, username, password)
+        >>> ssh_manager.send_command("ls -al")
+        >>> ssh_manager.send_file("/path/to/local_path", "/path/to/remote_path")
+        >>> ssh_manager.get_file("/path/to/remote_path", "/path/to/local_path")
+        ...
+        >>> ssh_manager.close_ssh_client()
+    """
+    def __init__(self):
+        self.ssh_client = None
+
+    def create_ssh_client(self, hostname, username, password):
+        """Create SSH client session to remote server"""
+        if self.ssh_client is None:
+            self.ssh_client = paramiko.SSHClient()
+            self.ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            self.ssh_client.connect(hostname, username=username, password=password)
+        else:
+            print("SSH client session exist.")
+
+    def close_ssh_client(self):
+        """Close SSH client session"""
+        self.ssh_client.close()
+
+    def send_file(self, local_path, remote_path):
+        """Send a single file to remote path"""
+        try:
+            with SCPClient(self.ssh_client.get_transport()) as scp:
+                scp.put(local_path, remote_path, preserve_times=True)
+        except SCPException:
+            raise SCPException.message
+
+    def get_file(self, remote_path, local_path):
+        """Get a single file from remote path"""
+        try:
+            with SCPClient(self.ssh_client.get_transport()) as scp:
+                scp.get(remote_path, local_path)
+        except SCPException:
+            raise SCPException.message
+
+    def send_command(self, command):
+        """Send a single command"""
+        stdin, stdout, stderr = self.ssh_client.exec_command(command)
+        return stdout.readlines()
+
+consumer = KafkaConsumer(
+    bootstrap_servers=config.get('Kafka', 'host'),
+    group_id=config.get('Kafka', 'group_id'),
+    auto_offset_reset='latest',
+)
+
+consumer.subscribe('book')
+
+for message in consumer:
+
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh_client.connect(config.get('ssh', 'host'), config.get('ssh', 'port'), config.get('ssh', 'user'), config.get('ssh', 'password'))
+    sftp_client = ssh_client.open_sftp()
+    
+
+    try:
+        # 원격 파일 가져오기
+        remote_path = message.value.decode('utf-8')
+        fileName = str(remote_path).split('/')[-1]
+        local_path = str(os.getcwd()) +'/'+ fileName
+        print(remote_path, local_path)
+        sftp_client.get(remote_path, local_path)
+
+        # 커서 생성
+        cursor = conn.cursor()
+        
+        #러닝 하기
+        print("러닝 시작")
+
+        # 쿼리 1 실행
+        #emotion = "'행복'"
+        emotion = "'{}'".format(runKobert(local_path))
+        query1 = "SELECT emotion_id FROM Emotion where `emotion` = "+ emotion
+        cursor.execute(query1)
+        result1 = cursor.fetchall()
+
+        emotion_id = 0
+        for row in result1:
+            emotion_id = row[0]
+            print(emotion_id)
+
+        # 쿼리 2 실행
+        # 쿼리실행할때는 ''로 감싸줘야함 "SELECT book_id FROM Book where `fileName` = 'test.txt'" 
+        # fileName의 경우 뒤에 '는 자동으로 있어서 앞에만 하면 됨
+        query_file = fileName.replace("'", "")
+        print(query_file)
+        query2 = "SELECT book_id FROM Book where `fileName` = '"+ query_file +"'"
+        cursor.execute(query2)
+        result2 = cursor.fetchall()
+        book_id = 0
+        for row in result2:
+            book_id = row[0]
+            print(book_id)
+        #insert query
+        query3 = "INSERT INTO BookEmotion (emotion_id, book_id) VALUES (%s, %s)"
+        values = (emotion_id, book_id)
+        cursor.execute(query3, values)
+        # 변경사항 커밋
+        conn.commit()
+        print(cursor.rowcount, "record inserted")
+
+        # 파일 삭제
+        os.remove(local_path)
+        
+    except Exception as e:
+        print(e)
+        # 연결 및 커서 닫기
+        continue
