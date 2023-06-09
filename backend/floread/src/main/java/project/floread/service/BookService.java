@@ -40,20 +40,10 @@ public class BookService {
     public Long join(Book book, String userId) {
         User user = userRepository.findByUserId(userId);
         book.setUser(user);
-        validateDuplicateBook(book);
+        validateDuplicateBook(book, user);
         bookRepository.save(book);
 
         return book.getId();
-    }
-
-    //책 DB에서 삭제
-    @Transactional
-    public void delete(String originName, String userId) {
-        User user = userRepository.findByUserId(userId);
-        Book book = bookRepository.findByOriginName(originName);
-        if (Objects.equals(book.getUser().getId(), user.getId())) {
-            bookRepository.delete(book);
-        }
     }
 
     @Transactional
@@ -68,10 +58,14 @@ public class BookService {
     }
 
     //존재하는 책인지 확인하는 함수
-    private void validateDuplicateBook(Book book) {
+    private void validateDuplicateBook(Book book, User user) {
         List<Book> findBooks = bookRepository.findByName(book.getFileName());
         if(!findBooks.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 책입니다.");
+            for (Book findBook : findBooks) {
+                if (Objects.equals(findBook.getUser().getId(), user.getId())) {
+                    throw new IllegalStateException("이미 존재하는 책입니다.");
+                }
+            }
         }
     }
 

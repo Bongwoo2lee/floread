@@ -6,9 +6,9 @@ INSERT INTO Emotion (emotion) values ('슬픔');
 INSERT INTO Emotion (emotion) values ('분노');
 INSERT INTO Emotion (emotion) values ('중립');
 
-INSERT INTO Music (title, url) values  ('test1.mp4', '/home/floread/floread/music/test1.mp4');
-INSERT INTO Music (title, url) values  ('test2.mp4', '/home/floread/floread/music/test2.mp4');
-INSERT INTO Music (title, url) values  ('test3.mp4', '/home/floread/floread/music/test3.mp4');
+INSERT INTO Music (title, url) values  ('test1.mp4', '/home/floread/floread/backend/music/test1.mp4');
+INSERT INTO Music (title, url) values  ('test2.mp4', '/home/floread/floread/backend/music/test2.mp4');
+INSERT INTO Music (title, url) values  ('test3.mp4', '/home/floread/floread/backend/music/test3.mp4');
 
 INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 1);
 INSERT INTO MusicEmotion (emotion_id, music_id) values (1, 2);

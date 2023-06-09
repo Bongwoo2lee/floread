@@ -1,15 +1,24 @@
 <script>
+
+	let mypageValue = null;
+
+
+
 	function mypage() {
 		fetch('http://floread.store:8000/mypage')
 		.then((response) => response.json())//읽어온 데이터를 json으로 변환
     	.then(data => {
-			console.log(data)
-			return data;
+			console.log(data);
+			mypageValue = data;
+			console.log(mypageValue);
+			document.body.innerText = mypageValue;
 		})
 		.catch(error => {
 			console.error(error);
 		});
-	}
+
+}
+
 
 
 	import {onMount} from 'svelte';
@@ -22,14 +31,6 @@
 	}
 	function togglePopup(){
 		popupVisible = !popupVisible;
-
-		data = mypage();
-		for (let i = 0; i < data.length; i++) {
-			url = data[i].url;
-			id = data[i].id;
-			console.log(url);
-			confirm.log(id);
-		}
 	}
 	function togglePopup2(){
 		popupVisible2 = !popupVisible2;
@@ -38,6 +39,8 @@
 		popupVisible3 = !popupVisible3;
 		if (popupVisible3) {
 			mypage();
+			// 여기서 팝업 토글 로직을 수행하고 값을 반환합니다.
+			// 또는 false 등 원하는 값을 반환할 수 있습니다.
 		}
 	}
 	function handleClick(event) {
@@ -78,7 +81,7 @@
             formData.append('files', file);
         });
 
-        fetch('http://localhost:8000/upload', {
+        fetch('http://floread.store:8000/upload', {
             method: 'POST',
             body: formData,
         })
@@ -108,6 +111,11 @@
     }
 </script>
 <style>
+	.custom-color {
+		background-color: white;
+		color: black;
+	}
+
 	.popup-wrapper {
     position: fixed;
     top: 0;
@@ -316,9 +324,22 @@
 					</svg>
 				  </button>
 			</td></tr>
-			<tr><td>
-				<h2>마이페이지 화면 들어올 예정</h2>
-			</td></tr>
+			{#if mypageValue}
+			<tr>
+			  <td class="custom-color">
+				{#each mypageValue as item}
+				<td>
+				  <p>{item.title}</p>
+				  {#if item.musicEmotionList}
+					{#each item.musicEmotionList as item2}
+					  <p>{item2.emotion}</p>
+					{/each}
+				  {/if}
+				</td>
+			  {/each}
+			  </td>
+			</tr>
+		  {/if}		  
 		</table>
 	</div>
   </div>
