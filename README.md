@@ -9,7 +9,28 @@
 <br>
 
 ## How to use
-TBD
+* Backend
+  ```
+    cd ./backend/floread
+    ./gradlew build
+    //백그라운드 실행할경우
+    nohup java -jar /build/libs/floread-0.0.1-SNAPSHOT.jar &
+    //그냥 실행할 경우
+    java -jar /build/libs/floread-0.0.1-SNAPSHOT.jar
+  ```
+* Kafka
+  ```
+  //다른 환경에서 실행할 경우 환경변수 설정 후
+  cd kafka_path
+  bin/zookeeper-server-start.sh -daemon config/zookeeper.properties
+  bin/kafka-server-start.sh  -daemon config/server.properties
+  ```
+
+* Frontend
+  ```
+    cd svelte-start-app
+    sudo npm run dev
+  ```
 
 ### Requirements
 TBD
@@ -54,4 +75,3 @@ TBD
 - [Kobert](https://github.com/SKTBrain/KoBERT)
 - [KoELECTRA](https://github.com/monologg/KoELECTRA)
 - [KcELECTRA](https://github.com/Beomi/KcELECTRA)
-
