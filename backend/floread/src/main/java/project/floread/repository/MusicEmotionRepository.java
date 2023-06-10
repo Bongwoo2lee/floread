@@ -21,11 +21,16 @@ public class MusicEmotionRepository {
                 .getResultList();
     }
 
-    public long findByEmotion(Emotion emotion) {
-        return em.createQuery("select e.id from Emotion e where e.emotion = :emotion", Long.class)
+    public List<String> findByEmotionToMusicUrl(String emotion) {
+        return em.createQuery("select m.url from Music m join m.musicEmotions me where me.emotion.emotion = :emotion", String.class)
                 .setParameter("emotion", emotion)
-                .getSingleResult();
+                .getResultList();
+
+//        return em.createQuery("select e.id from Emotion e where e.emotion = :emotion", Long.class)
+//                .setParameter("emotion", emotion)
+//                .getSingleResult();
     }
+
 
     public String findByUrl(long MusicId) {
         return em.createQuery("select m.url from Music m where m.id = :MusicId", String.class)

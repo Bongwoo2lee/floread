@@ -23,8 +23,8 @@ public class BookEmotionRepository {
         em.remove(bookEmotion);
     }
 
-    public List<Emotion> findByEmotion(Book book) {
-        return em.createQuery("select be.emotion from BookEmotion be where be.book = :book", Emotion.class)
+    public List<String> findByEmotion(Book book) {
+        return em.createQuery("select be.emotion.emotion from BookEmotion be where be.book = :book", String.class)
                 .setParameter("book", book)
                 .getResultList();
     }

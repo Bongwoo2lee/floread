@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -31,7 +32,6 @@ import java.util.List;
 @RestController
 public class BookController {
 
-    private final MusicService musicService;
     private final BookService bookService;
     private final AuthenticationService authenticationService;
     private final KafkaSampleProducerService kafkaSampleProducerService;
@@ -65,7 +65,6 @@ public class BookController {
     @PostMapping("/upload")
     public ResponseEntity<String> create(@RequestPart("files") MultipartFile[] files) throws IOException {
         String userId = authenticationService.getAuthentication().getName();
-
         System.out.println(userId);
         for (MultipartFile file : files) {
             //저장후 보낼 파일url을 담을 변수
@@ -98,7 +97,7 @@ public class BookController {
                     assert title != null;
                     String hashedPassword = hashString(title, "SHA-256");
                     //파일명은 해싱.html로 저장됨
-                    destinationBookName = hashedPassword + ".html";
+                    destinationBookName = hashedPassword + ".txt";
 
                     //파일 경로
                     destinationBook = new File(bookUrl + destinationBookName);
@@ -146,55 +145,20 @@ public class BookController {
         for (Book book : books) {
             System.out.println("book = " + book.getOriginName());
         }
-        // //잠시 책이랑 감성이랑 연결
-        // for (Book book : books) {
-        //     System.out.println("book = " + book.getOriginName());
-
-        //     BookEmotion bookEmotion = new BookEmotion();
-        //     Emotion emotion = emotionService.FindId("기쁨");
-        //     System.out.println("emotion = " + emotion.getEmotion());
-
-        //     bookEmotion.setBook(book);
-        //     bookEmotion.setEmotion(emotion);
-        //     System.out.println("bookEmotion = " + bookEmotion.getId());
-        //     bookService.joinEmotion(bookEmotion);
-        // }
-
 
         //보낼 형식
         List<SendBook> sendBookList = new ArrayList<>();
-        List<SendMusicEmotion> sendMusicEmotionList = new ArrayList<>();
 
-        //책 별로 제목, url, 음악김성리스트(음악, 감성)
+        //책 별로 감정 리스트
         for (Book book : books) {
             //음악 감성 리스트
-
-            //감성 찾기
-            List<Emotion> emotions = bookService.findEmotions(book);
-
-
-            for (Emotion emotion : emotions) {
-                //감성에 대한 음악 찾기
-                List<String> musicList = musicService.findByMusic(emotion);
-
-                System.out.println("musicList = " + musicList);
-
-                //감성에 따른 음악 리스트 연결
-                SendMusicEmotion sendMusicEmotion = new SendMusicEmotion(emotion.getEmotion(), musicList);
-                
-                //만약 리스트에 감정이 있으면 넘김
-                if (sendMusicEmotionList.contains(sendMusicEmotion)) {
-                    continue;
-                }
-
-                sendMusicEmotionList.add(sendMusicEmotion);
-            }
-            SendBook sendBook = new SendBook(book.getOriginName(), book.getUrl(), sendMusicEmotionList);
-            System.out.println("sendBook = " + sendBook);
+            List<String> emotions = bookService.findEmotions(book);
+            System.out.println("book = " + book.getFileName());
+            System.out.println("emotions = " + emotions.get(0));
+            //책에 대한 감정 리스트 연결
+            SendBook sendBook = new SendBook(book.getOriginName(), book.getUrl(), emotions);
             sendBookList.add(sendBook);
         }
-        String aa = sendBookList.toString();
-        System.out.println("책리스트 = " + aa);
 
         Gson gson = new Gson();
         System.out.println(gson.toJson(sendBookList).getClass().getName());
@@ -203,12 +167,9 @@ public class BookController {
     }
 
 
-    @GetMapping("/read")
-    public ResponseEntity<Resource> Read() throws FileNotFoundException {
-        String userId = authenticationService.getAuthentication().getName();
-        System.out.println(userId);
-        List<Book> books = bookService.findBooks(userId);
-        Book book = books.get(0);
+    @GetMapping("/book/{title}")
+    public ResponseEntity<Resource> Read(@PathVariable String title) throws IOException {
+        Book book = bookService.findByOriginName(title);
         String filePath = book.getUrl();
         System.out.println(filePath);
         //파일 가져오기

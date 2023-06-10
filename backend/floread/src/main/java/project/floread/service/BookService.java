@@ -40,6 +40,7 @@ public class BookService {
     public Long join(Book book, String userId) {
         User user = userRepository.findByUserId(userId);
         book.setUser(user);
+        System.out.println("book = " + book.toString());
         validateDuplicateBook(book, user);
         bookRepository.save(book);
 
@@ -53,7 +54,7 @@ public class BookService {
     }
 
     @Transactional
-    public List<Emotion> findEmotions(Book book) {
+    public List<String> findEmotions(Book book) {
         return bookEmotionRepository.findByEmotion(book);
     }
 
@@ -81,5 +82,9 @@ public class BookService {
             System.out.println(book.getFileName());
         }
         return books;
+    }
+
+    public Book findByOriginName(String originName) {
+        return bookRepository.findByOriginName(originName);
     }
 }

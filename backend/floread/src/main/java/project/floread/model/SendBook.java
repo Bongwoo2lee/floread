@@ -1,5 +1,6 @@
 package project.floread.model;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -12,22 +13,13 @@ public class SendBook implements Serializable {
 
     private String title;
     private String url;
-    private List<SendMusicEmotion> musicEmotionList;
+    private List<String> emotions;
 
-    public SendBook(String title, String url, List<SendMusicEmotion> musicEmotionList) {
+    public SendBook(String title, String url, List<String> emotions) {
         this.title = title;
         this.url = url;
-        this.musicEmotionList = musicEmotionList;
+        this.emotions = emotions;
     }
 
-    @Override
-    public String toString() {
-        String musicTo = musicEmotionList.toString();
 
-        return "SendBook{" +
-                "title='" + title + '\'' +
-                ", url='" + url + '\'' +
-                ", musicEmotionList=" + musicTo +
-                '}';
-    }
 }
