@@ -8,33 +8,38 @@ import gluonnlp as nlp
 import numpy as np
 
 def runKobert(raw_file):
-    with open(raw_file, 'r', encoding='utf-8') as html_file:
-        raw_text = html_file.read()
+    
+    raw_text = ''
+    
+    if raw_file[-4:]=='html':
+        print("html")
+        with open(raw_file, 'r', encoding='utf-8') as html_file:
+            raw_text = html_file.read()
+    
+    else: 
+        file = open(raw_file, 'r',encoding='UTF8')    #인코딩 안바꾸면 오류
+        raw_text = file.readlines()
         
     print("파일읽기", len(raw_text), type(raw_text))
     
-    #줄바꿈제거
     textsum = '' 
-    for sentence in raw_text:
-        sentence = sentence.replace("\n", "")
-        textsum += sentence
+    if isinstance(raw_text, list):
+        #줄바꿈제거
+        for sentence in raw_text:
+            sentence = sentence.replace("\n", "")
+            textsum += sentence
+    else:
+        textsum=raw_text
         
+    print("textsum",len(textsum))
+
     #(한자) 제거    
     textsum = re.sub('\([^)]*\)|[一-龥]', '', textsum)
     
-    # 줄바꿈제거
-    text = []
-    s, e = 0, 0
-    for i in range(len(textsum)):
-        if (textsum[i]=='.' and textsum[i+1]!='”' ) or textsum[i]=='”':
-            e = i+1
-            text.append(textsum[s:e])
-            s = e
-            
     #문장 단위로 분리: . ”로 끝날때마다 묶어주기
     text = []
     s, e = 0, 0
-    for i in range(len(textsum)):
+    for i in range(len(textsum)-1):
         if (textsum[i]=='.' and textsum[i+1]!='”' ) or textsum[i]=='”':
             e = i+1
             text.append(textsum[s:e])
@@ -57,40 +62,13 @@ def runKobert(raw_file):
     print(res_emo)
     return res_emo
     
-# file_path = '../sentiment-analysis/data/booksample1.txt'
-#file_path = 'sentiment-analysis/data/booksample1.txt' #(cmd 위치 기준)
-
-#file = open(file_path, 'r',encoding='UTF8')    #인코딩 안바꾸면 오류
-
-#raw_text = file.readlines()
-
-#줄바꿈제거
-# textsum = '' 
-# for sentence in raw_text:
-#     sentence = sentence.replace("\n", "")
-#     textsum += sentence
-
-# #(한자) 제거    
-# textsum = re.sub('\([^)]*\)|[一-龥]', '', textsum)
-
-# #문장 단위로 분리: . ”로 끝날때마다 묶어주기
-# text = []
-# s, e = 0, 0
-# for i in range(len(textsum)):
-#     if (textsum[i]=='.' and textsum[i+1]!='”' ) or textsum[i]=='”':
-#         e = i+1
-#         text.append(textsum[s:e])
-#         s = e
-        
-# #데이터프레임으로
-# df = pd.DataFrame(text, columns=['sentence'])
-
 #모델 불러오기
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
 vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
 tok = tokenizer.tokenize
 
 #device = torch.device("cpu")
+device = torch.device("cuda:0")
 
 class BERTClassifier(nn.Module):
     def __init__(self,
@@ -140,7 +118,7 @@ class BERTDataset(Dataset):
 #model_path = '../sentiment-analysis/model/kobert-v6.pt'
 model_path = 'sentiment-analysis/model/kobert-v6.pt' #(cmd 위치 기준)
 model = torch.load(model_path)
-model = model.to('cpu')
+#model = model.to('cpu')
 
 max_len = 64
 batch_size = 64
@@ -153,10 +131,10 @@ def predict(sentence):
     model.eval()
     answer = 0
     for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(test_dataloader):
-        token_ids = token_ids.long().cpu()    #벡엔드에서 cpu로
-        segment_ids = segment_ids.long().cpu()  #벡엔드에서 cpu로
+        token_ids = token_ids.long().to(device)
+        segment_ids = segment_ids.long().to(device)
         valid_length= valid_length
-        label = label.long().cpu() 
+        label = label.long().to(device)
         out = model(token_ids, valid_length, segment_ids)
         for logits in out:
             logits = logits.detach().cpu().numpy()
@@ -258,12 +236,11 @@ for message in consumer:
     ssh_client.connect(config.get('ssh', 'host'), config.get('ssh', 'port'), config.get('ssh', 'user'), config.get('ssh', 'password'))
     sftp_client = ssh_client.open_sftp()
     
-
     try:
         # 원격 파일 가져오기
         remote_path = message.value.decode('utf-8')
         fileName = str(remote_path).split('/')[-1]
-        local_path = str(os.getcwd()) +'/'+ fileName
+        local_path = os.getcwd().replace("\\", "/") +'/'+ fileName #슬레시가 반대로 나오는거 바꿔주기
         print(remote_path, local_path)
         sftp_client.get(remote_path, local_path)
 
@@ -304,11 +281,12 @@ for message in consumer:
         # 변경사항 커밋
         conn.commit()
         print(cursor.rowcount, "record inserted")
-
-        # 파일 삭제
-        os.remove(local_path)
         
     except Exception as e:
         print(e)
         # 연결 및 커서 닫기
         continue
+    
+    # 파일 삭제
+    print(local_path, "삭제")
+    os.remove(local_path)
