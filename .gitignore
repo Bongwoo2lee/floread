@@ -7,5 +7,12 @@
 #AI허브 제공 데이터셋
 *.csv
 *.xlsx
+
+# 가상환경
+match_music/env/
+
+config.ini
+
 book/*
+
 
