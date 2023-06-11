@@ -6,22 +6,23 @@ from torch.utils.data import Dataset
 from kobert_tokenizer import KoBERTTokenizer
 import gluonnlp as nlp
 import numpy as np
+import csv
+
+file_path = 'C:/Users/KangIW/Desktop/혼혈의왕자-불사조의슬픈노래.txt'
 
 def runKobert(raw_file):
-    
     raw_text = ''
     
     if raw_file[-4:]=='html':
-        print("html")
+        print("html 문서읽기")
         with open(raw_file, 'r', encoding='utf-8') as html_file:
             raw_text = html_file.read()
     
     else: 
+        print("txt 문서읽기")
         file = open(raw_file, 'r',encoding='UTF8')    #인코딩 안바꾸면 오류
         raw_text = file.readlines()
-        
-    print("파일읽기", len(raw_text), type(raw_text))
-    
+            
     textsum = '' 
     if isinstance(raw_text, list):
         #줄바꿈제거
@@ -39,21 +40,42 @@ def runKobert(raw_file):
     #문장 단위로 분리: . ”로 끝날때마다 묶어주기
     text = []
     s, e = 0, 0
+    isopen = False #쌍따옴표 안에 글자인지 확인
     for i in range(len(textsum)-1):
-        if (textsum[i]=='.' and textsum[i+1]!='”' ) or textsum[i]=='”':
+        if textsum[i]=='“':
+            isopen = True
+            continue
+            
+        if (textsum[i]=='.' and textsum[i+1]!='”' and isopen==False) or textsum[i]=='”':
             e = i+1
-            text.append(textsum[s:e])
+            text.append(textsum[s:e].strip())
             s = e
+            isopen = False
+            
+    print(len(text),"문장 감성분석 시작")
+
+                    
+    # #csv파일 생성, 쓰기
+    # with open(r'C:\Users\KangIW\Desktop\output.csv', 'w', newline='', encoding="utf-8-sig") as f:
+    #     writer = csv.writer(f)
+    #     for item in text:
+    #         writer.writerow([item])
+        
+    
     #데이터프레임으로
     df = pd.DataFrame(text, columns=['sentence'])
     
     emos = ('행복','불안','놀람', '슬픔','분노','중립')
     res = {'행복':0,'불안':0,'놀람':0, '슬픔':0,'분노':0,'중립':0}
 
-    for index, data in df.iterrows():
-        res[emos[predict(data['sentence'])]] += 1
+    # for index, data in df.iterrows():
+    #     res[emos[predict(data['sentence'])]] += 1
+    # print(res)
+    
+    for sentence in text:
+        res[emos[predict(sentence)]] += 1
     print(res)
-
+        
     res_copied = res.copy()
     del res_copied['중립']
     del res_copied['놀람']
@@ -61,8 +83,8 @@ def runKobert(raw_file):
 
     print(res_emo)
     return res_emo
-    
-#모델 불러오기
+
+#region 모델 불러오기
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
 vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
 tok = tokenizer.tokenize
@@ -140,10 +162,7 @@ def predict(sentence):
             logits = logits.detach().cpu().numpy()
             answer = np.argmax(logits)
     return answer
-
-file_path = 'sentiment-analysis/data/booksample1.txt'
-file_path = 'C:/Users/KangIW/Desktop/sample2.txt'
-#file_path = 'sentiment-analysis/data/booksample1.txt'
-file_path = 'C:/Users/KangIW/Desktop/혼혈의왕자.html'
+#endregion
 
 runKobert(file_path)
+

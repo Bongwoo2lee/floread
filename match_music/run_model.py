@@ -6,21 +6,22 @@ from torch.utils.data import Dataset
 from kobert_tokenizer import KoBERTTokenizer
 import gluonnlp as nlp
 import numpy as np
+import time
+
 
 def runKobert(raw_file):
     
     raw_text = ''
     
     if raw_file[-4:]=='html':
-        print("html")
         with open(raw_file, 'r', encoding='utf-8') as html_file:
             raw_text = html_file.read()
+        print("\n html 파일 읽기", type(raw_text))
     
     else: 
         file = open(raw_file, 'r',encoding='UTF8')    #인코딩 안바꾸면 오류
         raw_text = file.readlines()
-        
-    print("파일읽기", len(raw_text), type(raw_text))
+        print("\n txt 파일 읽기",  type(raw_text))
     
     textsum = '' 
     if isinstance(raw_text, list):
@@ -31,7 +32,7 @@ def runKobert(raw_file):
     else:
         textsum=raw_text
         
-    print("textsum",len(textsum))
+    print("총 길이",len(textsum))
 
     #(한자) 제거    
     textsum = re.sub('\([^)]*\)|[一-龥]', '', textsum)
@@ -39,30 +40,40 @@ def runKobert(raw_file):
     #문장 단위로 분리: . ”로 끝날때마다 묶어주기
     text = []
     s, e = 0, 0
+    isopen = False #쌍따옴표 안에 글자인지 확인
     for i in range(len(textsum)-1):
-        if (textsum[i]=='.' and textsum[i+1]!='”' ) or textsum[i]=='”':
+        if textsum[i]=='“':
+            isopen = True
+            continue
+            
+        if (textsum[i]=='.' and textsum[i+1]!='”' and isopen==False) or textsum[i]=='”':
             e = i+1
-            text.append(textsum[s:e])
+            text.append(textsum[s:e].strip())
             s = e
-    #데이터프레임으로
-    df = pd.DataFrame(text, columns=['sentence'])
+            isopen = False
+
+    #감성분석 하기
+    print("===========================================",len(text),"문장 감성분석 시작")
+    start_time = time.time()
     
     emos = ('행복','불안','놀람', '슬픔','분노','중립')
     res = {'행복':0,'불안':0,'놀람':0, '슬픔':0,'분노':0,'중립':0}
-
-    for index, data in df.iterrows():
-        res[emos[predict(data['sentence'])]] += 1
-    print(res)
+    
+    for sentence in text:
+        res[emos[predict(sentence)]] += 1
+    end_time = time.time()  # 종료 시간 저장
+    print("소요시간: {}s".format(round(end_time - start_time, 2)))  # 실행 시간 출력
+    print("분석 결과: ",res)
 
     res_copied = res.copy()
     del res_copied['중립']
     del res_copied['놀람']
     res_emo = max(res_copied, key=res_copied.get)
 
-    print(res_emo)
+    print("최다 빈도: ",res_emo,end=', ')
     return res_emo
     
-#모델 불러오기
+#region kovert-v6 모델 불러오기
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
 vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
 tok = tokenizer.tokenize
@@ -140,6 +151,8 @@ def predict(sentence):
             logits = logits.detach().cpu().numpy()
             answer = np.argmax(logits)
     return answer
+
+#endregion
 
 ####################################################################################################################
 
@@ -241,14 +254,11 @@ for message in consumer:
         remote_path = message.value.decode('utf-8')
         fileName = str(remote_path).split('/')[-1]
         local_path = os.getcwd().replace("\\", "/") +'/'+ fileName #슬레시가 반대로 나오는거 바꿔주기
-        print(remote_path, local_path)
+        #print(remote_path, local_path)
         sftp_client.get(remote_path, local_path)
 
         # 커서 생성
         cursor = conn.cursor()
-        
-        #러닝 하기
-        print("러닝 시작")
 
         # 쿼리 1 실행
         #emotion = "'행복'"
@@ -266,21 +276,21 @@ for message in consumer:
         # 쿼리실행할때는 ''로 감싸줘야함 "SELECT book_id FROM Book where `fileName` = 'test.txt'" 
         # fileName의 경우 뒤에 '는 자동으로 있어서 앞에만 하면 됨
         query_file = fileName.replace("'", "")
-        print(query_file)
+        #print(query_file)
         query2 = "SELECT book_id FROM Book where `fileName` = '"+ query_file +"'"
         cursor.execute(query2)
         result2 = cursor.fetchall()
         book_id = 0
         for row in result2:
             book_id = row[0]
-            print(book_id)
+            #print(book_id)
         #insert query
         query3 = "INSERT INTO BookEmotion (emotion_id, book_id) VALUES (%s, %s)"
         values = (emotion_id, book_id)
         cursor.execute(query3, values)
         # 변경사항 커밋
         conn.commit()
-        print(cursor.rowcount, "record inserted")
+        print(cursor.rowcount, "record inserted\n")
         
     except Exception as e:
         print(e)
