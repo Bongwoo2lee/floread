@@ -19,7 +19,7 @@ spring:
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
   profiles:
-    include: oauth, datasource
+    include: datasource
 
 
   kafka:
@@ -39,4 +39,3 @@ server:
   servlet:
     encoding:
       force-response: true
-  port: 8000
