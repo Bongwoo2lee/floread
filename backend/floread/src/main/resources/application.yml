@@ -19,7 +19,7 @@ spring:
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
   profiles:
-    include: datasource
+    include: datasource, secret-key
 
 
   kafka:

@@ -2,12 +2,14 @@ package project.floread.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import project.floread.dto.BookDTO;
 import project.floread.dto.ResponseDTO;
 import project.floread.model.BookEntity;
 import project.floread.service.BookService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,20 +17,30 @@ import java.util.stream.Collectors;
 @RequestMapping("book")
 @AllArgsConstructor
 public class BookController {
+
     private final BookService bookService;
 
-    @PostMapping
-    public ResponseEntity<?> createBook(@RequestBody BookDTO bookDTO) {
-        try {
-            //임시 유저id
-            String temporaryUserId = "temporary-user";
+    @GetMapping("/test")
+    public ResponseEntity<?> testBook() {
+        String str = bookService.testService(); //테스트 서비스
+        List<String> list = new ArrayList<>();
+        list.add(str);
+        ResponseDTO<String> response = ResponseDTO.<String>builder().data(list).build();
+        return ResponseEntity.ok().body(response);
+    }
 
+    @PostMapping
+    public ResponseEntity<?> createBook(@AuthenticationPrincipal String userId, @RequestBody BookDTO bookDTO) {
+        try {
+            System.out.println("userId = " + userId);
             //DTO를 entity로 변형
             BookEntity bookEntity = BookDTO.toEntity(bookDTO);
 
+            //Id를 null 로 초기화
             bookEntity.setId(null);
 
-            bookEntity.setUserId(temporaryUserId);
+            //auth token으로 받은 userid를 가짐
+            bookEntity.setUserId(userId);
 
             //서비스를 이용하여 생성
             List<BookEntity> bookEntityList = bookService.create(bookEntity);
@@ -50,10 +62,10 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity<?> retrieveBookList() {
-        String temporaryUserId = "temporary-user";
-
-        List<BookEntity> bookEntityList = bookService.retrieve(temporaryUserId);
+    public ResponseEntity<?> retrieveBookList(@AuthenticationPrincipal String userId) {
+        System.out.println("userId = " + userId);
+        //userid로 책 리스트 가져오기
+        List<BookEntity> bookEntityList = bookService.retrieve(userId);
 
         List<BookDTO> bookDTOList = bookEntityList.stream().map(BookDTO::new).collect(Collectors.toList());
 
@@ -63,12 +75,10 @@ public class BookController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateBook(@RequestBody BookDTO bookDTO) {
-        String temporaryUserId = "temporary-user";
-
+    public ResponseEntity<?> updateBook(@AuthenticationPrincipal String userId, @RequestBody BookDTO bookDTO) {
         BookEntity bookEntity = BookDTO.toEntity(bookDTO);
 
-        bookEntity.setUserId(temporaryUserId);
+        bookEntity.setUserId(userId);
 
         List<BookEntity> bookEntityList = bookService.update(bookEntity);
 
@@ -80,14 +90,13 @@ public class BookController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteBook(@RequestBody BookDTO bookDTO) {
+    public ResponseEntity<?> deleteBook(@AuthenticationPrincipal String userId, @RequestBody BookDTO bookDTO) {
         try {
-            String temporaryUserId = "temporary-user";
 
             //엔티티로 변환
             BookEntity bookEntity = BookDTO.toEntity(bookDTO);
 
-            bookEntity.setUserId(temporaryUserId);
+            bookEntity.setUserId(userId);
 
             List<BookEntity> bookEntityList = bookService.delete(bookEntity);
 

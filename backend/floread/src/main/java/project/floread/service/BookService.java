@@ -16,6 +16,16 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
+    public String testService() {
+        // TodoEntity 생성
+        BookEntity entity = BookEntity.builder().title("My first book").build();
+        // TodoEntity 저장
+        bookRepository.save(entity);
+        // TodoEntity 검색
+        BookEntity savedEntity = bookRepository.findById(entity.getId()).get();
+        return savedEntity.getTitle();
+    }
+
     public List<BookEntity> create(final BookEntity bookEntity) {
         //검증 부분
         validate(bookEntity);
