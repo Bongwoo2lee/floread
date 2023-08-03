@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import project.floread.dto.ResponseDTO;
 import project.floread.dto.UserDTO;
 import project.floread.model.UserEntity;
@@ -18,6 +15,7 @@ import project.floread.service.UserService;
 @Slf4j
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:3000")
 @AllArgsConstructor
 public class UserController {
 
@@ -53,6 +51,7 @@ public class UserController {
         }
     }
 
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticate(@RequestBody UserDTO userDTO) {
         UserEntity user = userService.getByCredentials(
@@ -77,6 +76,7 @@ public class UserController {
             ResponseDTO responseDTO = ResponseDTO.builder()
                     .error("Login failed")
                     .build();
+
 
             return ResponseEntity
                     .badRequest().body(responseDTO);
