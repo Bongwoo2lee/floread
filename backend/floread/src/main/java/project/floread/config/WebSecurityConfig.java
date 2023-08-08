@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import project.floread.security.JwtAuthenticationFilter;
+import project.floread.security.OAuthUserServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -22,7 +23,9 @@ import project.floread.security.JwtAuthenticationFilter;
 public class WebSecurityConfig {
 
     //jwt 필터를 사용할 예정
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    private final OAuthUserServiceImpl oAuthUserService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -35,8 +38,15 @@ public class WebSecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/auth/**","/book").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/", "/auth/**", "/oauth2/**", "/book", "login/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login()
+                .redirectionEndpoint()
+                .baseUri("/login/oauth2/code/*")
+                .and()
+                .userInfoEndpoint()
+                .userService(oAuthUserService);
 
 
         return http.build();
