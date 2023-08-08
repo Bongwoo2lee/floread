@@ -1,15 +1,15 @@
 package project.floread.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import project.floread.model.User;
+import org.springframework.stereotype.Repository;
+import project.floread.model.UserEntity;
 
-import java.util.List;
-import java.util.Optional;
+@Repository
+public interface UserRepository extends JpaRepository<UserEntity, String> {
 
-public interface UserRepository extends JpaRepository<User, Long> {
+    UserEntity findByUsername(String username);
 
-    Optional<User> findByEmail(String email);
+    Boolean existsByUsername(String username);
 
-    User findByUserId(String userId);
-
+    UserEntity findByUsernameAndPassword(String username, String password);
 }

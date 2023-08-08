@@ -19,10 +19,23 @@ spring:
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
   profiles:
-    include: oauth, datasource
+    include: datasource, secret-key, oauth
+
+
+  kafka:
+    consumer:
+      bootstrap-servers: floread.store:9092
+      group-id: floread
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: floread.store:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
 
 server:
   servlet:
     encoding:
       force-response: true
-  port: 8000

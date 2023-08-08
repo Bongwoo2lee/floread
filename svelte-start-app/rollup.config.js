@@ -16,6 +16,7 @@ function serve() {
 	}
 
 	return {
+		
 		writeBundle() {
 			if (server) return;
 			server = spawn('npm', ['run', 'start', '--', '--dev'], {
@@ -30,6 +31,9 @@ function serve() {
 }
 
 export default {
+	dev: {
+		host: 'floread.store', // 개발 서버의 호스트 설정
+	  },
 	input: 'src/main.js',
 	output: {
 		sourcemap: true,

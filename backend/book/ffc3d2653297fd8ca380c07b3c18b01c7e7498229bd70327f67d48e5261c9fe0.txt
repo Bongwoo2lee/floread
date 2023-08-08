@@ -1,0 +1,51 @@
+gitlab 가입
+ssh-keygen -t ed25519 -C "email"
+주석으로 email 여러개의 키를 관리함
+원격 ssh 서버와 인증하는데 사용하여 비밀번호를 치지 않아도 된다
+ssh키는 .ssh디렉토리에 존재한다.
+cd ~
+cd .ssh
+ls
+cat id_rsa.pub--> 공개용키를 복사합니다.
+
+깃랩로 들어가서
+아이디 클릭
+settings --> ssh and gpg keys 클릭하고 
+타이틀은 자유롭게 쓰고 public key 를 넣으면 됩니다.
+
+연습용 repo 생성 --> test, readme와 public으로 
+공개여부를 선택할 수 있는데 private는 말그대로 다른 사람에게 안보이고 public은 모든사람이 볼수 있습니다.
+readme는 프로젝트를 설명하는 가이드정도로 보시면 됩니다.
+다 했으면 git clone ssh복사
+
+이러면 이 디렉토리가 git의 워킹디렉토리로 변합니다.
+여기서 git의 저장방법에 대해 잠깐 알려드리자면
+워킹디렉토리에서 수정을 한다음 로컬 저장소에 저장하기 전에 먼저 staging영역에 넣습니다. 이 영역이 있는 이유는 간단히 말해 자신이 원하는 파일만 저장하기 때문에 효율적으로 사용할 수 있습니다.
+그 다음 로컬 저장소라는 곳이 있는데 커밋하면 이 로컬 저장소에 저장됩니다.  
+그다음 원격 저장소에 저장합니다.
+
+main.txt --> hello git
+
+git add test.txt, add ., add -A
+git status로 현재 add 내역 확인 가능
+untracked는 관리하지 않음 add하지 않음
+unmodified
+modified
+staged
+git commit -m "Add "
+git pull origin main
+git push origin main
+
+origin --> 원격 저장소의 경로
+main --> 브랜치 이름입니다.
+기본적으로 디폴트 브랜치의 이름은 main입니다.
+옛날에는 master라고도 하기도 했습니다.
+
+git config user.email “....”
+git config user.name “....”
+
+만약 시간이 된다면
+git에서도 바꾸고
+github에서도 바꾸면
+pull 작업 commit pull push
+

@@ -1,52 +1,86 @@
 package project.floread.service;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import project.floread.model.Book;
-import project.floread.model.User;
+import project.floread.model.BookEntity;
 import project.floread.repository.BookRepository;
-import project.floread.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @Service
-@Transactional(readOnly = true)
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final UserRepository userRepository;
 
-    //책 DB에 저장
-    @Transactional
-    public Long join(Book book, String userId) {
-        User user = userRepository.findByUserId(userId);
-        book.setUser(user);
-        validateDuplicateBook(book);
-        bookRepository.save(book);
-        return book.getId();
+    public String testService() {
+        // TodoEntity 생성
+        BookEntity entity = BookEntity.builder().title("My first book").build();
+        // TodoEntity 저장
+        bookRepository.save(entity);
+        // TodoEntity 검색
+        BookEntity savedEntity = bookRepository.findById(entity.getId()).get();
+        return savedEntity.getTitle();
     }
 
-    //존재하는 책인지 확인하는 함수
-    private void validateDuplicateBook(Book book) {
-        List<Book> findBooks = bookRepository.findByName(book.getFileName());
-        if(!findBooks.isEmpty()) {
-            throw new IllegalStateException("이미 존재하는 책입니다.");
+    public List<BookEntity> create(final BookEntity bookEntity) {
+        //검증 부분
+        validate(bookEntity);
+
+        bookRepository.save(bookEntity);
+
+        log.info("Entity id : {} is saved", bookEntity.getId());
+
+        return bookRepository.findByUserId(bookEntity.getUserId());
+    }
+
+    public List<BookEntity> retrieve(final String userId) {
+        return bookRepository.findByUserId(userId);
+    }
+
+    public List<BookEntity> update(final BookEntity bookEntity) {
+        validate(bookEntity);
+
+        //optional은 값이 없어도 ㄱㅊ
+        final Optional<BookEntity> original = bookRepository.findById(bookEntity.getId());
+
+        original.ifPresent(book -> {
+            book.setTitle(bookEntity.getTitle());
+            book.setUrl(bookEntity.getUrl());
+
+            bookRepository.save(book);
+        });
+
+        //유저의 모든 book리스트 리턴
+        return retrieve(bookEntity.getUserId());
+    }
+
+    public List<BookEntity> delete(final BookEntity bookEntity) {
+        validate(bookEntity);
+
+        try {
+            bookRepository.delete(bookEntity);
+        } catch (Exception e) {
+            log.error("error deleting entity", bookEntity.getId(), e);
+
+            throw new RuntimeException("error deleting entity"+bookEntity.getId());
         }
+
+        return retrieve(bookEntity.getUserId());
     }
 
-    //사용자의 OAuth2의 ID를 입력으로 받으면 그 사용자가 업로드한 책들의 경로를 출력
-    public List<String> findUrl(String userId) {
-        List<String> urls = bookRepository.findByUrl(userId);
-        return urls;
-    }
-
-    public List<Book> findBooks(String userId) {
-        List<Book> books = bookRepository.findByBook(userId);
-        for (Book book : books) {
-            System.out.println(book.getFileName());
+    private void validate(final BookEntity entity) {
+        if(entity == null) {
+            log.warn("Entity cannot be null");
+            throw new RuntimeException("Entity cannot be null");
         }
-        return books;
+
+        if(entity.getUserId() == null) {
+            log.warn("Unknown user.");
+            throw new RuntimeException("Unknown user.");
+        }
     }
 }
