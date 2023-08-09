@@ -19,7 +19,7 @@ import project.floread.repository.UserRepository;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OAuthUserServiceImpl extends DefaultOAuth2UserService {
+public class OAuthUserServiceImpl implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final UserRepository userRepository;
 
@@ -27,15 +27,21 @@ public class OAuthUserServiceImpl extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         //기존 loaduser 호출
         OAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new DefaultOAuth2UserService();
+        //System.out.println("delegate = " + delegate);
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
+        System.out.println("oAuth2User = " + oAuth2User.getAttribute("sub"));
+        //System.out.println("oAuth2User = " + oAuth2User);
+//        try {
+//            log.info("OAuth2User attributes {}", new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
 
-        String authProvider = userRequest.getClientRegistration().getRegistrationId();
-        String username = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
 
+        final String username = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
-
-
+        final String authProvider = userRequest.getClientRegistration().getRegistrationId();
 
         UserEntity userEntity = null;
 

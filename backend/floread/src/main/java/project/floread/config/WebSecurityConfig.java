@@ -25,7 +25,7 @@ public class WebSecurityConfig {
     //jwt 필터를 사용할 예정
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final OAuthUserServiceImpl oAuthUserService;
+    private final OAuthUserServiceImpl oAuthUserServiceImpl;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -38,15 +38,12 @@ public class WebSecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/auth/**", "/oauth2/**", "/book", "login/**").permitAll()
+                .antMatchers("/", "/auth/**", "/oauth2/**", "/book").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
-                .redirectionEndpoint()
-                .baseUri("/login/oauth2/code/*")
-                .and()
                 .userInfoEndpoint()
-                .userService(oAuthUserService);
+                .userService(oAuthUserServiceImpl);
 
 
         return http.build();
