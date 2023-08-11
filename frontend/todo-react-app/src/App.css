@@ -1,38 +1,266 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.popup-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  z-index: -1;
+  }
+
+  .popup {
+  position: relative;
+  width: 350px;
+  height: 300px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(100%);
+  }
+  .popup-wrapper2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  z-index: -1;
+  }
+
+  .popup2 {
+  position: relative;
+  width: 700px;
+  height: 725px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(100%);
+  }
+  .popup-wrapper3 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  z-index: -1;
+  }
+
+  .popup3 {
+  position: relative;
+  width: 350px;
+  height: 300px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(100%);
+  }
+  .bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0px;
+  height: 100%;
+  background: linear-gradient(to top,	
+    rgba(0, 0, 0, 1)10%,
+    rgba(0, 0, 0,3)25%,
+    rgba(0, 0, 0,0.3)70%,
+    rgba(0, 0, 0,0.3)80%,
+    rgba(0, 0, 0,5)90%,
+    rgb(0, 0, 0)100%);
+  transition: transform 0.3s ease-in-out;
+  transform: translateX(100%);
+  }
+
+  .bar.open {
+  width: 130px;
+  transform: translateX(0%);
+  }
+
+  .button {
+  position: absolute;
+  top: auto;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .music-ui {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background-color: rgba(33, 1, 68, 0.6);
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+  transform: translateY(-100%);
+  }
+
+  .music-ui.open {
+  transform: translateY(0%);
+  }
+  .popup-wrapper.visible {
+  opacity: 1;
+  z-index: 1;
+  }
+  .popup.visible {
+  transform: translateY(0);
+  }
+  .popup2.visible {
+  transform: translateY(0);
+  }
+  .popup-wrapper2.visible {
+  opacity: 1;
+  z-index: 1;
+  }
+  .popup-wrapper3.visible {
+  opacity: 1;
+  z-index: 1;
+  }
+  .popup3.visible {
+  transform: translateY(0);
+  }
+  .close-button {
+  float: right;
+  width: 48px;
+  height: 48px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.close-icon {
+  width: 24px;
+  height: 24px;
+  fill: #757575;
+}
+
+.close-button:hover .close-icon {
+  fill: #212121;
+}
+  p{
+    color: rgb(255, 244,233);
+    font-family: 'Georgia', serif;
+    font-size: 1em;
+    text-align: center;
+  }
+  body {
+    background: linear-gradient(
+    to top,	
+    rgba(0,0,0,0.3)10%,
+    rgba(0,0,0,0.3)25%,
+    rgba(0,0,0,0.3)70%,
+    rgba(0,0,0,0.3)80%,
+    rgba(0,0,0,1)90%,
+    rgba(0,0,0,1)100%
+    ),linear-gradient(
+    to bottom,	
+    rgba(0,0,0,0.3)10%,
+    rgba(0,0,0,0.3)25%,
+    rgba(0,0,0,0.3)40%,
+    rgba(0,0,0,0.3)85%,
+    rgba(0,0,0,0.8)95%,
+    rgba(0,0,0,1)100%
+    ),
+    url("https://raw.githubusercontent.com/Bongwoo2lee/floread/frontend/svelte-start-app/src/1511831767380871.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+  }
+  .btn{
+  background: rgba(0,0,0,0);
+  padding: 10px 25px;
+  display: inline-block;
+  border-radius: 25px;
+  margin: 20px 0;
+  color: #fff;
+  position: relative;
+  font-size: 1em;
+  font-weight: bold;
+  border-color: #fff;
+}
+  #wrap{
+    margin: 0 auto;
+    overflow: hidden;
+    padding-top: 10px;
+  }
+  div>article{
+    float: left;
+    margin-left: 225px;
+    margin-bottom: 150px;
+  }
+  img{display: block;}
+  .upload-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+  }
+
+  .upload-btn {
+  background-color: #4CAF50;
   color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-right: 1rem;
   }
-  to {
-    transform: rotate(360deg);
+
+  .upload-input {
+  display: none;
   }
+
+  .message {
+  margin-top: 1rem;
+  }
+  pre {
+  position: absolute;
+  top:100px;
+  max-width: 100%;
+  max-height: 550px;
+  overflow: auto;
+  padding: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #333;
 }
