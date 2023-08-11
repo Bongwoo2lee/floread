@@ -2,15 +2,52 @@
 	var viewData = [];
 	var audioFiles = [];
 	var titles = [];
+	var music = {
+		"헹복": ["music/happy1.mp3", "music/happy2.mp3", "music/happy3.mp3"],
+		"슬픔": ["music/sad1.mp3", "music/sad2.mp3", "music/sad3.mp3"],
+		"화남": ["music/angry1.mp3"],
+		"무서운": ["music/scary1.mp3", "music/scary2.mp3", "music/scary3.mp3"] 
+	}
+
+	var mood = "";
+    var i = 0;
+    var nextSong = "";
+	var inputmood = "";
+
+    function setup(mood) {
+        var audioPlayer = document.getElementById('audio');
+		console.log(mood);
+        audioPlayer.addEventListener('ended', function() {
+            i = (i + 1) % music[mood].length;
+            nextSong = music[mood][i];
+            audioPlayer.src = nextSong;
+            audioPlayer.load();
+            audioPlayer.play();
+        }, false);
+
+        audioPlayer.src = music[mood][i];
+        audioPlayer.load();
+        audioPlayer.play();
+    }
+
+    function setmood(inputMood) {
+        mood = inputMood;
+        if (mood !== null) {
+            setup(mood);
+        }
+    }
 	
 	function selectviewDataIndex(index) {
 		const selectedviewData = viewData[index];
 		return selectedviewData;
 	}
 
+	var index = 0;
+
 	function receiveMusicUrl(index) {
 		if (viewData && viewData[index] && viewData[index].emotions) {
-			console.log(viewData[index].emotions[0])
+			console.log(viewData[index].emotions[0]);
+			setmood(viewData[index].emotions[0]);
 		fetch('http://floread.store:8000/music/' + viewData[index].emotions[0])
 			.then((response) => response.json())
 			.then((data) => {
@@ -496,6 +533,31 @@
 	  .upload-input {
 		display: none;
 	  }
+
+	  .scrollable-container {
+		max-height: 400px; /* 원하는 높이 값으로 설정 */
+		overflow-y: auto;
+		color: rgb(1, 11, 20);
+		font-family: 'Georgia', serif;
+		font-size: 1em;
+		position: inherit;
+		bottom: 20px;
+	}
+	.no_dot {
+	list-style-type: none;
+	}
+
+	.title {
+		color: rgb(1, 11, 20);
+		font-family: 'Georgia', serif;
+		font-size: 1em;
+	}
+
+	.book {
+		position: fixed;
+		bottom: 20px;
+		right: 50px;
+	}
 	
 	  .message {
 		margin-top: 1rem;
@@ -572,7 +634,7 @@
 	  <div class="popup-wrapper2 {popupVisible2 ? 'visible' : ''}">
 		<div class="popup2 {popupVisible2 ? 'visible' : ''}" on:click={(e) => e.stopPropagation()}>
 			<table style="width: 100%; text-align:center; margin:auto;">
-		  <tr><td><pre id="fileContent"></pre></td></tr>
+		  <tr><td></td></tr>
 				<tr><td>
 					<button class="close-button" aria-label="Close modal" on:click={togglePopup2}>
 						<svg class="close-icon" viewBox="0 0 24 24">
@@ -581,30 +643,30 @@
 					  </button>
 				</td></tr>
 				<tr><td>
+					<!--
 					<div class="bar {isBarOpen ? 'open' : ''}" on:click={toggleBar} ></div>
 					<button class="button" on:click={toggleBar}>펼치기/접기</button>
 					<button class="button" on:click={viewer}>펼치기/접기</button>
-					
-					<button on:click={() => receiveMusicUrl(0)}>Next</button>
+					-->
+					<audio id="audio" controls autoplay></audio>
+					<button  on:click={() => receiveMusicUrl(index)}>음악실행</button>
 					<div id="audio-container">
-					{#each audioFiles as audioSrc}
-						<audio controls>
-						<source src={audioSrc} type="audio/mpeg">
-						</audio>
-					{/each}
 					</div>
-					<ul>
-					  {#each titles as item (item.index)}
-					  <!--여기에 title들 출력후 title을 클릭할수 있게 하여서 클릭하면 책 내용 나오게-->
-					  <!--그리고 책을 누르는 순간 music함수 하고 위에 있는 음악 재생되게-->
-						<li on:click={() => receiveBook(item.title)}>
-						  {item.title}
-						</li>
-					  {/each}
-					</ul>
-					{#if bookData}
-					<div>{bookData}</div>
-				  	{/if}
+					<div>
+						<ul>
+						  {#each titles as item (item.index)}
+							<li class="no_dot">
+							  <button class="w-btn w-btn-indigo" on:click={() => { receiveBook(item.title); music(); }}>
+								{item.title}
+							  </button>
+							</li>
+						  {/each}
+						</ul>
+						{#if bookData}
+						  <pre class="scrollable-container">{bookData}</pre>
+					  {/if}
+					  
+					  </div>
 					{#if isBarOpen}
 					  <div class="music-ui {isMusicPlaying ? 'open' : ''}">
 						<button on:click={isMusicPlaying ? stopMusic : playMusic}>
@@ -627,7 +689,7 @@
 						</svg>
 					  </button>
 				</td></tr>
-				<tr><td><div class="popup-content"></div>
+				<tr><td><div class="popup-content title"></div>
 				</td></tr>
 			</table>
 		</div>
