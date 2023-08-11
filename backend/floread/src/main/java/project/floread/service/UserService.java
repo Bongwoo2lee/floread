@@ -1,40 +1,34 @@
 package project.floread.service;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.floread.model.UserEntity;
+import org.springframework.transaction.annotation.Transactional;
+import project.floread.model.Book;
+import project.floread.model.User;
 import project.floread.repository.UserRepository;
 
-@Slf4j
+import java.util.List;
+
 @Service
-@AllArgsConstructor
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
 
-    //유저 정보 생성
-    public UserEntity create(final UserEntity userEntity) {
-        if(userEntity == null || userEntity.getUsername() == null) {
-            throw new RuntimeException("Invalid arguments");
-        }
-        final String username = userEntity.getUsername();
-        if(userRepository.existsByUsername(username)) {
-            log.warn("Username already exists {}", username);
-            throw new RuntimeException("Username already exists");
-        }
-
-        return userRepository.save(userEntity);
+    @Transactional
+    public Long join(User user) {
+        validateDuplicateUser(user.getUserId());
+        userRepository.save(user);
+        return user.getId();
     }
 
-    //오리지널과 암호화된 것과 같은지 체크
-    public UserEntity getByCredentials(final String username, final String password, final PasswordEncoder encoder) {
-        final UserEntity originalUser = userRepository.findByUsername(username);
-        if(originalUser !=null && encoder.matches(password, originalUser.getPassword())) {
-            return originalUser;
+    //존재하는 책인지 확인하는 함수
+    private void validateDuplicateUser(String id) {
+        User findUser = userRepository.findByUserId(id);
+        if(findUser != null) {
+            throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
-        return null;
     }
 
 }
