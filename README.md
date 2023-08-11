@@ -21,7 +21,7 @@
 * Kafka
   ```
   //다른 환경에서 실행할 경우 환경변수 설정 후
-  cd kafka_path
+  cd kafka
   bin/zookeeper-server-start.sh -daemon config/zookeeper.properties
   bin/kafka-server-start.sh  -daemon config/server.properties
   ```
