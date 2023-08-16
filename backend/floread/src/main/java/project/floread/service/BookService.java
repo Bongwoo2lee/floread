@@ -1,86 +1,89 @@
 package project.floread.service;
 
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import project.floread.model.BookEntity;
+import org.springframework.transaction.annotation.Transactional;
+import project.floread.model.Book;
+import project.floread.model.BookEmotion;
+import project.floread.model.User;
+import project.floread.repository.BookEmotionRepository;
 import project.floread.repository.BookRepository;
+import project.floread.repository.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
-@Slf4j
 @Service
-@AllArgsConstructor
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final UserRepository userRepository;
+    private final BookEmotionRepository bookEmotionRepository;
 
-    public String testService() {
-        // TodoEntity 생성
-        BookEntity entity = BookEntity.builder().title("My first book").build();
-        // TodoEntity 저장
-        bookRepository.save(entity);
-        // TodoEntity 검색
-        BookEntity savedEntity = bookRepository.findById(entity.getId()).get();
-        return savedEntity.getTitle();
-    }
-
-    public List<BookEntity> create(final BookEntity bookEntity) {
-        //검증 부분
-        validate(bookEntity);
-
-        bookRepository.save(bookEntity);
-
-        log.info("Entity id : {} is saved", bookEntity.getId());
-
-        return bookRepository.findByUserId(bookEntity.getUserId());
-    }
-
-    public List<BookEntity> retrieve(final String userId) {
-        return bookRepository.findByUserId(userId);
-    }
-
-    public List<BookEntity> update(final BookEntity bookEntity) {
-        validate(bookEntity);
-
-        //optional은 값이 없어도 ㄱㅊ
-        final Optional<BookEntity> original = bookRepository.findById(bookEntity.getId());
-
-        original.ifPresent(book -> {
-            book.setTitle(bookEntity.getTitle());
-            book.setUrl(bookEntity.getUrl());
-
-            bookRepository.save(book);
-        });
-
-        //유저의 모든 book리스트 리턴
-        return retrieve(bookEntity.getUserId());
-    }
-
-    public List<BookEntity> delete(final BookEntity bookEntity) {
-        validate(bookEntity);
-
-        try {
-            bookRepository.delete(bookEntity);
-        } catch (Exception e) {
-            log.error("error deleting entity", bookEntity.getId(), e);
-
-            throw new RuntimeException("error deleting entity"+bookEntity.getId());
+    //책 DB에서 삭제
+    @Transactional
+    public void delete(String originName, String userId) {
+        User user = userRepository.findByUserId(userId);
+        Book book = bookRepository.findByOriginName(originName);
+        BookEmotion bookEmotion = bookEmotionRepository.findByBookEmotion(book.getId());
+        if (Objects.equals(book.getUser().getId(), user.getId())) {
+            bookEmotionRepository.delete(bookEmotion);
+            bookRepository.delete(book);
         }
-
-        return retrieve(bookEntity.getUserId());
     }
 
-    private void validate(final BookEntity entity) {
-        if(entity == null) {
-            log.warn("Entity cannot be null");
-            throw new RuntimeException("Entity cannot be null");
-        }
+    //책 DB에 저장  
+    @Transactional
+    public Long join(Book book, String userId) {
+        User user = userRepository.findByUserId(userId);
+        book.setUser(user);
+        System.out.println("book = " + book.toString());
+        validateDuplicateBook(book, user);
+        bookRepository.save(book);
 
-        if(entity.getUserId() == null) {
-            log.warn("Unknown user.");
-            throw new RuntimeException("Unknown user.");
+        return book.getId();
+    }
+
+    @Transactional
+    public Long joinEmotion(BookEmotion bookEmotion) {
+        bookEmotionRepository.save(bookEmotion);
+        return bookEmotion.getId();
+    }
+
+    @Transactional
+    public List<String> findEmotions(Book book) {
+        return bookEmotionRepository.findByEmotion(book);
+    }
+
+    //존재하는 책인지 확인하는 함수
+    private void validateDuplicateBook(Book book, User user) {
+        List<Book> findBooks = bookRepository.findByFileName(book.getFileName());
+        if(!findBooks.isEmpty()) {
+            for (Book findBook : findBooks) {
+                if (Objects.equals(findBook.getUser().getId(), user.getId())) {
+                    throw new IllegalStateException("이미 존재하는 책입니다.");
+                }
+            }
         }
+    }
+
+    //사용자의 OAuth2의 ID를 입력으로 받으면 그 사용자가 업로드한 책들의 경로를 출력
+    public List<String> findUrl(String userId) {
+        List<String> urls = bookRepository.findByUrl(userId);
+        return urls;
+    }
+
+    public List<Book> findBooks(String userId) {
+        List<Book> books = bookRepository.findByBook(userId);
+        for (Book book : books) {
+            System.out.println(book.getFileName());
+        }
+        return books;
+    }
+
+    public Book findByOriginName(String originName) {
+        return bookRepository.findByOriginName(originName);
     }
 }

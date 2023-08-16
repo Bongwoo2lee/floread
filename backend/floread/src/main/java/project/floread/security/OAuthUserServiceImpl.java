@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import project.floread.model.UserEntity;
+import project.floread.model.User;
 import project.floread.repository.UserRepository;
 
 @Slf4j
@@ -39,21 +39,20 @@ public class OAuthUserServiceImpl implements OAuth2UserService<OAuth2UserRequest
 
 
 
-        final String username = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
+        final String name = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
 
         final String authProvider = userRequest.getClientRegistration().getRegistrationId();
 
-        UserEntity userEntity = null;
+        User userEntity = null;
 
-        if(!userRepository.existsByUsername(username)) {
-            userEntity = UserEntity.builder()
-                    .username(username)
-                    .authProvider(authProvider)
+        if(!userRepository.existsByName(name)) {
+            userEntity = User.builder()
+                    .name(name)
                     .build();
             userEntity = userRepository.save(userEntity);
         }
 
-        log.info("Successfully pulled user info username {} authProvider {}", username, authProvider);
+        log.info("Successfully pulled user info username {} authProvider {}", name, authProvider);
 
         return oAuth2User;
     }
