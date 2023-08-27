@@ -28,9 +28,4 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    //오리지널과 암호화된 것과 같은지 체크
-    public User getByCredentials(final String name, final String password, final PasswordEncoder encoder) {
-        return userRepository.findByName(name);
-    }
-
 }
