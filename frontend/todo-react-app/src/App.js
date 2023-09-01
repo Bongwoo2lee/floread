@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import App2 from './App2';
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
 
@@ -12,7 +13,8 @@ function App() {
   };
 
   return (
-    <div style={{ backgroundColor: 'black' }}>
+    <div >
+    <div >
       <div style={{ float: 'right' }}>
         <button
           style={{ background: 'none' }}
@@ -25,6 +27,8 @@ function App() {
         <p style={{ lineHeight: '0px', fontSize: '6.5em' }}>Floread</p>
         <p style={{ lineHeight: '0px' }}>Music stuck on the bookshelf</p>
       </div>
+    </div>
+    <App2 />
     </div>
   );
 }
