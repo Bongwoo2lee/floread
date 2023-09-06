@@ -7,3 +7,7 @@
 #AI허브 제공 데이터셋
 *.csv
 *.xlsx
+
+# fasttext 모델
+cc.ko.300.bin
+cc.ko.300.bin.gz
