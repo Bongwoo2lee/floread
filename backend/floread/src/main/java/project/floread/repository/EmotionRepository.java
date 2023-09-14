@@ -12,6 +12,6 @@ public interface EmotionRepository extends JpaRepository<Emotion, Long> {
 //    @Query(value = "select e.url from Emotion e where e.")
 //    List<String> findUrlByEmotion(String emotion);
 
-    @Query(value = "select e from Emotion e where e.emotion = :emotion")
-    Emotion findByEmotion(@Param("emotion") String emotion);
+    @Query(value = "select e.id from Emotion e where e.emotion = :emotion")
+    Long findByEmotion(@Param("emotion") String emotion);
 }

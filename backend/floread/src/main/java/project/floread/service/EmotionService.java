@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.floread.model.Emotion;
 import project.floread.repository.EmotionRepository;
+import project.floread.repository.MusicEmotionRepository;
 
 import java.util.List;
 
@@ -14,16 +15,6 @@ import java.util.List;
 public class EmotionService {
 
     private final EmotionRepository emotionRepository;
+    private final MusicEmotionRepository musicEmotionRepository;
 
-//    @Transactional
-//    public List<String> Print(String emotion) {
-//        List<String> urls = emotionRepository.findUrlByEmotion(emotion);
-//
-//        return urls;
-//    }
-
-    @Transactional
-    public Emotion FindId(String emotion) {
-        return emotionRepository.findByEmotion(emotion);
-    }
 }

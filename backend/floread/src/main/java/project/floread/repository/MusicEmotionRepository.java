@@ -14,6 +14,6 @@ public interface MusicEmotionRepository extends JpaRepository<MusicEmotion, Long
     List<Music> findByMusic(@Param("emotion") Emotion emotion);
 
 
-    @Query(value = "select me.music.url from MusicEmotion me where me.emotion.emotion = :emotion")
-    List<String> findByEmotionToMusicUrl(@Param("emotion") String emotion);
+    @Query(value = "select me.music.url from MusicEmotion me where me.emotion.id = :id")
+    List<String> findByMusicUrlFromEmotionId(@Param("id") Long id);
 }
