@@ -3,7 +3,6 @@ package project.floread.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import project.floread.model.Book;
 import project.floread.model.User;
 import project.floread.repository.UserRepository;
 

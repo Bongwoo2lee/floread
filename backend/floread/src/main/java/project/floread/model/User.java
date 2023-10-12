@@ -32,9 +32,6 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
-    private List<Book> bookList = new ArrayList<>();
-
     //생성
     @Builder
     public User(String name, String email, String userId, Role role) {
