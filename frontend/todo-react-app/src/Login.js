@@ -1,4 +1,4 @@
-import { Grid, TextField, Typography, Container, Button } from "@mui/material";
+import { Grid, TextField, Typography, Container, Button , AppBar, Toolbar} from "@mui/material";
 import React from "react";
 import { music, signin, socialLogin } from "./service/ApiService";
 import { Link } from "react-router-dom";
@@ -20,7 +20,16 @@ function Login() {
     }
 
     return (
-        <Container component="main" maxWidth="xs" style={{ marginTop: "8%" }}>
+        <Container component="main" maxWidth="xs" style={{ marginTop: "15%" }}>
+            <AppBar position="static" style={{backgroundColor:'white'}}>
+                <Toolbar>
+                    <Button style={{color:'black'}} component={Link} to="/">Floread</Button>
+                    <Button style={{color:'black'}} component={Link} to="/upload">Upload</Button>
+                    <Button style={{color:'black'}} component={Link} to="/viewer">Viewer</Button>
+                    <Button style={{color:'black'}} component={Link} to="/mypage">Mypage</Button>
+                    <Button style={{color:'black'}} component={Link} to="/login">Login</Button>
+                </Toolbar>
+            </AppBar>
             <Grid container>
                 <Grid item xs={12}>
                     <Typography component="h1" variant="h5">
