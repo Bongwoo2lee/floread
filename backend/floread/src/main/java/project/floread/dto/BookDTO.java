@@ -11,19 +11,22 @@ import java.util.List;
 
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 public class BookDTO implements Serializable {
     //DTO는 data transfer object로 데이터를 클라에 리턴할 때 사용
     //비즈니스 로직을 추가x, 에러메시지 보낼때 사용
     private String title;
     private String url;
+    private String genre;
     private List<String> emotions;
 
-    public BookDTO(String title, String url, List<String> emotions) {
-        this.title = title;
-        this.url = url;
-        this.emotions = emotions;
-    }
+//    public BookDTO(String title, String url, String genre, List<String> emotions) {
+//        this.title = title;
+//        this.url = url;
+//        this.genre = genre;
+//        this.emotions = emotions;
+//    }
 
 
 //    //엔티티로 변환

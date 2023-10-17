@@ -36,6 +36,7 @@ public class TokenProvider {
                         .plus(1, ChronoUnit.DAYS)
         );
 
+        System.out.println("authentication = " + authentication);
 
         return Jwts.builder()
                 //헤더의 시크릿 키와 서명

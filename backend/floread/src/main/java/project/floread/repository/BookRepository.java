@@ -20,7 +20,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByFileName(String fileName);
 
     @Query(value = "select b.url from Book b where b.user.userId = :userId")
-    List<String> findByUrl(String userId);
+    List<String> findByUrl(@Param("userId") String userId);
 
     @Query(value = "select b from Book b where b.user.userId = :userId")
     List<Book> findByBook(@Param("userId") String userId);

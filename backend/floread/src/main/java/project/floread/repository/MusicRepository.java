@@ -11,4 +11,7 @@ public interface MusicRepository extends JpaRepository<Music, Long> {
 
     @Query(value = "select m.url from Music m where m.id = :id")
     String findByMusicUrl(@Param("id") Long id);
+
+    @Query(value = "select m.genre from Music m where m.genre = :genre")
+    String findByGenre(@Param("genre") String genre);
 }

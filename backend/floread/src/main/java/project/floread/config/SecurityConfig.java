@@ -16,7 +16,6 @@ import org.springframework.web.filter.CorsFilter;
 import project.floread.config.auth.CustomOAuth2UserService;
 import project.floread.security.JwtAuthenticationFilter;
 import project.floread.security.OAuthSuccessHandler;
-import project.floread.security.OAuthUserServiceImpl;
 import project.floread.security.RedirectUrlCookieFilter;
 
 @Configuration
@@ -45,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/auth/**", "/oauth2/**", "/book", "/test/**", "/music/**", "/video/**").permitAll()
+                .antMatchers("/", "/auth/**", "/oauth2/**", "/book", "/test/**", "/music/**", "/video/**", "/upload/**", "/viewer/**", "/mypage/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()

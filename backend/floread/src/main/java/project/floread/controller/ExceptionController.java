@@ -10,7 +10,7 @@ import java.nio.file.AccessDeniedException;
 
 @ControllerAdvice
 @Slf4j
-public class ExceptionController {
+public class ExceptionController extends RuntimeException {
 
     // 400
     @ExceptionHandler({

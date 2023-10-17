@@ -11,20 +11,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.floread.dto.BookDTO;
+import project.floread.dto.SendBookDTO;
 import project.floread.model.Book;
 import project.floread.service.AuthenticationService;
 import project.floread.service.BookService;
 import project.floread.service.KafkaSampleProducerService;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +37,10 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class BookController {
 
-    private final BookService bookService;
+private final BookService bookService;
     private final AuthenticationService authenticationService;
     private final KafkaSampleProducerService kafkaSampleProducerService;
 
@@ -64,10 +70,17 @@ public class BookController {
                 .body("OK");
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/upload")
-    public ResponseEntity<String> create(@RequestPart("files") MultipartFile[] files) throws IOException {
-        String userId = authenticationService.getAuthentication().getName();
-        System.out.println(userId);
+    public ResponseEntity<String> create(@RequestPart("files") MultipartFile[] files, @RequestParam("genre") String genre, HttpServletRequest request, Principal authentication) throws IOException {
+
+        System.out.println("bookGenre = " + genre);
+        //장르 추가
+
+
+        String userId = authentication.getName();
+        System.out.println("authentication = " + authentication.getName());
+
         for (MultipartFile file : files) {
             //저장후 보낼 파일url을 담을 변수
             String fileUrl = null;
@@ -98,7 +111,7 @@ public class BookController {
                 try {
                     assert title != null;
                     String hashedPassword = hashString(title, "SHA-256");
-                    //파일명은 해싱.html로 저장됨
+                    //파일명은 해싱.txt로 저장됨
                     destinationBookName = hashedPassword + ".txt";
 
                     //파일 경로
@@ -113,7 +126,7 @@ public class BookController {
                     book.setFileName(destinationBookName);
                     book.setOriginName(title);
                     book.setUrl(bookUrl + destinationBookName);
-                    bookService.join(book, userId);
+                    bookService.join(book, genre, userId);
                     fileUrl = book.getUrl();
                     
 
@@ -129,7 +142,8 @@ public class BookController {
                 return ResponseEntity.status(HttpStatus.NOT_EXTENDED)
                         .body("저장 실패");
             }
-            kafkaSampleProducerService.sendMessage(fileUrl);
+            //카프카 문자 보내기
+            //kafkaSampleProducerService.sendMessage(fileUrl);
         }
         return ResponseEntity.status(HttpStatus.OK)
                 .body("OK");
@@ -137,35 +151,52 @@ public class BookController {
 
 
     @GetMapping("/mypage")
-    public String getMyPage() {
-        //아이디 찾기
-        String userId = authenticationService.getAuthentication().getName();
-        System.out.println("userId: "+ userId);
+    public ResponseEntity<String> getMyPage(Principal authentication) {
 
+        //아이디 찾기
+        try {
+            authentication.getName();
+        } catch (NullPointerException e) {
+            return ResponseEntity.notFound().build();
+        }
         //아이디로 책 찾기
+        String userId = authentication.getName();
         List<Book> books = bookService.findBooks(userId);
         for (Book book : books) {
             System.out.println("book = " + book.getOriginName());
         }
 
         //보낼 형식
+        //SendBookDTO sendBookDTO = new SendBookDTO();
         List<BookDTO> sendBookList = new ArrayList<>();
 
         //책 별로 감정 리스트
         for (Book book : books) {
             //음악 감성 리스트
             List<String> emotions = bookService.findEmotions(book);
+
             System.out.println("book = " + book.getFileName());
-            System.out.println("emotions = " + emotions.get(0));
+            //책 한권에 있는 감성
+            BookDTO sendBook;
+
+            if (emotions.isEmpty()) {
+                sendBook = new BookDTO(book.getOriginName(), book.getUrl(), book.getGenre(), null);
+            }
+            else {
+                System.out.println("emotions = " + emotions.get(0));
+                sendBook = new BookDTO(book.getOriginName(), book.getUrl(), book.getGenre(), emotions);
+                System.out.println("sendBook = " + sendBook);
+            }
             //책에 대한 감정 리스트 연결
-            BookDTO sendBook = new BookDTO(book.getOriginName(), book.getUrl(), emotions);
             sendBookList.add(sendBook);
         }
 
-        Gson gson = new Gson();
-        System.out.println(gson.toJson(sendBookList).getClass().getName());
+        SendBookDTO sendBookDTO = new SendBookDTO(userId, sendBookList);
 
-        return gson.toJson(sendBookList);
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(sendBookDTO).getClass().getName());
+
+        return ResponseEntity.ok().body(gson.toJson(sendBookDTO));
     }
 
 

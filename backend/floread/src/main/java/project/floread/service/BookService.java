@@ -36,9 +36,10 @@ public class BookService {
 
     //책 DB에 저장  
     @Transactional
-    public Long join(Book book, String userId) {
+    public Long join(Book book, String genre, String userId) {
         User user = userRepository.findByUserId(userId);
         book.setUser(user);
+        book.setGenre(genre);
         System.out.println("book = " + book.toString());
         validateDuplicateBook(book, user);
         bookRepository.save(book);

@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import project.floread.security.JwtAuthenticationFilter;
 import project.floread.service.MusicService;
 
 import java.util.LinkedHashMap;
@@ -15,6 +16,7 @@ import java.util.LinkedHashMap;
 public class MusicController {
 
     private final MusicService musicService;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @ResponseBody

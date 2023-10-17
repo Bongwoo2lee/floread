@@ -27,6 +27,9 @@ public class Book {
     @Column(nullable = false)
     private String url;
 
+    @Column(nullable = false)
+    private String genre;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private User user;

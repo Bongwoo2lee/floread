@@ -13,14 +13,16 @@ public class OAuthAttributes {
     private String nameAttributeKey;
     private String name;
     private String email;
+    private String userId;
 
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email) {
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String userId) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
         this.email = email;
+        this.userId = userId;
     }
 
 
@@ -37,6 +39,7 @@ public class OAuthAttributes {
         Map<String, Object> response = (Map<String, Object>) attributes.get("response");
 
         return OAuthAttributes.builder()
+                .userId((String) response.get("id"))
                 .name((String) response.get("name"))
                 .email((String) response.get("email"))
                 .attributes(response)
@@ -47,6 +50,7 @@ public class OAuthAttributes {
 
     private static OAuthAttributes ofGoogle(String userNameAttributeName, Map<String, Object> attributes) {
         return OAuthAttributes.builder()
+                .userId((String) attributes.get("sub"))
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
                 .attributes(attributes)
@@ -59,6 +63,7 @@ public class OAuthAttributes {
         return User.builder()
                 .name(name)
                 .email(email)
+                .userId(userId)
                 .role(Role.GUEST)
                 .build();
     }

@@ -11,6 +11,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import project.floread.model.User;
+import project.floread.repository.UserRepository;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -24,6 +26,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenProvider tokenProvider;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -39,16 +42,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String userId = tokenProvider.validateAndGetUserId(token);
                 log.info("Authenticated userID: "+ userId);
 
+                User user = userRepository.findByUserId(userId);
+                if(user == null) {
+                    throw new IllegalStateException("로그인이 필요합니다.");
+                }
+
                 AbstractAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userId, null, AuthorityUtils.NO_AUTHORITIES);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
                 securityContext.setAuthentication(authentication);
                 SecurityContextHolder.setContext(securityContext);
+                //filterChain.doFilter(request, response);
             }
+        } catch (IllegalStateException e) {
+            System.out.println("에러 발생: " + e.getMessage());
         } catch (Exception e) {
-            logger.error("Could not set user authentication in security context", e);
+            log.error("Could not set user authentication in security context", e);
         }
-
         filterChain.doFilter(request, response);
     }
 

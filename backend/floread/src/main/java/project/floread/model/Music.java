@@ -15,9 +15,11 @@ public class Music {
     @Column(name = "music_id")
     private Long id;
 
-    private String title;
+    private String fileName;
 
     private String url;
+
+    private String genre;
 
     @OneToMany(mappedBy = "music", cascade = CascadeType.ALL)
     private List<MusicEmotion> musicEmotions;
