@@ -1,12 +1,17 @@
 import React, {Component } from "react";
 import { Link } from 'react-router-dom';
-class Upload extends Component {
-    constructor(props) {
+class Upload extends Component { 
+  constructor(props) {
         super(props);
+        this.fileInput=React.createRef();
         this.state = {
           selectedFile: null,
         };
     }
+    handleButtonClick = () => {
+      this.fileInput.current.click(); // 파일 선택 상자 트리거
+    };
+  
 
     fileSelectedHandler = event => {
         this.setState({
@@ -63,7 +68,7 @@ class Upload extends Component {
   render() {
     return (
       <div>
-        <nav style={{ backgroundColor: 'white', top: 0, height: '80px' }}>
+        <nav style={{ backgroundColor: 'rgba(255, 244, 233)', top: 0, height: '80px' }}>
           <ul style={{ position: 'fixed'}}>
             <div>
               <div style={{ position: 'fixed', left: '15px' }}>
@@ -84,16 +89,27 @@ class Upload extends Component {
             </div>
           </ul>
         </nav>
-        <label htmlFor="genre">장르</label>
-        <select name="genres" id="genre">
+        <div>
+        <p style={{ fontSize: '6.5em' }}>Upload</p>
+        <p style={{ color: 'rgba(255, 244, 233)', fontSize: '3em', fontFamily: 'Gothic A1, san-serif' }}>
+      <b>텍스트 파일을 업로드 해주세요</b>
+    </p>
+      </div>
+        <div style={{textAlign: 'center'}}>
+        <label htmlFor="genre"><b style={{ color: 'rgba(255, 244, 233)', fontSize: '1em', fontFamily: 'Gothic A1, san-serif' }}>장르를 선택해주세요</b></label>
+        <select style={{width:'110px',padding:'6px',border:'3px solid #ccc',borderRadius:'10px'}}  name="genres" id="genre">
           <option value="none">선택안함</option>
           <option value="fantasy">판타지</option>
           <option value="scienceFiction">SF</option>
           <option value="mystery">추리</option>
           <option value="scary">공포</option>
         </select>
-        <input type="file" accept="text/plain" onChange={this.fileSelectedHandler} />
-        <button onClick={this.fileUploadHandler}>업로드</button>
+        </div>
+        <div style={{textAlign: 'center'}}>
+        <button className="custom-btn" onClick={this.handleButtonClick}>파일 선택</button>
+        <input style={{display:'none'}} ref={this.fileInput} type="file" accept="text/plain" onChange={this.fileSelectedHandler}/>
+        <button className="custom-btn" onClick={this.fileUploadHandler}>업로드</button>
+        </div>
       </div>
     );
   }

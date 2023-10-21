@@ -21,7 +21,7 @@ function Login() {
 
     return (
         <Container component="main" maxWidth="xs" style={{ marginTop: "15%" }}>
-            <AppBar position="static" style={{backgroundColor:'white'}}>
+            <AppBar position="static" style={{backgroundColor:'rgba(255, 244, 233)'}}>
                 <Toolbar>
                     <Button style={{color:'black'}} component={Link} to="/">Floread</Button>
                     <Button style={{color:'black'}} component={Link} to="/upload">Upload</Button>

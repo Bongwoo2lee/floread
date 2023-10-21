@@ -19,7 +19,7 @@ function App() {
   return (
     <div>
     <div>
-    <nav style={{ backgroundColor: 'white', top: 0, height: '80px' }}>
+    <nav style={{ backgroundColor:'rgba(255, 244, 233)', top: 0, height: '80px' }}>
           <ul style={{ position: 'fixed'}}>
             <div>
               <div style={{ position: 'fixed', left: '15px' }}>
