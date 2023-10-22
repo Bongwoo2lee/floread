@@ -1,3 +1,5 @@
+#cpu로 돌리기
+
 import re
 
 import pandas as pd
@@ -8,7 +10,7 @@ from kobert_tokenizer import KoBERTTokenizer
 import gluonnlp as nlp
 import numpy as np
 
-file_path ='sentiment-analysis/data/booksample1.txt'
+file_path ='sentiment-analysis/data/성냥팔이_소녀.txt'
 file = open(file_path, 'r',encoding='UTF8')    #인코딩 안바꾸면 오류
 raw_text = file.readlines()
 
@@ -85,7 +87,7 @@ class BERTDataset(Dataset):
     def __len__(self):
         return (len(self.labels))
     
-model_path = 'sentiment-analysis/model/kobert-v5.pt'
+model_path = 'sentiment-analysis/model/kobert-v6.pt'
 model = torch.load(model_path)
 model = model.to('cpu')
 
