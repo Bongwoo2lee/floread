@@ -3,7 +3,10 @@ spring:
     store-type: jdbc
     jdbc:
       initialize-schema: always
-
+  mvc:
+    cors:
+      allowed-origins: "*"
+      allowed-methods: "GET,POST,PUT,DELETE"
   jpa:
     open-in-view: true
     hibernate:
@@ -19,7 +22,7 @@ spring:
       dialect: org.hibernate.dialect.MySQL8InnoDBDialect
 
   profiles:
-    include: datasource, secret-key, oauth
+    include: datasource, secret-key, oauth, jwt
 
 
   kafka:
@@ -39,3 +42,4 @@ server:
   servlet:
     encoding:
       force-response: true
+

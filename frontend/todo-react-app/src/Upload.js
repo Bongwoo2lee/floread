@@ -70,6 +70,7 @@ class Upload extends Component {
                     <option value="scienceFiction">SF</option>
                     <option value="mystery">추리</option>
                     <option value="scary">공포</option>
+                    <option value="romance">로맨스</option>
                 </select>
                 <input type="file" accept="text/plain" onChange={this.fileSelectedHandler} />
                 <button onClick={this.fileUploadHandler}>업로드</button>
