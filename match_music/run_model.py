@@ -322,12 +322,17 @@ for message in consumer:
 
         # 파일을 열고 업로드할 준비
         with open(image_file_path, 'rb') as file:
+                        
             # 파일 및 bookId를 포함하여 POST 요청 보내기
             files = {'file': (file_name, file), 'bookId': str(book_id)}  # book_id를 문자열로 변환
-            response = requests.post(upload_url, files=files)
 
             # POST 요청을 보내어 파일을 업로드
             response = requests.post(upload_url, files=files)
+            
+            print("테스트 file_name",file_name,file_name,response)
+            print("테스트: 파일 크기", os.path.getsize(image_file_path))
+
+
             
         # 서버로부터의 응답 확인
         if response.status_code == 200:
