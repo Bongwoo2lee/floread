@@ -7,6 +7,7 @@ from kobert_tokenizer import KoBERTTokenizer
 import gluonnlp as nlp
 import numpy as np
 import time
+import requests
 
 
 def runKobert(raw_file):
@@ -58,6 +59,7 @@ def runKobert(raw_file):
     
     emos = ('행복','불안','놀람', '슬픔','분노','중립')
     res = {'행복':0,'불안':0,'놀람':0, '슬픔':0,'분노':0,'중립':0}
+    res_eng = {'행복':'happy','불안':'tense','슬픔':'sad','분노':'angry'}
     
     for sentence in text:
         res[emos[predict(sentence)]] += 1
@@ -69,9 +71,14 @@ def runKobert(raw_file):
     del res_copied['중립']
     del res_copied['놀람']
     res_emo = max(res_copied, key=res_copied.get)
+    
+    # 딕셔너리 활용한
+    if res_emo == '행복':
+        res_emo == ''
+        
 
     print("최다 빈도: ",res_emo,end=', ')
-    return res_emo
+    return res_eng[res_emo]
     
 #region kovert-v6 모델 불러오기
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
@@ -194,7 +201,7 @@ class SSHManager:
         >>> ssh_manager.send_command("ls -al")
         >>> ssh_manager.send_file("/path/to/local_path", "/path/to/remote_path")
         >>> ssh_manager.get_file("/path/to/remote_path", "/path/to/local_path")
-        ...
+        …
         >>> ssh_manager.close_ssh_client()
     """
     def __init__(self):
@@ -277,20 +284,56 @@ for message in consumer:
         # fileName의 경우 뒤에 '는 자동으로 있어서 앞에만 하면 됨
         query_file = fileName.replace("'", "")
         #print(query_file)
-        query2 = "SELECT book_id FROM Book where `fileName` = '"+ query_file +"'"
+        query2 = "SELECT book_id, originName FROM Book where `fileName` = '"+ query_file +"'"
         cursor.execute(query2)
         result2 = cursor.fetchall()
         book_id = 0
+        originName=''
         for row in result2:
             book_id = row[0]
+            originName = row[1]
             #print(book_id)
+            print(originName)
         #insert query
         query3 = "INSERT INTO BookEmotion (emotion_id, book_id) VALUES (%s, %s)"
         values = (emotion_id, book_id)
         cursor.execute(query3, values)
+        
+        #쿼리4
+        
+        # 이미지 파일의 경로 (로컬 파일 시스템에서의 경로)
+        image_file_path = 'match_music/image.png'
+
+        # 업로드할 파일의 이름 (원하는 파일 이름으로 변경)
+        file_name = originName + '.png'
+        
+        query4 = f"UPDATE Book SET image = '/home/floread/image/{file_name}' WHERE book_id = {book_id}"
+        cursor.execute(query4)
+        result4 = cursor.fetchall()
+
         # 변경사항 커밋
         conn.commit()
         print(cursor.rowcount, "record inserted\n")
+
+
+
+        # 업로드할 URL
+        upload_url = 'http://floread.store:8080/image'
+
+        # 파일을 열고 업로드할 준비
+        with open(image_file_path, 'rb') as file:
+            # 파일 및 bookId를 포함하여 POST 요청 보내기
+            files = {'file': (file_name, file), 'bookId': str(book_id)}  # book_id를 문자열로 변환
+            response = requests.post(upload_url, files=files)
+
+            # POST 요청을 보내어 파일을 업로드
+            response = requests.post(upload_url, files=files)
+            
+        # 서버로부터의 응답 확인
+        if response.status_code == 200:
+            print('이미지 업로드 성공!')
+        else:
+            print('이미지 업로드 실패. 응답 코드:', response.status_code)
         
     except Exception as e:
         print(e)
