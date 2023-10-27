@@ -307,7 +307,7 @@ for message in consumer:
         # 업로드할 파일의 이름 (원하는 파일 이름으로 변경)
         file_name = originName + '.png'
         
-        query4 = f"UPDATE Book SET image = '/home/floread/image/{file_name}' WHERE book_id = {book_id}"
+        query4 = f"UPDATE Book SET image = '/home/floread/image/{file_name}' WHERE book_id = {book_id};"
         cursor.execute(query4)
         result4 = cursor.fetchall()
 
