@@ -72,7 +72,6 @@ public class ImageController {
     public ResponseEntity<Resource> downloadFile(@PathVariable String filename) {
         // 이미지 파일의 경로 설정
         String filePath = "/home/floread/image/"+filename+".png";
-        //String filePath = "/Users/seokbeomlee/Desktop/Project/refactor/floread/backend/image/"+filename+".png";
         System.out.println("filePath = " + filePath);
         Path path = Paths.get(filePath);
 

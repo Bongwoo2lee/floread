@@ -12,6 +12,7 @@ import project.floread.repository.BookRepository;
 import project.floread.repository.UserRepository;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -27,9 +28,11 @@ public class BookService {
 
     //책 DB에서 삭제
     @Transactional
-    public String  delete(String originName, String userId) {
+    public String delete(String originName, String userId) {
         User user = userRepository.findByUserId(userId);
         Book book = bookRepository.findByOriginName(originName);
+
+
         try {
             List<BookEmotion> bookEmotion = bookEmotionRepository.findByBookEmotion(book);
             bookEmotionRepository.deleteByBook(book);
@@ -38,16 +41,39 @@ public class BookService {
         }
         String url = book.getUrl();
         bookRepository.delete(book);
-        File file = new File(url);
-        if (file.exists()) {
-            if (file.delete()) {
-                return "파일 삭제 성공: " + file.getName();
+        File bookFile = new File(url);
+        File imageFile = new File(book.getImage());
+
+        String bookResult;
+        String imageResult;
+        if (bookFile.exists()) {
+            if (bookFile.delete()) {
+                bookResult = "파일1 삭제 성공: " + bookFile.getName();
             } else {
-                return "파일 삭제 실패: " + file.getName();
+                bookResult = "파일1 삭제 실패: " + bookFile.getName();
+                return bookResult;
             }
         } else {
-            return "파일이 존재하지 않음: " + file.getName();
+            bookResult = "파일1이 존재하지 않음: " + bookFile.getName();
+            return bookResult;
         }
+
+        if (imageFile.exists()) {
+            if (imageFile.delete()) {
+                imageResult = "파일2 삭제 성공: " + imageFile.getName();
+            } else {
+                imageResult = "파일2 삭제 실패: " + imageFile.getName();
+                return imageResult;
+            }
+        } else {
+            imageResult = "파일2가 존재하지 않음: " + imageFile.getName();
+            return imageResult;
+        }
+
+        System.out.println(bookResult);
+        System.out.println(imageResult);
+
+        return "삭제 성공";
     }
 
     //책 DB에 저장  
