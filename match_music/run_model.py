@@ -9,6 +9,62 @@ import numpy as np
 import time
 import requests
 
+import matplotlib.font_manager as fm
+import matplotlib.pyplot as plt
+import datetime
+
+
+fontpath = r'C:\Windows\Fonts\HMKMRHD.TTF'
+font_name = fm.FontProperties(fname=fontpath, size=50).get_name()
+plt.rc('font', family=font_name)
+
+# 이미지 파일의 경로 (로컬 파일 시스템에서의 경로)
+image_file_path = ''
+
+def save_vis(res):
+    global image_file_path
+    
+    del res['중립']
+    
+    # 키와 값 리스트 추출
+    labels = list(res.keys())
+    sizes = list(res.values())
+    
+    # 원형 그래프 그리기
+    fig1, ax1 = plt.subplots()
+
+    # 가운데 부분을 뚤린 원형으로 설정
+    wedgeprops = {'width': 0.3, 'edgecolor': 'white'}  # 가운데 부분 속성
+
+    # 원형 그래프 그리기
+    outer_colors = plt.cm.Set3(range(len(labels)))  # 바깥 부분 색상
+    inner_colors = ['white'] * len(labels)  # 가운데 부분 색상
+
+    ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90,
+            colors=outer_colors, wedgeprops=wedgeprops)
+
+    ax1.pie([1], radius=0.7, colors=inner_colors, wedgeprops=wedgeprops)  # 가운데 뚤린 원형 추가
+
+    # 가운데 부분에 텍스트 추가
+    plt.text(0, 0, '감성 분석 결과', ha='center', va='center', fontsize=12)
+
+    # 가운데 뚤린 원형 그래프 출력
+    plt.axis('equal')
+    
+    image_file_path = ''
+    
+    try:
+        # 날짜, 시간으로 파일 저장
+        current_datetime = datetime.datetime.now().strftime("%m%d%H%M%S")
+        image_file_path = './sentiment-analysis/res_image/{0}.png'.format(current_datetime)
+        print(image_file_path, "이미지 패스")
+        plt.savefig(image_file_path, dpi=300, bbox_inches='tight')
+        
+    except Exception as e:
+        print("이미지 저장 실패",e, sep='\ns')
+        # 연결 및 커서 닫기
+    
+
 
 def runKobert(raw_file):
     
@@ -70,13 +126,19 @@ def runKobert(raw_file):
     res_copied = res.copy()
     del res_copied['중립']
     del res_copied['놀람']
+    
+    # .이나 ""로 구분된 문장이 없을 경우
+    if max(res, key=res.get) == 0:
+        print("텍스트 확인 필요")
+        return -1
+        
     res_emo = max(res_copied, key=res_copied.get)
     
     # 딕셔너리 활용한
     if res_emo == '행복':
         res_emo == ''
         
-
+    save_vis(res)
     print("최다 빈도: ",res_emo,end=', ')
     return res_eng[res_emo]
     
@@ -268,8 +330,9 @@ for message in consumer:
         cursor = conn.cursor()
 
         # 쿼리 1 실행
-        #emotion = "'행복'"
-        emotion = "'{}'".format(runKobert(local_path))
+        analysis_res = runKobert(local_path)
+        emotion = "'{}'".format(analysis_res)
+        
         query1 = "SELECT emotion_id FROM Emotion where `emotion` = "+ emotion
         cursor.execute(query1)
         result1 = cursor.fetchall()
@@ -300,10 +363,6 @@ for message in consumer:
         cursor.execute(query3, values)
         
         #쿼리4
-        
-        # 이미지 파일의 경로 (로컬 파일 시스템에서의 경로)
-        image_file_path = 'match_music/image.png'
-
         # 업로드할 파일의 이름 (원하는 파일 이름으로 변경)
         file_name = originName + '.png'
         
@@ -315,22 +374,20 @@ for message in consumer:
         conn.commit()
         print(cursor.rowcount, "record inserted\n")
 
-
-
         # 업로드할 URL
         upload_url = 'http://floread.store:8080/image'
+        
 
         # 파일을 열고 업로드할 준비
         with open(image_file_path, 'rb') as file:
-                        
+            
+
             # 파일 및 bookId를 포함하여 POST 요청 보내기
             files = {'file': (file_name, file), 'bookId': str(book_id)}  # book_id를 문자열로 변환
 
             # POST 요청을 보내어 파일을 업로드
             response = requests.post(upload_url, files=files)
             
-            print("테스트 file_name",file_name,file_name,response)
-            print("테스트: 파일 크기", os.path.getsize(image_file_path))
 
 
             
