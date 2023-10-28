@@ -27,7 +27,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query(value = "select b from Book b where b.user.userId = :userId and b.originName = :originName")
     Book findByOrOriginNameAndUser(@Param("userId") String userId, @Param("originName") String originName);
 
-    @Query(value = "select b from Book b where b.id = :bookId")
-    Optional<Book> findById(@Param("bookId") Long bookId);
+
 
 }

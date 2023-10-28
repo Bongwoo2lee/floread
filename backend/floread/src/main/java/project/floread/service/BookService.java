@@ -1,6 +1,7 @@
 package project.floread.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.floread.model.Book;
@@ -10,6 +11,7 @@ import project.floread.repository.BookEmotionRepository;
 import project.floread.repository.BookRepository;
 import project.floread.repository.UserRepository;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -25,13 +27,26 @@ public class BookService {
 
     //책 DB에서 삭제
     @Transactional
-    public void delete(String originName, String userId) {
+    public String  delete(String originName, String userId) {
         User user = userRepository.findByUserId(userId);
         Book book = bookRepository.findByOriginName(originName);
-        BookEmotion bookEmotion = bookEmotionRepository.findByBookEmotion(book.getId());
-        if (Objects.equals(book.getUser().getId(), user.getId())) {
-            bookEmotionRepository.delete(bookEmotion);
-            bookRepository.delete(book);
+        try {
+            List<BookEmotion> bookEmotion = bookEmotionRepository.findByBookEmotion(book);
+            bookEmotionRepository.deleteByBook(book);
+        } catch (Exception e) {
+
+        }
+        String url = book.getUrl();
+        bookRepository.delete(book);
+        File file = new File(url);
+        if (file.exists()) {
+            if (file.delete()) {
+                return "파일 삭제 성공: " + file.getName();
+            } else {
+                return "파일 삭제 실패: " + file.getName();
+            }
+        } else {
+            return "파일이 존재하지 않음: " + file.getName();
         }
     }
 
@@ -72,11 +87,16 @@ public class BookService {
     }
 
     //사용자의 OAuth2의 ID를 입력으로 받으면 그 사용자가 업로드한 책들의 경로를 출력
+    @Transactional
     public void insertImageUrl(String image, Long id) {
+        System.out.println("id = " + id);
         Optional<Book> getBook = bookRepository.findById(id);
         if (getBook.isPresent()) {
             Book book = getBook.get();
             book.setImage(image);
+            System.out.println("book.getImage() = " + book.getImage());
+            Book book1 = bookRepository.save(book);
+            System.out.println("book1 = " + book1.getImage());
         } else {
             System.out.println("값이 없음");
         }
@@ -94,8 +114,16 @@ public class BookService {
         return bookRepository.findByOrOriginNameAndUser(userId, originName);
     }
 
+    public Optional<Book> findBookById(Long bookId) {
+        return bookRepository.findById(bookId);
+    }
+
     public void update(String originName, String genre, String userId) {
         Book book = bookRepository.findByOrOriginNameAndUser(userId, originName);
         book.setGenre(genre);
+    }
+
+    public List<BookEmotion> findBookEmotion(Book book) {
+        return bookEmotionRepository.findByBookEmotion(book);
     }
 }

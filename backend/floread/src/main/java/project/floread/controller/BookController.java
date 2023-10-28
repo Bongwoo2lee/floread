@@ -2,7 +2,9 @@ package project.floread.controller;
 
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -19,6 +21,7 @@ import project.floread.dto.BookDTO;
 import project.floread.dto.SendBookDTO;
 import project.floread.dto.SendUserDTO;
 import project.floread.model.Book;
+import project.floread.model.BookEmotion;
 import project.floread.model.User;
 import project.floread.repository.UserRepository;
 import project.floread.service.AuthenticationService;
@@ -43,7 +46,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://floread.store:3000")
 public class BookController {
 
-private final BookService bookService;
+    private final BookService bookService;
     private final AuthenticationService authenticationService;
     private final KafkaSampleProducerService kafkaSampleProducerService;
     private final UserRepository userRepository;
@@ -69,9 +72,9 @@ private final BookService bookService;
         System.out.println(originName);
         String userId = authentication.getName();
         System.out.println(userId);
-        bookService.delete(originName, userId);
+        String message = bookService.delete(originName, userId);
         return ResponseEntity.status(HttpStatus.OK)
-                .body("OK");
+                .body(message);
     }
 
     @PostMapping("/update/{originName}/{genre}")
@@ -157,7 +160,7 @@ private final BookService bookService;
                         .body("저장 실패");
             }
             //카프카 문자 보내기
-            //kafkaSampleProducerService.sendMessage(fileUrl);
+            kafkaSampleProducerService.sendMessage(fileUrl);
         }
         return ResponseEntity.status(HttpStatus.OK)
                 .body("OK");
@@ -231,12 +234,19 @@ private final BookService bookService;
         System.out.println("book.toString() = " + book.toString());
 
         try {
-            List<String> emotions = bookService.findEmotions(book);
-            if(emotions.isEmpty()) {
+            List<BookEmotion> bookEmotion = bookService.findBookEmotion(book);
+            System.out.println("bookEmotion = " + bookEmotion.toString());
+            if(bookEmotion.isEmpty()) {
                 throw new EmotionsNotFoundException("감성 분석 중 입니다.");
             }
         } catch (EmotionsNotFoundException e) {
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("감성 분석 중 입니다.");
+            String message = "감성 분석 중 입니다.";
+            File messageFile = new File("message.txt");
+            FileUtils.writeStringToFile(messageFile, message, "UTF-8");
+
+            // 파일을 Resource로 로드
+            Resource resource = new ClassPathResource("message.txt");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resource);
         }
 
         String filePath = book.getUrl();
@@ -249,7 +259,7 @@ private final BookService bookService;
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE+ "; charset=UTF-8");
 
             return ResponseEntity.ok()
                     .headers(headers)

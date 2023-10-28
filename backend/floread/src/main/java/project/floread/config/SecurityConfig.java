@@ -44,7 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/", "/auth/**", "/oauth2/**", "/book/**", "/test/**", "/music/**", "/video/**", "/upload/**", "/viewer/**", "/mypage/**", "/download/**", "/update/**", "/image/**").permitAll()
+                .antMatchers("/", "/auth/**", "/oauth2/**", "/delete/**", "/book/**", "/test/**", "/music/**", "/video/**", "/upload/**", "/viewer/**", "/mypage/**", "/download/**", "/update/**", "/image/**", "/image").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()

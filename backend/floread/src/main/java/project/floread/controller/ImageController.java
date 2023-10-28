@@ -1,6 +1,7 @@
 package project.floread.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.PathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -9,11 +10,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import project.floread.model.Book;
 import project.floread.service.BookService;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,24 +28,38 @@ public class ImageController {
     private final BookService bookService;
 
     @PostMapping("/image")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("bookId") Long bookId) {
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+        System.out.println("file = " + file.getOriginalFilename());
+        System.out.println("file.getName() = " + file.getName());
+        System.out.println("file.toString() = " + file);
+        System.out.println("file.getSize() = " + file.getSize());
+        System.out.println("file.getResource() = " + file.getResource());
+        String sourceFileName = file.getOriginalFilename();
+        //원본파일확장자명
+        String sourceFileNameExtension = FilenameUtils.getExtension(sourceFileName);
+        //확장자빼고
+        String title = FilenameUtils.removeExtension(sourceFileName);
+
+        //저장될 파일
+        File destinationBook;
+        String destinationImageName;
+        String currentUrl = System.getProperty("user.dir");
+        File currentFolder = new File(currentUrl);
+        File parentFolder = currentFolder.getParentFile();
+        String imageUrl = parentFolder.getAbsolutePath()+"/image/";
+        System.out.println(imageUrl);
         try {
-            String currentUrl = System.getProperty("user.dir");
-            File currentFolder = new File(currentUrl);
-            File parentFolder = currentFolder.getParentFile();
-            String imageUrl = parentFolder.getAbsolutePath()+"/image/";
-            File destinationImage = new File(imageUrl + file.getName()+".png");
+            assert title != null;
+
+            destinationImageName = title + ".png";
+
+            //파일 경로
+            destinationBook = new File(imageUrl + destinationImageName);
 
             //부모디렉토리가 존재하지 않으면 생성
-            destinationImage.getParentFile().mkdirs();
-
-            //파일 경로 출력
-            System.out.println("destinationImage = " + destinationImage);
+            destinationBook.getParentFile().mkdirs();
             //파일 이동
-            file.transferTo(destinationImage);
-
-            bookService.insertImageUrl(file.getName(), bookId);
-
+            file.transferTo(destinationBook);
 
             return new ResponseEntity<>("이미지 업로드 및 처리 성공", HttpStatus.OK);
         } catch (Exception e) {
@@ -49,7 +68,7 @@ public class ImageController {
     }
 
     @CrossOrigin(origins = "http://floread.store:3000")
-    @GetMapping("/image/download/{filename:.+}")
+    @GetMapping("/image/download/{filename}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String filename) {
         // 이미지 파일의 경로 설정
         String filePath = "/home/floread/image/"+filename+".png";
@@ -59,10 +78,11 @@ public class ImageController {
 
         // PathResource를 사용하여 Resource 객체 생성
         Resource resource = new PathResource(path);
+        System.out.println("resource = " + resource);
 
 
         if (resource.exists() && resource.isReadable()) {
-            String contentType = "image/png"; // MP3 파일의 MIME 타입
+            String contentType = "image/png"; // image
 
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
