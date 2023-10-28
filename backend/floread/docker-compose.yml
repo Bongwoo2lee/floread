@@ -1,0 +1,34 @@
+version: '3'
+services:
+  mysql:
+    image: mysql
+    platform: linux/arm64/v8
+    restart: no
+    environment:
+      MYSQL_ROOT_PASSWORD: floread123
+      MYSQL_DATABASE: floread_db
+      MYSQL_USER: floread
+      MYSQL_PASSWORD: floread123
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - spring-network
+
+  spring-app:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: no
+    ports:
+      - 8000:8000
+    depends_on:
+      - mysql
+    networks:
+      - spring-network
+
+networks:
+  spring-network:
+    driver: bridge
