@@ -78,12 +78,6 @@ body {
 .close-button:hover .close-icon {
   fill: #212121;
 }
-  p{
-    color: rgb(255, 244,233);
-    font-family: 'Georgia', serif;
-    font-size: 1em;
-    text-align: center;
-  }
   .btn{
   background: rgba(0,0,0,0);
   padding: 10px 25px;
@@ -152,17 +146,18 @@ body {
   margin-left: 40px;
   margin-right: 40px;
   margin-top: 20px;
-  width: 110px;
-  padding: 12px;
-  border: 3px solid rgb(59, 1, 249);
+  width: 140px;
+  padding: 15px;
+  border: 5px solid rgb(255, 255, 255);
   border-radius: 50px;
-  font-size: 15px;
+  font-size: 20px;
   background: none;
   color: rgb(255, 255, 255);
 }
 
 .custom-btn:focus {
   outline: none; /* 포커스 상자 제거 */
-  border-color: #fdfdfd; /* 포커스 시 테두리 색상 변경 */
-  box-shadow: 0 0 5px #cde2f8; /* 포커스 시 그림자 효과 추가 */
+  background-color: rgb(60, 60, 60);
+  border-color: rgb(255, 255, 255);; /* 포커스 시 테두리 색상 변경 */
+  box-shadow: 0 0 5px rgb(60, 60, 60); /* 포커스 시 그림자 효과 추가 */
 }
