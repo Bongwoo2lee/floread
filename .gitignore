@@ -16,3 +16,6 @@ config.ini
 book/*
 
 
+# fasttext 모델
+cc.ko.300.bin
+cc.ko.300.bin.gz
