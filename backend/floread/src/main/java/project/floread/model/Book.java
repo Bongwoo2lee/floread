@@ -30,10 +30,12 @@ public class Book {
     @Column(nullable = false)
     private String genre;
 
+    private String image;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<BookEmotion> bookEmotions = new ArrayList<>();
+    private final List<BookEmotion> bookEmotions = new ArrayList<>();
 }

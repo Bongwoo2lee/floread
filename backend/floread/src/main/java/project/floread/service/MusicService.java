@@ -19,35 +19,26 @@ public class MusicService {
     private final MusicEmotionRepository musicEmotionRepository;
 
 
-    public LinkedHashMap playAudio(HashMap param) throws Exception {
+    public List<String> playAudio(HashMap param) throws Exception {
         //파일을 파일객체에 넣는다/
-        String emotion = (String) param.get("emotion");
-//        if(emotion.equals("happy")) {
-//            File file = new File("/Users/seokbeomlee/Desktop/Project/floread/svelte-start-app/public/music/angry.mp3");
-//            String base64 = fileToString(file);
-//
-//            //Map형태의 result에 담는다.
-//            LinkedHashMap result = new LinkedHashMap();
-//            result.put("audio", base64);
-//            //읽은 파일을 아래[fileToString] 메소드를 통해 String으로 변환한다.
-//
-//            return result;
-//        }
+        List<String> emotions = (List<String>) param.get("emotion");
+        String genre = (String) param.get("genre");
 
-        LinkedHashMap result = new LinkedHashMap();
+        List<String> resultList = new ArrayList<>();
         //url만 가져오기
-        Long emotionId = emotionRepository.findByEmotion(emotion);
-        List<String> tmpList = musicEmotionRepository.findByMusicUrlFromEmotionId(emotionId);
-        System.out.println("tmpList = " + tmpList);
-
-        ArrayList<String> musicUrlList = new ArrayList<>();
-        for (String url : tmpList) {
-            File file = new File(url);
-            String base64 = fileToString(file);
-            musicUrlList.add(base64);
+        for (String emotion : emotions) {
+            Long emotionId = emotionRepository.findByEmotion(emotion);
+            List<String> tmpList = new ArrayList<>();
+            if (Objects.equals(genre, "none")) {
+                tmpList = musicEmotionRepository.findByMusicUrlFromEmotionId(emotionId);
+            }
+            else {
+                tmpList = musicEmotionRepository.findByMusicUrlFromEmotionIdAAndGenre(emotionId, genre);
+            }
+            System.out.println("tmpList = " + tmpList);
+            resultList.addAll(tmpList);
         }
-        result.put("audio", musicUrlList);
-        return result;
+        return resultList;
     }
 
     // 파일 읽어들이는 메소드
@@ -86,7 +77,8 @@ public class MusicService {
 
         //해당 바이트 배열을 스트링으로 변환한다.
         fileString = new String(encoderResult);
-
+        inputStream.close();
+        byteOutStream.close();
         return fileString;
 
     }

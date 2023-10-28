@@ -23,4 +23,5 @@ public class BookEmotion {
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "emotion_id")
     private Emotion emotion;
+
 }

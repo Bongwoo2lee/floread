@@ -2,7 +2,9 @@ package project.floread.controller;
 
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -17,7 +19,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import project.floread.dto.BookDTO;
 import project.floread.dto.SendBookDTO;
+import project.floread.dto.SendUserDTO;
 import project.floread.model.Book;
+import project.floread.model.BookEmotion;
+import project.floread.model.User;
+import project.floread.repository.UserRepository;
 import project.floread.service.AuthenticationService;
 import project.floread.service.BookService;
 import project.floread.service.KafkaSampleProducerService;
@@ -37,12 +43,13 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://floread.store:3000")
 public class BookController {
 
-private final BookService bookService;
+    private final BookService bookService;
     private final AuthenticationService authenticationService;
     private final KafkaSampleProducerService kafkaSampleProducerService;
+    private final UserRepository userRepository;
 
     private static String hashString(String input, String algorithm) {
         try {
@@ -61,16 +68,26 @@ private final BookService bookService;
     }
 
     @GetMapping("/delete/{originName}")
-    public ResponseEntity<String> deleteBook(@PathVariable String originName) {
+    public ResponseEntity<String> deleteBook(@PathVariable String originName, Principal authentication) {
         System.out.println(originName);
-        String userId = authenticationService.getAuthentication().getName();
+        String userId = authentication.getName();
         System.out.println(userId);
-        bookService.delete(originName, userId);
+        String message = bookService.delete(originName, userId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(message);
+    }
+
+    @PostMapping("/update/{originName}/{genre}")
+    public ResponseEntity<String> updateBook(@PathVariable String originName, @PathVariable String genre, Principal authentication) {
+        System.out.println(originName);
+        String userId = authentication.getName();
+        System.out.println(userId);
+        bookService.update(originName, genre, userId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body("OK");
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+    @CrossOrigin(origins = "http://floread.store:3000")
     @PostMapping("/upload")
     public ResponseEntity<String> create(@RequestPart("files") MultipartFile[] files, @RequestParam("genre") String genre, HttpServletRequest request, Principal authentication) throws IOException {
 
@@ -143,14 +160,14 @@ private final BookService bookService;
                         .body("저장 실패");
             }
             //카프카 문자 보내기
-            //kafkaSampleProducerService.sendMessage(fileUrl);
+            kafkaSampleProducerService.sendMessage(fileUrl);
         }
         return ResponseEntity.status(HttpStatus.OK)
                 .body("OK");
     }
 
-
-    @GetMapping("/mypage")
+    @CrossOrigin(origins = "http://floread.store:3000")
+    @GetMapping("/viewer")
     public ResponseEntity<String> getMyPage(Principal authentication) {
 
         //아이디 찾기
@@ -190,8 +207,11 @@ private final BookService bookService;
             //책에 대한 감정 리스트 연결
             sendBookList.add(sendBook);
         }
+        User sendUser = userRepository.findByUserId(userId);
 
-        SendBookDTO sendBookDTO = new SendBookDTO(userId, sendBookList);
+        SendUserDTO sendUserDTO = new SendUserDTO(sendUser.getName(), sendUser.getEmail());
+
+        SendBookDTO sendBookDTO = new SendBookDTO(sendUserDTO, sendBookList);
 
         Gson gson = new Gson();
         System.out.println(gson.toJson(sendBookDTO).getClass().getName());
@@ -199,10 +219,36 @@ private final BookService bookService;
         return ResponseEntity.ok().body(gson.toJson(sendBookDTO));
     }
 
+    public class EmotionsNotFoundException extends RuntimeException {
+        public EmotionsNotFoundException(String message) {
+            super(message);
+        }
+    }
 
-    @GetMapping("/book/{title}")
-    public ResponseEntity<Resource> Read(@PathVariable String title) throws IOException {
-        Book book = bookService.findByOriginName(title);
+    @CrossOrigin(origins = "http://floread.store:3000")
+    @PostMapping("/book/{title}")
+    public ResponseEntity<Resource> Read(@PathVariable String title, Principal authentication) throws IOException {
+        String userId = authentication.getName();
+
+        Book book = bookService.findByOriginNameAndUser(userId, title);
+        System.out.println("book.toString() = " + book.toString());
+
+        try {
+            List<BookEmotion> bookEmotion = bookService.findBookEmotion(book);
+            System.out.println("bookEmotion = " + bookEmotion.toString());
+            if(bookEmotion.isEmpty()) {
+                throw new EmotionsNotFoundException("감성 분석 중 입니다.");
+            }
+        } catch (EmotionsNotFoundException e) {
+            String message = "감성 분석 중 입니다.";
+            File messageFile = new File("message.txt");
+            FileUtils.writeStringToFile(messageFile, message, "UTF-8");
+
+            // 파일을 Resource로 로드
+            Resource resource = new ClassPathResource("message.txt");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resource);
+        }
+
         String filePath = book.getUrl();
         System.out.println(filePath);
         //파일 가져오기
@@ -213,7 +259,7 @@ private final BookService bookService;
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_HTML_VALUE);
+            headers.add(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE+ "; charset=UTF-8");
 
             return ResponseEntity.ok()
                     .headers(headers)

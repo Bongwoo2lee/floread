@@ -10,10 +10,14 @@ import project.floread.model.MusicEmotion;
 import java.util.List;
 
 public interface MusicEmotionRepository extends JpaRepository<MusicEmotion, Long> {
-    @Query(value = "select me.music from MusicEmotion me where me.emotion = :emotion")
-    List<Music> findByMusic(@Param("emotion") Emotion emotion);
+    @Query(value = "select me.music from MusicEmotion me where me.emotion = :emotion and me.music.genre = :genre")
+    List<Music> findByMusic(@Param("emotion") Emotion emotion, @Param("genre") String genre);
 
 
-    @Query(value = "select me.music.url from MusicEmotion me where me.emotion.id = :id")
+    @Query(value = "select me.music.fileName from MusicEmotion me where me.emotion.id = :id and me.music.genre = :genre")
+    List<String> findByMusicUrlFromEmotionIdAAndGenre(@Param("id") Long id, @Param("genre") String genre);
+
+    @Query(value = "select me.music.fileName from MusicEmotion me where me.emotion.id = :id")
     List<String> findByMusicUrlFromEmotionId(@Param("id") Long id);
+
 }

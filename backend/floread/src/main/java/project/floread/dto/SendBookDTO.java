@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public class SendBookDTO {
 
-    private String userId;
+    private SendUserDTO sendUserDTO;
     private List<BookDTO> bookList;
 
 

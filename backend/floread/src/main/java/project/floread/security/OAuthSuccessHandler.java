@@ -22,7 +22,7 @@ import static project.floread.security.RedirectUrlCookieFilter.REDIRECT_URI_PARA
 @AllArgsConstructor
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    private static final String LOCAL_REDIRECT_URL = "http://localhost:3000";
+    private static final String LOCAL_REDIRECT_URL = "http://floread.store:3000";
 
     private final TokenProvider tokenProvider;
 
@@ -33,6 +33,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         Optional<String> redirectUri = oCookie.map(Cookie::getValue);
 
         log.info("token {}", token);
-        response.sendRedirect(redirectUri.orElseGet(() -> LOCAL_REDIRECT_URL) + "/sociallogin?token=" + token);
+        //response.sendRedirect(redirectUri.orElseGet(() -> LOCAL_REDIRECT_URL) + "/sociallogin?token=" + token);
+        response.sendRedirect("http://floread.store:3000" + "/sociallogin?token=" + token);
     }
 }

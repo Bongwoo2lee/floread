@@ -3,7 +3,10 @@ spring:
     store-type: jdbc
     jdbc:
       initialize-schema: always
-
+  mvc:
+    cors:
+      allowed-origins: "*"
+      allowed-methods: "GET,POST,PUT,DELETE"
   jpa:
     open-in-view: true
     hibernate:
