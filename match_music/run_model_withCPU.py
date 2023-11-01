@@ -159,9 +159,6 @@ tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
 vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
 tok = tokenizer.tokenize
 
-#device = torch.device("cpu")
-device = torch.device("cuda:0")
-
 class BERTClassifier(nn.Module):
     def __init__(self,
                  bert,
@@ -210,7 +207,7 @@ class BERTDataset(Dataset):
 #model_path = '../sentiment-analysis/model/kobert-v6.pt'
 model_path = 'sentiment-analysis/model/kobert-v6.pt' #(cmd 위치 기준)
 model = torch.load(model_path)
-#model = model.to('cpu')
+model = model.to('cpu')
 
 max_len = 64
 batch_size = 64
@@ -223,10 +220,10 @@ def predict(sentence):
     model.eval()
     answer = 0
     for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(test_dataloader):
-        token_ids = token_ids.long().to(device)
-        segment_ids = segment_ids.long().to(device)
+        token_ids = token_ids.long().cpu()    #벡엔드에서 cpu로
+        segment_ids = segment_ids.long().cpu()  #벡엔드에서 cpu로
         valid_length= valid_length
-        label = label.long().to(device)
+        label = label.long().cpu()
         out = model(token_ids, valid_length, segment_ids)
         for logits in out:
             logits = logits.detach().cpu().numpy()
