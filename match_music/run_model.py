@@ -24,8 +24,9 @@ image_file_path = ''
 def save_vis(res):
     global image_file_path
     
+    # 중립은 그래프에서 빠지도록
     del res['중립']
-    
+      
     # 키와 값 리스트 추출
     labels = list(res.keys())
     sizes = list(res.values())
@@ -40,13 +41,17 @@ def save_vis(res):
     outer_colors = plt.cm.Set3(range(len(labels)))  # 바깥 부분 색상
     inner_colors = ['white'] * len(labels)  # 가운데 부분 색상
 
-    ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90,
+    # 원형 그래프에 labels 파라미터를 제거해서 바깥에 글씨가 출력되지 않도록 함
+    wedges, texts, autotexts = ax1.pie(sizes, autopct='%1.1f%%', startangle=90,
             colors=outer_colors, wedgeprops=wedgeprops)
 
     ax1.pie([1], radius=0.7, colors=inner_colors, wedgeprops=wedgeprops)  # 가운데 뚤린 원형 추가
 
     # 가운데 부분에 텍스트 추가
     plt.text(0, 0, '감성 분석 결과', ha='center', va='center', fontsize=12)
+
+    # 범례 추가
+    ax1.legend(wedges, labels, title="감성", loc="best", bbox_to_anchor=(0.8, 0.5))
 
     # 가운데 뚤린 원형 그래프 출력
     plt.axis('equal')
@@ -57,14 +62,12 @@ def save_vis(res):
         # 날짜, 시간으로 파일 저장
         current_datetime = datetime.datetime.now().strftime("%m%d%H%M%S")
         image_file_path = './sentiment-analysis/res_image/{0}.png'.format(current_datetime)
-        print(image_file_path, "이미지 패스")
         plt.savefig(image_file_path, dpi=300, bbox_inches='tight')
         
     except Exception as e:
         print("이미지 저장 실패",e, sep='\ns')
         # 연결 및 커서 닫기
     
-
 
 def runKobert(raw_file):
     
@@ -76,7 +79,7 @@ def runKobert(raw_file):
         print("\n html 파일 읽기", type(raw_text))
     
     else: 
-        file = open(raw_file, 'r',encoding='UTF8')    #인코딩 안바꾸면 오류
+        file = open(raw_file, 'r',encoding='utf-8')    #인코딩 안바꾸면 오류
         raw_text = file.readlines()
         print("\n txt 파일 읽기",  type(raw_text))
     
@@ -115,32 +118,43 @@ def runKobert(raw_file):
     
     emos = ('행복','불안','놀람', '슬픔','분노','중립')
     res = {'행복':0,'불안':0,'놀람':0, '슬픔':0,'분노':0,'중립':0}
+    
+    # db 삽입을 위해서 리턴할 때 영어로 변경
     res_eng = {'행복':'happy','불안':'tense','슬픔':'sad','분노':'angry'}
+
     
     for sentence in text:
         res[emos[predict(sentence)]] += 1
     end_time = time.time()  # 종료 시간 저장
     print("소요시간: {}s".format(round(end_time - start_time, 2)))  # 실행 시간 출력
     print("분석 결과: ",res)
-
+    
+    # 분석결과 이미지로 저장
+    save_vis(res)
+    
+    # 음악 매칭을 위해 중립, 놀람 태그가 제거된 딕셔너리 생성
     res_copied = res.copy()
-    del res_copied['중립']
+    
+    if '중립' in res_copied:    
+        del res_copied['중립']
     del res_copied['놀람']
     
     # .이나 ""로 구분된 문장이 없을 경우
     if max(res, key=res.get) == 0:
         print("텍스트 확인 필요")
         return -1
-        
-    res_emo = max(res_copied, key=res_copied.get)
+
+    sorted_res = sorted(res_copied.items(), key=lambda x: x[1], reverse=True)
+    first_emo = sorted_res[0][0]
+    second_emo = sorted_res[1][0]
     
-    # 딕셔너리 활용한
-    if res_emo == '행복':
-        res_emo == ''
-        
-    save_vis(res)
-    print("최다 빈도: ",res_emo,end=', ')
-    return res_eng[res_emo]
+    # 1번째와 2번쨰로 많은 문장 수 차이가 10% 내외 일때
+    if sorted_res[1][1] !=0 and sorted_res[0][1]/sorted_res[1][1] < 1.1:
+        print("2중 태그: ",first_emo, second_emo)
+        return (res_eng[first_emo], res_eng[second_emo])
+
+    print("최다 빈도: ",first_emo,end=', ')
+    return (res_eng[first_emo],)   #투플로 인식되려면 ,
     
 #region kovert-v6 모델 불러오기
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
@@ -311,6 +325,42 @@ consumer = KafkaConsumer(
 
 consumer.subscribe('book')
 
+
+# db에 태그 삽입
+def insert_tag(emotion):
+    query1 = "SELECT emotion_id FROM Emotion where `emotion` = "+ emotion
+    cursor.execute(query1)
+    result1 = cursor.fetchall()
+
+    emotion_id = 0
+    for row in result1:
+        emotion_id = row[0]
+        print("emotion_id: ",emotion_id)
+
+    # 쿼리 2 실행
+    # 쿼리실행할때는 ''로 감싸줘야함 "SELECT book_id FROM Book where `fileName` = 'test.txt'" 
+    # fileName의 경우 뒤에 '는 자동으로 있어서 앞에만 하면 됨
+    query_file = fileName.replace("'", "")
+    #print(query_file)
+    query2 = "SELECT book_id, originName FROM Book where `fileName` = '"+ query_file +"'"
+    cursor.execute(query2)
+    result2 = cursor.fetchall()
+    book_id = 0
+    
+    # 책이름
+    originName=''
+    for row in result2:
+        book_id = row[0]
+        originName = row[1]
+        
+    #insert query
+    query3 = "INSERT INTO BookEmotion (emotion_id, book_id) VALUES (%s, %s)"
+    values = (emotion_id, book_id)
+    cursor.execute(query3, values)
+    
+    return originName, book_id
+    
+
 for message in consumer:
 
     ssh_client = paramiko.SSHClient()
@@ -331,37 +381,18 @@ for message in consumer:
 
         # 쿼리 1 실행
         analysis_res = runKobert(local_path)
-        emotion = "'{}'".format(analysis_res)
+        emotion1 = "'{}'".format(analysis_res[0])
         
-        query1 = "SELECT emotion_id FROM Emotion where `emotion` = "+ emotion
-        cursor.execute(query1)
-        result1 = cursor.fetchall()
-
-        emotion_id = 0
-        for row in result1:
-            emotion_id = row[0]
-            print(emotion_id)
-
-        # 쿼리 2 실행
-        # 쿼리실행할때는 ''로 감싸줘야함 "SELECT book_id FROM Book where `fileName` = 'test.txt'" 
-        # fileName의 경우 뒤에 '는 자동으로 있어서 앞에만 하면 됨
-        query_file = fileName.replace("'", "")
-        #print(query_file)
-        query2 = "SELECT book_id, originName FROM Book where `fileName` = '"+ query_file +"'"
-        cursor.execute(query2)
-        result2 = cursor.fetchall()
-        book_id = 0
-        originName=''
-        for row in result2:
-            book_id = row[0]
-            originName = row[1]
-            #print(book_id)
-            print(originName)
-        #insert query
-        query3 = "INSERT INTO BookEmotion (emotion_id, book_id) VALUES (%s, %s)"
-        values = (emotion_id, book_id)
-        cursor.execute(query3, values)
+        #db에 감성분석 결과 삽입
+        originName, book_id =insert_tag(emotion1)
         
+        #이중 태그
+        if len(analysis_res)==2:
+            print("test: 이중태그")
+            emotion2 = "'{}'".format(analysis_res[1])
+            insert_tag(emotion2)
+            
+            
         #쿼리4
         # 업로드할 파일의 이름 (원하는 파일 이름으로 변경)
         file_name = originName + '.png'
@@ -387,9 +418,6 @@ for message in consumer:
 
             # POST 요청을 보내어 파일을 업로드
             response = requests.post(upload_url, files=files)
-            
-
-
             
         # 서버로부터의 응답 확인
         if response.status_code == 200:
