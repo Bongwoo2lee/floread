@@ -14,9 +14,9 @@
     cd ./floread
     ./gradlew build
     //백그라운드 실행할경우
-    nohup java -jar /build/libs/floread-0.0.1-SNAPSHOT.jar &
+    nohup java -jar floread-0.0.1-SNAPSHOT.jar &
     //그냥 실행할 경우
-    java -jar /build/libs/floread-0.0.1-SNAPSHOT.jar
+    java -jar floread-0.0.1-SNAPSHOT.jar
   ```
 * Kafka
   ```
