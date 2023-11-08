@@ -28,7 +28,7 @@
 
 * Frontend
   ```
-    cd svelte-start-app
+    cd ./floread/frontend/todo-react-app
     sudo npm run dev
   ```
 
