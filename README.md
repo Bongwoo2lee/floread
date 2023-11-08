@@ -11,7 +11,7 @@
 ## How to use
 * Backend
   ```
-    cd ./backend/floread
+    cd ./floread
     ./gradlew build
     //백그라운드 실행할경우
     nohup java -jar /build/libs/floread-0.0.1-SNAPSHOT.jar &
