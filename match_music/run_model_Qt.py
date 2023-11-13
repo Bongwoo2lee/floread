@@ -1,5 +1,8 @@
-#cpu버전 + pyQt로 UI추가
+import sys
 
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel
+from PyQt5.QtCore import Qt, QThread
+import time
 import re
 import torch
 from torch import nn
@@ -7,15 +10,181 @@ from torch.utils.data import Dataset
 from kobert_tokenizer import KoBERTTokenizer
 import gluonnlp as nlp
 import numpy as np
-import time
 import requests
 
 import matplotlib.font_manager as fm
 import matplotlib.pyplot as plt
 import datetime
 
+from kafka import KafkaConsumer
+import paramiko
+from scp import SCPClient, SCPException
+import os
+import mysql.connector
+import configparser
+
+
+class InfiniteLoopThread(QThread):
+    def __init__(self):
+        super().__init__()
+        self._is_running = True
+        
+        
+    def run(self):
+        # MySQL 서버 정보 설정
+        self.config = configparser.ConfigParser()
+        self.config.read('config.ini')
+
+        # MySQL 연결 설정
+        self.conn = mysql.connector.connect(
+            host=self.config.get('mysql', 'host'),
+            port=self.config.get('mysql', 'port'),
+            database=self.config.get('mysql', 'database'),
+            user=self.config.get('mysql', 'user'),
+            password=self.config.get('mysql', 'password'),
+            charset='utf8'  
+        )
+
+        # 연결 확인
+        if self.conn.is_connected():
+            print('MySQL에 연결되었습니다.')
+        self.consumer = KafkaConsumer(
+            bootstrap_servers=self.config.get('Kafka', 'host'),
+            group_id=self.config.get('Kafka', 'group_id'),
+            auto_offset_reset='latest',
+        )
+
+        self.consumer.subscribe('book')  
+
+
+    def stop(self):
+        self._is_running = False
+        
+    def start_program(self):
+        
+        print("start_program")
+        
+        for message in self.consumer:
+            
+            print("실행중")
+
+            ssh_client = paramiko.SSHClient()
+            ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh_client.connect(self.config.get('ssh', 'host'), self.config.get('ssh', 'port'), self.config.get('ssh', 'user'), self.config.get('ssh', 'password'))
+            sftp_client = ssh_client.open_sftp()
+            
+            try:
+                # 원격 파일 가져오기
+                remote_path = message.value.decode('utf-8')
+                fileName = str(remote_path).split('/')[-1]
+                local_path = os.getcwd().replace("\\", "/") +'/'+ fileName #슬레시가 반대로 나오는거 바꿔주기
+                sftp_client.get(remote_path, local_path)
+
+                # 커서 생성
+                cursor = self.conn.cursor()
+
+                # 쿼리 1 실행
+                analysis_res = runKobert(local_path)
+                emotion1 = "'{}'".format(analysis_res[0])
+                
+                #쿼리1,2,3
+                originName, book_id = insert_tag(emotion1, cursor, fileName)
+                
+                #이중 태그
+                if len(analysis_res)==2:
+                    print("test: 이중태그")
+                    emotion2 = "'{}'".format(analysis_res[1])
+                    insert_tag(emotion2, cursor, fileName)
+                    
+                    
+                #쿼리4
+                # 업로드할 파일의 이름 (원하는 파일 이름으로 변경)
+                file_name = originName + '.png'
+                
+                query4 = f"UPDATE Book SET image = '/home/floread/image/{file_name}' WHERE book_id = {book_id};"
+                cursor.execute(query4)
+                result4 = cursor.fetchall()
+
+                # 변경사항 커밋
+                self.conn.commit()
+                print(cursor.rowcount, "record inserted\n")
+
+                # 업로드할 URL
+                upload_url = 'http://floread.store:8080/image'
+                
+
+                # 파일을 열고 업로드할 준비
+                with open(image_file_path, 'rb') as file:
+                    
+                    # 파일 및 bookId를 포함하여 POST 요청 보내기
+                    files = {'file': (file_name, file), 'bookId': str(book_id)}  # book_id를 문자열로 변환
+
+                    # POST 요청을 보내어 파일을 업로드
+                    response = requests.post(upload_url, files=files)
+                    
+                # 서버로부터의 응답 확인
+                if response.status_code == 200:
+                    print('이미지 업로드 성공!')
+                else:
+                    print('이미지 업로드 실패. 응답 코드:', response.status_code)
+                
+            except Exception as e:
+                print(e)
+                # 연결 및 커서 닫기
+                continue
+            
+            # 파일 삭제
+            print(local_path, "삭제")
+            os.remove(local_path)  
+        
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.thread = None
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('Run KoBert')
+
+        vbox = QVBoxLayout()
+
+        self.status_label = QLabel('', self)
+        self.status_label.setAlignment(Qt.AlignCenter)
+        vbox.addWidget(self.status_label)
+
+        btn_start = QPushButton('모델실행', self)
+        btn_start.clicked.connect(self.start_model)
+
+        btn_stop = QPushButton('실행중지', self)
+        btn_stop.clicked.connect(self.stop_model)
+
+        vbox.addWidget(btn_start)
+        vbox.addWidget(btn_stop)
+        self.setLayout(vbox)
+
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+
+    def start_model(self):
+        if self.thread:
+            self.thread.stop()
+            self.thread.wait()
+        self.thread = InfiniteLoopThread()
+        self.status_label.setText("모델 실행중")
+        self.status_label.setStyleSheet("color: red")
+        self.thread.start()
+
+    def stop_model(self):
+        if self.thread:
+            self.thread.stop()
+            self.thread.wait()
+            self.status_label.setText("")
+            
+        
 # matplotlib 글꼴 설정
-fontpath = r'NPSfont_regular.ttf'
+fontpath = r'sentiment-analysis/NPSfont_regular.ttf'
 font_name = fm.FontProperties(fname=fontpath, size=50).get_name()
 plt.rc('font', family=font_name)
 
@@ -206,8 +375,8 @@ class BERTDataset(Dataset):
     def __len__(self):
         return (len(self.labels))
     
-#model_path = '../sentiment-analysis/model/kobert-v6.pt'
-model_path = 'model/kobert-v6.pt' #(cmd 위치 기준)
+model_path = 'sentiment-analysis/model/kobert-v6.pt'
+#model_path = 'model/kobert-v6.pt' #(cmd 위치 기준)
 model = torch.load(model_path)
 model = model.to('cpu')
 
@@ -238,31 +407,6 @@ def predict(sentence):
 
 ####################################################################################################################
 
-from kafka import KafkaConsumer
-import paramiko
-from scp import SCPClient, SCPException
-import os
-import time
-import mysql.connector
-import configparser
-
-# MySQL 서버 정보 설정
-config = configparser.ConfigParser()
-config.read('config.ini')
-
-# MySQL 연결 설정
-conn = mysql.connector.connect(
-    host=config.get('mysql', 'host'),
-    port=config.get('mysql', 'port'),
-    database=config.get('mysql', 'database'),
-    user=config.get('mysql', 'user'),
-    password=config.get('mysql', 'password'),
-    charset='utf8'  
-)
-
-# 연결 확인
-if conn.is_connected():
-    print('MySQL에 연결되었습니다.')
 
 class SSHManager:
     """
@@ -313,16 +457,10 @@ class SSHManager:
         stdin, stdout, stderr = self.ssh_client.exec_command(command)
         return stdout.readlines()
 
-consumer = KafkaConsumer(
-    bootstrap_servers=config.get('Kafka', 'host'),
-    group_id=config.get('Kafka', 'group_id'),
-    auto_offset_reset='latest',
-)
-
-consumer.subscribe('book')   
 
 # db에 태그 삽입
-def insert_tag(emotion):
+def insert_tag(emotion, cursor, fileName):
+    #쿼리1
     query1 = "SELECT emotion_id FROM Emotion where `emotion` = "+ emotion
     cursor.execute(query1)
     result1 = cursor.fetchall()
@@ -355,74 +493,12 @@ def insert_tag(emotion):
     
     return originName, book_id 
 
-# 실제 실행
-for message in consumer:
-
-    ssh_client = paramiko.SSHClient()
-    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh_client.connect(config.get('ssh', 'host'), config.get('ssh', 'port'), config.get('ssh', 'user'), config.get('ssh', 'password'))
-    sftp_client = ssh_client.open_sftp()
+       
+            
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
     
-    try:
-        # 원격 파일 가져오기
-        remote_path = message.value.decode('utf-8')
-        fileName = str(remote_path).split('/')[-1]
-        local_path = os.getcwd().replace("\\", "/") +'/'+ fileName #슬레시가 반대로 나오는거 바꿔주기
-        sftp_client.get(remote_path, local_path)
-
-        # 커서 생성
-        cursor = conn.cursor()
-
-        # 쿼리 1 실행
-        analysis_res = runKobert(local_path)
-        emotion1 = "'{}'".format(analysis_res[0])
-        
-        #db에 감성분석 결과 삽입
-        originName, book_id =insert_tag(emotion1)
-        
-        #이중 태그
-        if len(analysis_res)==2:
-            print("test: 이중태그")
-            emotion2 = "'{}'".format(analysis_res[1])
-            insert_tag(emotion2)
-            
-            
-        #쿼리4
-        # 업로드할 파일의 이름 (원하는 파일 이름으로 변경)
-        file_name = originName + '.png'
-        
-        query4 = f"UPDATE Book SET image = '/home/floread/image/{file_name}' WHERE book_id = {book_id};"
-        cursor.execute(query4)
-        result4 = cursor.fetchall()
-
-        # 변경사항 커밋
-        conn.commit()
-        print(cursor.rowcount, "record inserted\n")
-
-        # 업로드할 URL
-        upload_url = 'http://floread.store:8080/image'
-        
-
-        # 파일을 열고 업로드할 준비
-        with open(image_file_path, 'rb') as file:
-            
-            # 파일 및 bookId를 포함하여 POST 요청 보내기
-            files = {'file': (file_name, file), 'bookId': str(book_id)}  # book_id를 문자열로 변환
-
-            # POST 요청을 보내어 파일을 업로드
-            response = requests.post(upload_url, files=files)
-            
-        # 서버로부터의 응답 확인
-        if response.status_code == 200:
-            print('이미지 업로드 성공!')
-        else:
-            print('이미지 업로드 실패. 응답 코드:', response.status_code)
-        
-    except Exception as e:
-        print(e)
-        # 연결 및 커서 닫기
-        continue
     
-    # 파일 삭제
-    print(local_path, "삭제")
-    os.remove(local_path)
+    
