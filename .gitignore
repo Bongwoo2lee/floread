@@ -19,3 +19,6 @@ book/*
 # fasttext 모델
 cc.ko.300.bin
 cc.ko.300.bin.gz
+
+# 폰트
+NPSfont_regular.ttf

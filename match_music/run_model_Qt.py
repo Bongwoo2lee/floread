@@ -1,3 +1,5 @@
+#cpu버전 + pyQt로 UI추가
+
 import re
 import torch
 from torch import nn
@@ -13,7 +15,7 @@ import matplotlib.pyplot as plt
 import datetime
 
 # matplotlib 글꼴 설정
-fontpath = r'sentiment-analysis/NPSfont_regular.ttf'
+fontpath = r'NPSfont_regular.ttf'
 font_name = fm.FontProperties(fname=fontpath, size=50).get_name()
 plt.rc('font', family=font_name)
 
@@ -25,56 +27,32 @@ def save_vis(res):
     
     # 중립은 그래프에서 빠지도록
     del res['중립']
+      
+    # 키와 값 리스트 추출
+    labels = list(res.keys())
+    sizes = list(res.values())
     
-    # 키값으로 딕셔너리를 정렬하고 첫번째, 두번째로 큰 키를 추출
-    sorted_items = sorted(res.items(), key=lambda item: item[1], reverse=True)
-    first_key, second_key = sorted_items[0][0], sorted_items[1][0]
-    print(first_key, second_key)
-
-    # 만약 가장 큰 키가 '놀람'이면 두번쨰 값을 디스플레이
-    if first_key == '놀람':
-        first_key = second_key
-        
-    # first_key의 인덱스 찾기
-    index_of_first_key = list(res.keys()).index(first_key)       
-     
-    # 라벨 설정
-    labels_for_display = [''] * len(res)
-    labels_for_display[index_of_first_key] = first_key  
-          
     # 원형 그래프 그리기
-    _, ax1 = plt.subplots()
+    fig1, ax1 = plt.subplots()
 
     # 가운데 부분을 뚤린 원형으로 설정
     wedgeprops = {'width': 0.3, 'edgecolor': 'white'}  # 가운데 부분 속성
 
     # 원형 그래프 그리기
-    outer_colors = plt.cm.Set3(range(len(res)))  # 바깥 부분 색상
-    inner_colors = ['white'] * len(res)  # 가운데 부분 색상
-    
+    outer_colors = plt.cm.Set3(range(len(labels)))  # 바깥 부분 색상
+    inner_colors = ['white'] * len(labels)  # 가운데 부분 색상
 
-    # 원형 그래프에 labels 파라미터를 추가해서 바깥에 최대값을 갖는 키의 이름만 출력되도록 함
-    wedges, texts, autotexts = ax1.pie(
-        list(res.values()),
-        labels=labels_for_display,  # <--- 이 부분을 수정함
-        autopct='%1.1f%%', 
-        startangle=90,
-        colors=outer_colors, 
-        wedgeprops=wedgeprops,
-        labeldistance= 0.95 #그래프, 텍스트 거리
-        )
-    
-    # 감정 글씨만 키우기
-    for text in texts:
-        text.set_fontsize(30)
+    # 원형 그래프에 labels 파라미터를 제거해서 바깥에 글씨가 출력되지 않도록 함
+    wedges, texts, autotexts = ax1.pie(sizes, autopct='%1.1f%%', startangle=90,
+            colors=outer_colors, wedgeprops=wedgeprops)
 
     ax1.pie([1], radius=0.7, colors=inner_colors, wedgeprops=wedgeprops)  # 가운데 뚤린 원형 추가
-    
-    # 범례 추가
-    ax1.legend(wedges, list(res.keys()), title="감성", loc="best", bbox_to_anchor=(0.67, 1.35), ncol=2) #bbox_to_anchor: 범례 위치
 
     # 가운데 부분에 텍스트 추가
-    plt.text(0, 0, '감성 분석 결과', ha='center', va='center', fontsize=17)
+    plt.text(0, 0, '감성 분석 결과', ha='center', va='center', fontsize=12)
+
+    # 범례 추가
+    ax1.legend(wedges, labels, title="감성", loc="best", bbox_to_anchor=(0.8, 0.5))
 
     # 가운데 뚤린 원형 그래프 출력
     plt.axis('equal')
@@ -84,7 +62,7 @@ def save_vis(res):
     try:
         # 날짜, 시간으로 파일 저장
         current_datetime = datetime.datetime.now().strftime("%m%d%H%M%S")
-        image_file_path = './sentiment-analysis/res_image/{0}.png'.format(current_datetime)
+        image_file_path = '/res_image/{0}.png'.format(current_datetime)
         plt.savefig(image_file_path, dpi=300, bbox_inches='tight')
         
     except Exception as e:
@@ -134,11 +112,6 @@ def runKobert(raw_file):
             text.append(textsum[s:e].strip())
             s = e
             isopen = False
-            
-    if len(text)==0:
-        print("텍스트 확인 필요")
-        return -1
-
 
     #감성분석 하기
     print("===========================================",len(text),"문장 감성분석 시작")
@@ -175,9 +148,8 @@ def runKobert(raw_file):
     first_emo = sorted_res[0][0]
     second_emo = sorted_res[1][0]
     
-    # 1번째와 2번쨰로 많은 감성의 비율 차이가 10% 내외 일때
-    #if (sorted_res[0][1]-sorted_res[1][1])/(len(text)-res.get("중립", None)) < 0.1:
-    if (sorted_res[0][1]-sorted_res[1][1])/(len(text)) < 0.05:
+    # 1번째와 2번쨰로 많은 문장 수 차이가 10% 내외 일때
+    if sorted_res[1][1] !=0 and sorted_res[0][1]/sorted_res[1][1] < 1.1:
         print("2중 태그: ",first_emo, second_emo)
         return (res_eng[first_emo], res_eng[second_emo])
 
@@ -188,9 +160,6 @@ def runKobert(raw_file):
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
 vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
 tok = tokenizer.tokenize
-
-#device = torch.device("cpu")
-device = torch.device("cuda:0")
 
 class BERTClassifier(nn.Module):
     def __init__(self,
@@ -238,9 +207,9 @@ class BERTDataset(Dataset):
         return (len(self.labels))
     
 #model_path = '../sentiment-analysis/model/kobert-v6.pt'
-model_path = 'sentiment-analysis/model/kobert-v6.pt' #(cmd 위치 기준)
+model_path = 'model/kobert-v6.pt' #(cmd 위치 기준)
 model = torch.load(model_path)
-#model = model.to('cpu')
+model = model.to('cpu')
 
 max_len = 64
 batch_size = 64
@@ -253,10 +222,10 @@ def predict(sentence):
     model.eval()
     answer = 0
     for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(test_dataloader):
-        token_ids = token_ids.long().to(device)
-        segment_ids = segment_ids.long().to(device)
+        token_ids = token_ids.long().cpu()    #벡엔드에서 cpu로
+        segment_ids = segment_ids.long().cpu()  #벡엔드에서 cpu로
         valid_length= valid_length
-        label = label.long().to(device)
+        label = label.long().cpu()
         out = model(token_ids, valid_length, segment_ids)
         for logits in out:
             logits = logits.detach().cpu().numpy()
@@ -279,7 +248,7 @@ import configparser
 
 # MySQL 서버 정보 설정
 config = configparser.ConfigParser()
-config.read('match_music/config.ini')
+config.read('config.ini')
 
 # MySQL 연결 설정
 conn = mysql.connector.connect(
@@ -353,8 +322,7 @@ consumer = KafkaConsumer(
 consumer.subscribe('book')   
 
 # db에 태그 삽입
-def insert_tag(emotion, cursor, fileName):
-    #쿼리1
+def insert_tag(emotion):
     query1 = "SELECT emotion_id FROM Emotion where `emotion` = "+ emotion
     cursor.execute(query1)
     result1 = cursor.fetchall()
@@ -387,87 +355,74 @@ def insert_tag(emotion, cursor, fileName):
     
     return originName, book_id 
 
+# 실제 실행
+for message in consumer:
 
-def start_program():
-    global image_file_path
-    global consumer
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh_client.connect(config.get('ssh', 'host'), config.get('ssh', 'port'), config.get('ssh', 'user'), config.get('ssh', 'password'))
+    sftp_client = ssh_client.open_sftp()
     
-    for message in consumer:
+    try:
+        # 원격 파일 가져오기
+        remote_path = message.value.decode('utf-8')
+        fileName = str(remote_path).split('/')[-1]
+        local_path = os.getcwd().replace("\\", "/") +'/'+ fileName #슬레시가 반대로 나오는거 바꿔주기
+        sftp_client.get(remote_path, local_path)
 
-        ssh_client = paramiko.SSHClient()
-        ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh_client.connect(config.get('ssh', 'host'), config.get('ssh', 'port'), config.get('ssh', 'user'), config.get('ssh', 'password'))
-        sftp_client = ssh_client.open_sftp()
+        # 커서 생성
+        cursor = conn.cursor()
+
+        # 쿼리 1 실행
+        analysis_res = runKobert(local_path)
+        emotion1 = "'{}'".format(analysis_res[0])
         
-        try:
-            # 원격 파일 가져오기
-            remote_path = message.value.decode('utf-8')
-            fileName = str(remote_path).split('/')[-1]
-            local_path = os.getcwd().replace("\\", "/") +'/'+ fileName #슬레시가 반대로 나오는거 바꿔주기
-            sftp_client.get(remote_path, local_path)
-            
-            # 커서 생성
-            cursor = conn.cursor()
-
-            # 쿼리 1 실행
-            analysis_res = runKobert(local_path)
-            
-            # 빈문자열 & 감성있는 문장이 없을 때
-            if analysis_res == -1:   continue
-            
-            emotion1 = "'{}'".format(analysis_res[0])
-            
-            #쿼리1,2,3
-            originName, book_id = insert_tag(emotion1,cursor, fileName)
-            
-            #이중 태그
-            if len(analysis_res)==2:
-                print("test: 이중태그")
-                emotion2 = "'{}'".format(analysis_res[1])
-                insert_tag(emotion2, cursor, fileName)
-                
-                
-            #쿼리4
-            # 업로드할 파일의 이름 (원하는 파일 이름으로 변경)
-            file_name = originName + '.png'
-            
-            query4 = f"UPDATE Book SET image = '/home/floread/image/{file_name}' WHERE book_id = {book_id};"
-            cursor.execute(query4)
-            result4 = cursor.fetchall()
-
-            # 변경사항 커밋
-            conn.commit()
-            print(cursor.rowcount, "record inserted\n")
-
-            # 업로드할 URL
-            upload_url = 'http://floread.store:8080/image'
-            
-
-            # 파일을 열고 업로드할 준비
-            with open(image_file_path, 'rb') as file:
-                
-                # 파일 및 bookId를 포함하여 POST 요청 보내기
-                files = {'file': (file_name, file), 'bookId': str(book_id)}  # book_id를 문자열로 변환
-
-                # POST 요청을 보내어 파일을 업로드
-                response = requests.post(upload_url, files=files)
-                
-            # 서버로부터의 응답 확인
-            if response.status_code == 200:
-                print('이미지 업로드 성공!')
-            else:
-                print('이미지 업로드 실패. 응답 코드:', response.status_code)
-            
-        except Exception as e:
-            print(e)
-            # 연결 및 커서 닫기
-            continue
+        #db에 감성분석 결과 삽입
+        originName, book_id =insert_tag(emotion1)
         
-        # 파일 삭제
-        print(local_path, "삭제")
-        os.remove(local_path)
+        #이중 태그
+        if len(analysis_res)==2:
+            print("test: 이중태그")
+            emotion2 = "'{}'".format(analysis_res[1])
+            insert_tag(emotion2)
+            
+            
+        #쿼리4
+        # 업로드할 파일의 이름 (원하는 파일 이름으로 변경)
+        file_name = originName + '.png'
+        
+        query4 = f"UPDATE Book SET image = '/home/floread/image/{file_name}' WHERE book_id = {book_id};"
+        cursor.execute(query4)
+        result4 = cursor.fetchall()
 
+        # 변경사항 커밋
+        conn.commit()
+        print(cursor.rowcount, "record inserted\n")
 
-if __name__ == '__main__':
-    start_program()
+        # 업로드할 URL
+        upload_url = 'http://floread.store:8080/image'
+        
+
+        # 파일을 열고 업로드할 준비
+        with open(image_file_path, 'rb') as file:
+            
+            # 파일 및 bookId를 포함하여 POST 요청 보내기
+            files = {'file': (file_name, file), 'bookId': str(book_id)}  # book_id를 문자열로 변환
+
+            # POST 요청을 보내어 파일을 업로드
+            response = requests.post(upload_url, files=files)
+            
+        # 서버로부터의 응답 확인
+        if response.status_code == 200:
+            print('이미지 업로드 성공!')
+        else:
+            print('이미지 업로드 실패. 응답 코드:', response.status_code)
+        
+    except Exception as e:
+        print(e)
+        # 연결 및 커서 닫기
+        continue
     
+    # 파일 삭제
+    print(local_path, "삭제")
+    os.remove(local_path)
