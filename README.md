@@ -32,8 +32,29 @@
     sudo npm run dev
   ```
 
+* Model
+<img src="https://github.com/Bongwoo2lee/floread/assets/100690081/078bef24-df08-475a-b2c4-c64fc85c4efd"  width="200" height="150"/>
+<img src="https://github.com/Bongwoo2lee/floread/assets/100690081/142f04bb-0853-4eb9-a390-33ef8309431f"  width="200" height="150"/>
+
+
+
 ### Requirements
-TBD
+
+* KoBERT requirements(Hugging Face)
+
+```
+  Python >= 3.6
+  PyTorch >= 1.8.1
+  transformers >= 4.8.2
+  sentencepiece >= 0.1.91
+```
+
+* 로컬에서 학습 & 실행할 경우  
+  [**ve_kobert.ipynb**](https://github.com/Bongwoo2lee/floread/blob/main/sentiment-analysis/ve_kobert.ipynb)
+
+
+
+
 <br>
 
 ## **sentiment-analysis model**
@@ -42,7 +63,7 @@ TBD
 + 한국어 감정 정보가 포함된 단발성 대화 데이터셋
 + 한국어 감정 정보가 포함된 연속적 대화 데이터셋 
    
-*학습데이터 처리 과정: [**EDA**](https://github.com/Bongwoo2lee/floread/blob/main/sentiment-analysis/EDA.ipynb)
+*학습데이터 처리 과정: [**EDA & Preprocess**](https://github.com/Bongwoo2lee/floread/blob/main/sentiment-analysis/EDA.ipynb)
 
 ### Performance
 |Model|　　학습 데이터|acc|size(mb)|비고|
@@ -57,7 +78,7 @@ TBD
 |kobert-v1|감성 대화 말뭉치|0.591|351.79| |  
 
 *정확도는 테스트 데이터셋을 4:1로 분할하여 측정  
-*Fine-tuning 코드는 [/sentiment-analysis](https://github.com/Bongwoo2lee/floread/tree/main/sentiment-analysis)에서 `train_[모델이름].ipynb`으로 찾을 수 있음
+*Fine-tuning 코드는 [/sentiment-analysis/train_model](https://github.com/Bongwoo2lee/floread/tree/main/sentiment-analysis/train_model)에서 `train_[모델이름].ipynb`으로 찾을 수 있음
 
 
 <!-- Throughput per 100  또는 Processing time pe
@@ -72,6 +93,6 @@ TBD
 
 
 ## Reference
-- [Kobert](https://github.com/SKTBrain/KoBERT)
+- [KoBERT](https://github.com/SKTBrain/KoBERT)
 - [KoELECTRA](https://github.com/monologg/KoELECTRA)
 - [KcELECTRA](https://github.com/Beomi/KcELECTRA)
