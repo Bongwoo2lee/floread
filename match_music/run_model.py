@@ -184,7 +184,7 @@ def runKobert(raw_file):
     print("최다 빈도: ",first_emo,end=', ')
     return (res_eng[first_emo],)   #투플로 인식되려면 ,
     
-#region kovert-v6 모델 불러오기
+#region kovert-v9 모델 불러오기
 tokenizer = KoBERTTokenizer.from_pretrained('skt/kobert-base-v1')
 vocab = nlp.vocab.BERTVocab.from_sentencepiece(tokenizer.vocab_file, padding_token='[PAD]')
 tok = tokenizer.tokenize
@@ -238,7 +238,8 @@ class BERTDataset(Dataset):
         return (len(self.labels))
     
 #model_path = '../sentiment-analysis/model/kobert-v6.pt'
-model_path = 'sentiment-analysis/model/kobert-v6.pt' #(cmd 위치 기준)
+#model_path = 'sentiment-analysis/model/kobert-v6.pt' #(cmd 위치 기준)
+model_path = 'sentiment-analysis/model/kobert-v9.pt' #(cmd 위치 기준)
 model = torch.load(model_path)
 #model = model.to('cpu')
 
