@@ -1,8 +1,6 @@
 package project.floread.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,7 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
-public class User extends BaseTimeEntity {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,10 +43,8 @@ public class User extends BaseTimeEntity {
     }
 
     //업데이트
-    public User update(String name, String userId) {
+    public User update(String name) {
         this.name = name;
-        this.userId = userId;
-
         return this;
     }
 

@@ -1,17 +1,17 @@
 package project.floread.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data //get,set
 @Entity
-@Getter
-@Setter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Book {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +27,15 @@ public class Book {
     @Column(nullable = false)
     private String url;
 
+    @Column(nullable = false)
+    private String genre;
+
+    private String image;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<BookEmotion> bookEmotions = new ArrayList<>();
+    private final List<BookEmotion> bookEmotions = new ArrayList<>();
 }

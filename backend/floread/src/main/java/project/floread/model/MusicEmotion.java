@@ -13,7 +13,6 @@ public class MusicEmotion {
     @Id @GeneratedValue
     private Long id;
 
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "music_id")
     private Music music;

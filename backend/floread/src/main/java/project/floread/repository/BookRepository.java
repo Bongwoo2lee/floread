@@ -1,53 +1,32 @@
 package project.floread.repository;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import project.floread.model.Book;
 
-import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-@RequiredArgsConstructor
+public interface BookRepository extends JpaRepository<Book, Long> {
+    //jpaRepository<T, id> t는 테이블에 매핑할 엔티티 클래스, id는 엔티티의 기본키 타입
 
-public class BookRepository {
+    Book findByOriginName(String originName);
 
-    private final EntityManager em;
+    List<Book> findByFileName(String fileName);
 
-    public void save(Book book) {
-        em.persist(book);
-    }
 
-    public List<Book> findById(long id) {
-        return em.createQuery("select b from Book b", Book.class)
-                .getResultList();
-    }
+    @Query(value = "select b.url from Book b where b.user.userId = :userId")
+    List<String> findByUrl(@Param("userId") String userId);
 
-    public void delete(Book book) {
-        em.remove(book);
-    }
+    @Query(value = "select b from Book b where b.user.userId = :userId")
+    List<Book> findByBook(@Param("userId") String userId);
 
-    public List<Book> findByName(String fileName) {
-        return em.createQuery("select b from Book b where b.fileName = :fileName", Book.class)
-                .setParameter("fileName", fileName)
-                .getResultList();
-    }
+    @Query(value = "select b from Book b where b.user.userId = :userId and b.originName = :originName")
+    Book findByOrOriginNameAndUser(@Param("userId") String userId, @Param("originName") String originName);
 
-    public Book findByOriginName(String originName) {
-        return em.createQuery("select b from Book b where b.originName = :originName", Book.class)
-                .setParameter("originName", originName)
-                .getSingleResult();
-    }
 
-    public List<String> findByUrl(String userId) {
-        return em.createQuery("select b.url from Book b join b.user u  where u.userId = :userId", String.class)
-                .setParameter("userId", userId)
-                .getResultList();
-    }
 
-    public List<Book> findByBook(String userId) {
-        return em.createQuery("select b from Book b join b.user u  where u.userId = :userId", Book.class)
-                .setParameter("userId", userId)
-                .getResultList();
-    }
 }

@@ -1,41 +1,22 @@
 package project.floread.repository;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-import project.floread.model.Book;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import project.floread.model.Emotion;
 import project.floread.model.Music;
+import project.floread.model.MusicEmotion;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
-@Repository
-@RequiredArgsConstructor
-public class MusicEmotionRepository {
-
-    private final EntityManager em;
-
-    public List<Music> findByMusic(Emotion emotion) {
-        return em.createQuery("select me.music from MusicEmotion me where me.emotion = :emotion", Music.class)
-                .setParameter("emotion", emotion)
-                .getResultList();
-    }
-
-    public List<String> findByEmotionToMusicUrl(String emotion) {
-        return em.createQuery("select m.url from Music m join m.musicEmotions me where me.emotion.emotion = :emotion", String.class)
-                .setParameter("emotion", emotion)
-                .getResultList();
-
-//        return em.createQuery("select e.id from Emotion e where e.emotion = :emotion", Long.class)
-//                .setParameter("emotion", emotion)
-//                .getSingleResult();
-    }
+public interface MusicEmotionRepository extends JpaRepository<MusicEmotion, Long> {
+    @Query(value = "select me.music from MusicEmotion me where me.emotion = :emotion and me.music.genre = :genre")
+    List<Music> findByMusic(@Param("emotion") Emotion emotion, @Param("genre") String genre);
 
 
-    public String findByUrl(long MusicId) {
-        return em.createQuery("select m.url from Music m where m.id = :MusicId", String.class)
-                .setParameter("MusicId", MusicId)
-                .getSingleResult();
-    }
+    @Query(value = "select me.music.fileName from MusicEmotion me where me.emotion.id = :id and me.music.genre = :genre")
+    List<String> findByMusicUrlFromEmotionIdAAndGenre(@Param("id") Long id, @Param("genre") String genre);
+
+    @Query(value = "select me.music.fileName from MusicEmotion me where me.emotion.id = :id")
+    List<String> findByMusicUrlFromEmotionId(@Param("id") Long id);
 }
-
