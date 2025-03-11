@@ -31,10 +31,10 @@ public class MusicController {
     @PostMapping("/video/{title}")
     public ResponseEntity<List<String>> getAudio(@PathVariable String title, Principal authentication) throws Exception {
         LinkedHashMap param = new LinkedHashMap();
-        String userId = authentication.getName();
-        System.out.println("오디오");
-        System.out.println("title = " + title);
-        System.out.println("userId = " + userId);
+        // String userId = authentication.getName();
+        // System.out.println("오디오");
+        // System.out.println("title = " + title);
+        // System.out.println("userId = " + userId);
 
         Book book = bookService.findByOriginNameAndUser(userId, title);
         String genre = book.getGenre();
